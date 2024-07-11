@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SEEKSMART</title>
-  <link rel="icon" type="image/x-icon" href="images\favicon.ico">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Bootstrap CSS link -->
 
@@ -47,12 +46,12 @@
           <img id="loginimage" src="images/loginlogo.png" class="img-fluid mx-auto d-block" alt="Login Logo">
           <form id="loginForm">
             <div class="form-group">
-              <input type="text" class="form-control" id="email" name="email" placeholder="Email" autocomplete="off">
+              <input type="text" class="form-control" id="email" name="email" placeholder="Email">
             </div>
             <div class="form-group">
-              <input type="password" class="form-control" id="password" name="password" placeholder="Password" autocomplete="off">
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password">
             </div>
-            <button type="submit" class="btn btn-primary btn-block" href="dbadmin.html">Login</button>
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
           </form>
         </div>
       </div>
@@ -63,28 +62,31 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
   <!-- Firebase scripts -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getDatabase, ref, update } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
-  <script>
+    // Your web app's Firebase configuration
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      databaseURL: "YOUR_DATABASE_URL",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+      authDomain: "seeksmart-database.firebaseapp.com",
+      databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+      projectId: "seeksmart-database",
+      storageBucket: "seeksmart-database.appspot.com",
+      messagingSenderId: "1066553932800",
+      appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
     };
 
     // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfig);
 
     // Firebase references
-    const db = firebase.database();
-    const auth = firebase.auth();
+    const db = getDatabase(app);
+    const auth = getAuth(app);
 
     // Login form submission
     document.getElementById('loginForm').addEventListener('submit', function(event) {
@@ -93,14 +95,14 @@
       const password = document.getElementById('password').value;
 
       // Firebase login with email and password
-      auth.signInWithEmailAndPassword(email, password)
+      signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Login successful
           const user = userCredential.user;
           if (user) {
             const dt = new Date();
-            const dbRef = db.ref('usersAdmin/' + user.uid);
-            dbRef.update({
+            const dbRef = ref(db, 'usersAdmin/' + user.uid);
+            update(dbRef, {
               last_login: dt.toString()
             }).then(() => {
               alert('User logged in successfully!');
