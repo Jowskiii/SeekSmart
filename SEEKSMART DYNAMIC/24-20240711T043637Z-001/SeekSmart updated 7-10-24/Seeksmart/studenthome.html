@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEEKSMART</title>
+  <link rel="stylesheet" href="css/studenthomestyle.css">
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // Web app Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+      authDomain: "seeksmart-database.firebaseapp.com",
+      databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+      projectId: "seeksmart-database",
+      storageBucket: "seeksmart-database.appspot.com",
+      messagingSenderId: "1066553932800",
+      appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth();
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('login').addEventListener('click', (e) => {
+        e.preventDefault();
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+
+            if (user) {
+              const dt = new Date();
+              const dbRef = ref(database, 'usersStudents/' + user.uid);
+              update(dbRef, {
+                last_login: dt,
+              })
+              .then(() => {
+                alert('User logged in!');
+                window.location.href = "lostitemstud.html";
+              })
+              .catch((error) => {
+                console.error('Error updating database:', error);
+              });
+            } else {
+              alert('Authentication failed');
+            }
+          })
+          .catch((error) => {
+            const errorMessage = error.message;
+            alert(errorMessage);
+          });
+      });
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const uid = user.uid;
+        } else {
+        }
+      });
+    });
+  </script>
+</head>
+<body background="images/bg.png">
+  <nav class="navbar">
+    <div class="navbarlc">
+      <p id="navbar__logo"><img src="images/hccslogo.png" class="navbar__image" alt="Logo"></p>
+    </div>
+    <div class="navbtncon">
+      <a href="index.html" class="btns">Home</a>
+      <a href="studentcontact.html" class="btns">Contact Us</a>
+      <button class="login-button">Login</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="main__container">
+      <div class="main__img--container">
+        <img id="main__img" src="images/sslogo.png" alt="Main Image">
+      </div>
+      <div class="vertical-line"></div>
+      <div class="main__content">
+        <p>SeekSmart is a lost and found system design for.....</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img id="loginimage" src="images/loginlogo.png">
+      <form>
+        <div class="input-container">
+          <input type="text" id="email" name="email" placeholder="Email">
+          <img src="images/username.png" class="username-logo" alt="Second Logo">
+          <input type="password" id="password" name="password" placeholder="Password"><br><br>
+          <img src="images/lock.png" class="password-logo" alt="Second Logo">
+        </div>
+        <button type="submit" id="login">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    var modal = document.getElementById("loginModal");
+
+    var btn = document.querySelector(".login-button");
+
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    document.getElementById("email").addEventListener("focus", function() {
+      document.querySelector(".username-logo").style.display = "none";
+    });
+
+    document.getElementById("email").addEventListener("blur", function() {
+      if (this.value === "") {
+        document.querySelector(".username-logo").style.display = "block";
+      }
+    });
+
+    document.getElementById("password").addEventListener("focus", function() {
+      document.querySelector(".password-logo").style.display = "none";
+    });
+
+    document.getElementById("password").addEventListener("blur", function() {
+      if (this.value === "") {
+        document.querySelector(".password-logo").style.display = "block";
+      }
+    });
+
+    document.querySelector("#loginModal form").addEventListener("submit", function(event) {
+      event.preventDefault(); 
+    });
+  </script>
+</body>
+</html>

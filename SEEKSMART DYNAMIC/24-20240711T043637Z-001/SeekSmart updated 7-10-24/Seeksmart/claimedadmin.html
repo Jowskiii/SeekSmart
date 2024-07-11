@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEEKSMART</title>
+    <link rel="stylesheet" href="css/claimedstylesss.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="profile">
+    <img src="images/picon.png" alt="Profile Icon">
+    <h1>Admin</h1>
+  </div>
+  
+  <a href="dbadmin.html">Dashboard</a>
+  <a href="laf.html">Lost And Found Items</a>
+  <a href="claimedadmin.html">Claimed Items</a>
+  <a href="index.html">Log Out</a>
+</div>
+
+<div class="content">
+  <div class="content-header">
+    <h1>Claimed Items</h1>
+    <img src="images/dblogo.png" class="logo" alt="Logo">
+  </div>
+
+  <div class="container-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Item No.</th>
+          <th>Item</th>
+          <th>Item Description</th>
+          <th>Claimed Date</th>
+          <th>Found Location</th>
+          <th>Claimed By</th>
+          <th>Item Photo</th>
+          <th>Claimant Photo</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="tbody2"></tbody>
+    </table>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, child, get, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+    authDomain: "seeksmart-database.firebaseapp.com",
+    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+    projectId: "seeksmart-database",
+    storageBucket: "seeksmart-database.appspot.com",
+    messagingSenderId: "1066553932800",
+    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+};
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  var tbody = document.getElementById("tbody2");
+
+  function AddItemToTable(itemNo, item, itemDescription, claimedDate, foundLocation, claimedBy, photo, photoId, itemId) {
+    let trow = document.createElement("tr");
+    trow.innerHTML = `
+      <td>${itemNo}</td>
+      <td>${item}</td>
+      <td>${itemDescription}</td>
+      <td>${claimedDate}</td>
+      <td>${foundLocation}</td>
+      <td>${claimedBy}</td>
+      <td><img src="${photo}" alt="Item Photo" width="50"></td>
+      <td><img src="${photoId}" alt="Claimant Photo" width="50"></td>
+      <td>
+        <div class="dropdown">
+          <button class="dropdown-btn action-button" data-item-id="${itemId}">Action</button>
+          <div class="dropdown-content">
+            <button class="view-btn action-button" data-item-id="${itemId}">View</button>
+            <button class="print-btn action-button" data-item-id="${itemId}">Print</button>
+            <button class="delete-btn action-button" data-item-id="${itemId}">Delete</button>
+          </div>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(trow);
+  }
+
+  function AddAllItemsToTable(ClaimedItems) {
+    tbody.innerHTML = "";
+    let itemNo = 1;
+    ClaimedItems.forEach(element => {
+      AddItemToTable(itemNo++, element.itemName, element.itemDescription, element.claimedDate, element.foundLocation, element.claimedBy, element.photo, element.photoId, element.itemId);
+    });
+  }
+
+  function GetAllClaimedDataOnce() {
+    const dbRef = ref(db);
+    get(child(dbRef, "claimedItems")).then((snapshot) => {
+      var items = [];
+      snapshot.forEach(childSnapshot => {
+        let item = childSnapshot.val();
+        item.itemId = childSnapshot.key;
+        items.push(item);
+      });
+      AddAllItemsToTable(items);
+    });
+  }
+
+  window.onload = GetAllClaimedDataOnce;
+
+  tbody.addEventListener('click', function(event) {
+    if (event.target.classList.contains('action-button')) {
+      const itemId = event.target.getAttribute('data-item-id');
+      
+      if (event.target.classList.contains('view-btn')) {
+        alert(`View item ${itemId}`);
+      } else if (event.target.classList.contains('print-btn')) {
+        alert(`Print item ${itemId}`);
+      } else if (event.target.classList.contains('delete-btn')) {
+        if (confirm("Are you sure you want to delete this item?")) {
+          deleteItem(itemId);
+        }
+      }
+    }
+  });
+
+  function deleteItem(itemId) {
+    const dbRef = ref(db, `claimedItems/${itemId}`);
+    remove(dbRef).then(() => {
+      alert("Item deleted successfully!");
+      GetAllClaimedDataOnce();
+    }).catch((error) => {
+      console.error("Error removing item: ", error);
+    });
+  }
+</script>
+
+</body>
+</html>

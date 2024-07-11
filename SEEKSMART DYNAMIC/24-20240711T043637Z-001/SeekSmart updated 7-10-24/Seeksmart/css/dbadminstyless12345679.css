@@ -1,0 +1,153 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+body {
+    background-color: #665dda;
+    color: #000000;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #06005a;
+    color: #fff;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile {
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.profile h1 {
+    font-size: 1.5rem;
+}
+
+.sidebar a {
+    font-size: 1.25rem;
+    margin: 15px 0;
+    display: block;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #2e2c77;
+}
+
+.content {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content h1 {
+    font-size: 2.5rem;
+}
+
+.content .logo {
+    height: 200px;
+    margin-left: 450px; 
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.box {
+    background-color: #2e2c77;
+    width: 48%;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.box p {
+    color: #fff;
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.box p.title {
+    margin-top: 20px;
+}
+
+#total-lost, #total-found {
+    font-size: 3rem;
+    display: block;
+    margin-top: 10px;
+}
+
+.notification-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 1000; 
+}
+
+.notification-icon img {
+    width: 100%;
+    height: 100%;
+}
+
+.notifications-container {
+    display: none;
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1001; 
+}
+
+.notifications-container h2 {
+    margin: 0;
+    padding: 10px;
+    background: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+}
+
+.notification {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.notification:last-child {
+    border-bottom: none;
+}

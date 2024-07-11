@@ -1,0 +1,139 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+body {
+    background-color: #665dda;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #06005a;
+    color: #fff;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.profile {
+    margin-bottom: 100px;
+    max-width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+}
+
+.profile img {
+    max-width: 50%;
+    height: auto;
+    display: block;
+}
+
+.profile h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    flex-grow: 1;
+    text-align: right;
+    margin-left: 10px;
+}
+
+.sidebar a {
+    font-size: 23px;
+    margin-bottom: 1rem;
+    display: block;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.content {
+    margin-left: 220px;
+    padding: 0 20px 20px 20px; 
+}
+
+.content-header {
+    display: flex;
+    align-items: center;
+}
+
+.content h1 {
+    font-size: 3rem;
+    margin: 0;
+    padding: 0; 
+    flex-shrink: 0;
+}
+
+.content .logo {
+    height: 200px;
+    margin-left: 280px; 
+}
+
+.container {
+    width: 80%;
+    height: 40vh;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    padding-left: 10rem; 
+}
+
+.box {
+    background-color: #06005a;
+    padding: 40px;
+    width: 90%;
+    border-radius: 5px;
+    text-align: left; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.box form {
+    display: grid;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.box label {
+    font-weight: bold;
+    color: #ccc;
+    
+}
+
+.box input[type="text"],
+.box input[type="date"],
+.box textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.box input[type="file"] {
+    width: 100%;
+}
+
+.box input[type="submit"] {
+    background-color: #f7f302;
+    color: gray;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+}
+
+.note {
+    color: #ccc;
+    padding-top: 20px;
+    padding-left: 15rem;
+    font-size: 15px;
+
+}

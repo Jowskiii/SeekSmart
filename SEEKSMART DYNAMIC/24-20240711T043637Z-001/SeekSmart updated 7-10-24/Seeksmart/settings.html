@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEEKSMART</title>
+  <link rel="stylesheet" href="css/settings1.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="profile">
+    <img src="images/picon.png" alt="Profile Icon">
+    <h1>Student</h1>
+  </div>
+  
+  <a href="lostitemstud.html">Search Lost Items</a>
+  <a href="addloststud.html">Add Lost Items</a>
+  <a href="claimstud.html">Claimed Items</a>
+  <a href="settings.html">Change Password</a>
+  <a href="index.html">Log Out</a>
+
+</div>
+
+<div class="content">
+  <div class="content-header">
+    <h1>Change Password</h1>
+    <img src="images/dblogo.png" class="logo" alt="Logo">
+  </div>
+
+  <div class="container">
+    <div class="box">
+      <form action="change_password.php" method="POST">
+        <div class="form-group">
+          <label for="current-password">Current Password:</label>
+          <input type="password" id="current-password" name="current-password" required>
+        </div>
+        <div class="form-group">
+          <label for="new-password">New Password:</label>
+          <input type="password" id="new-password" name="new-password" required>
+        </div>
+        <div class="form-group">
+          <label for="confirm-password">Confirm New Password:</label>
+          <input type="password" id="confirm-password" name="confirm-password" required>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Change Password">
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+<div class="note">
+    <p><b>Your password must be at least 8-20 characters long only. Making your password difficult for anyone else to crack will secure your data. </b></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEEKSMART</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Bootstrap CSS link -->
+
+  <style>
+    /* Your custom CSS can go here for specific adjustments */
+  </style>
+</head>
+<body background="images/bg.png">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-subtle">
+    <a class="navbar-brand" href="#"><img src="images/hccslogo.png" width="300" height="100" class="navbar__image" alt="Logo"></a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-6">
+        <img id="main__img" src="images/sslogo.png" alt="Main Image" class="img-fluid">
+      </div>
+      <div class="col-md-6">
+        <p>Welcome, Admin!</p>
+        <p>Please Log-In</p>
+        <button class="btn btn-primary login-button" data-toggle="modal" data-target="#loginModal">Login</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Modal -->
+  <div id="loginModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Login</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img id="loginimage" src="images/loginlogo.png" class="img-fluid mx-auto d-block" alt="Login Logo">
+          <form id="loginForm">
+            <div class="form-group">
+              <input type="text" class="form-control" id="email" name="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" href="dbadmin.html">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap and Firebase Scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      databaseURL: "YOUR_DATABASE_URL",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Firebase references
+    const db = firebase.database();
+    const auth = firebase.auth();
+
+    // Login form submission
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Firebase login with email and password
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Login successful
+          const user = userCredential.user;
+          if (user) {
+            const dt = new Date();
+            const dbRef = db.ref('usersAdmin/' + user.uid);
+            dbRef.update({
+              last_login: dt.toString()
+            }).then(() => {
+              alert('User logged in successfully!');
+              window.location.href = "dbadmin.html";
+            }).catch((error) => {
+              console.error('Error updating database:', error);
+            });
+          }
+        })
+        .catch((error) => {
+          // Handle login errors
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });
+    });
+  </script>
+
+</body>
+</html>

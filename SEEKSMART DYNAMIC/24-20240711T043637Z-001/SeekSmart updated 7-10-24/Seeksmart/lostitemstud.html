@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEEKSMART</title>
+  <link rel="stylesheet" href="css/lostitemstud123.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="profile">
+    <img src="images/picon.png" alt="Profile Icon">
+    <h1>Student</h1>
+  </div>
+  
+  <a href="lostitemstud.html">Search Lost Items</a>
+  <a href="addloststud.html">Add Lost Items</a>
+  <a href="claimstud.html">Claimed Items</a>
+  <a href="settings.html">Change Password</a>
+  <a href="index.html">Log Out</a>
+</div>
+
+<div class="content">
+  <div class="content-header">
+    <h1>Lost Items</h1>
+    <img src="images/dblogo.png" class="logo" alt="Logo">
+  </div>
+
+  <div class="search-bar">
+    <button class="search-button" id="matchingImagesButton">Matching Images</button>
+    <button class="search-button" id="searchSpecificItemsButton">Search Specific Items</button>
+  </div>
+
+  <div class="items-container" id="itemsContainer"></div>
+  
+  <div id="modalContainer" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      
+      <div id="matchingImagesContainer" style="display:none;">
+        <div class="option-buttons">
+          <button id="captureImageOption">Capture Image</button>
+          <button id="uploadImageOption">Upload Image</button>
+        </div>
+        <div id="capture-container" style="display:none;">
+          <video id="video" width="100%" height="auto" autoplay></video>
+          <button id="snap">Capture Image</button>
+          <canvas id="canvas" style="display:none;"></canvas>
+        </div>
+        <div id="upload-container" style="display:none;">
+          <input type="file" id="upload" accept="image/*">
+        </div>
+        <img id="loginimage" src="images/loginlogo.png" alt="Login Logo" style="display:none;">
+      </div>
+
+      <div id="specificItemsContainer" style="display:none;">
+        <h2>Search Specific Items</h2>
+        <form id="specificItemsForm">
+          <input type="text" id="itemName" name="itemName" placeholder="Enter item name">
+          <input type="text" id="itemDescription" name="itemDescription" placeholder="Enter item description">
+          <button type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+    authDomain: "seeksmart-database.firebaseapp.com",
+    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+    projectId: "seeksmart-database",
+    storageBucket: "seeksmart-database.appspot.com",
+    messagingSenderId: "1066553932800",
+    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+};
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  var itemsContainer = document.getElementById("itemsContainer");
+
+  function createItemContainer(item) {
+    const container = document.createElement("div");
+    container.classList.add("item-container");
+    container.innerHTML = `
+      <div class="item-header">
+        <h2>${item.itemName}</h2>
+        <img src="${item.photo}" alt="Item Photo" width="100">
+      </div>
+      <div class="item-body">
+        <p><strong>Description:</strong> ${item.itemDescription}</p>
+        <p><strong>Found Date:</strong> ${item.foundDate}</p>
+        <p><strong>Found Location:</strong> ${item.foundLocation}</p>
+        <p><strong>Founder Name:</strong> ${item.founderName}</p>
+        <p><strong>Keyword:</strong> ${item.keyword}</p>
+      </div>
+      <div class="item-footer">
+        <button class="view-btn" data-item-id="${item.itemId}">View</button>
+      </div>
+    `;
+    itemsContainer.appendChild(container);
+  }
+
+  function AddAllItemsToTable(LostFound) {
+    itemsContainer.innerHTML = "";
+    LostFound.forEach(element => {
+      createItemContainer(element);
+    });
+  }
+
+  function GetAllDataOnce() {
+    const dbRef = ref(db);
+    get(child(dbRef, "lostItemForm")).then((snapshot) => {
+      var items = [];
+      snapshot.forEach(childSnapshot => {
+        let item = childSnapshot.val();
+        item.itemId = childSnapshot.key;
+        items.push(item);
+      });
+      AddAllItemsToTable(items);
+    });
+  }
+
+  window.onload = GetAllDataOnce;
+
+  var modal = document.getElementById("modalContainer");
+
+  var matchingImagesButton = document.getElementById("matchingImagesButton");
+  var searchSpecificItemsButton = document.getElementById("searchSpecificItemsButton");
+
+  var span = document.getElementsByClassName("close")[0];
+
+  let stream = null;
+
+  var matchingImagesContainer = document.getElementById("matchingImagesContainer");
+  var specificItemsContainer = document.getElementById("specificItemsContainer");
+
+  matchingImagesButton.onclick = function() {
+    modal.style.display = "block";
+    matchingImagesContainer.style.display = "block";
+    specificItemsContainer.style.display = "none";
+  }
+
+  searchSpecificItemsButton.onclick = function() {
+    modal.style.display = "block";
+    matchingImagesContainer.style.display = "none";
+    specificItemsContainer.style.display = "block";
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+    stopCamera();
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+      stopCamera();
+    }
+  }
+
+  var captureImageOption = document.getElementById("captureImageOption");
+  var uploadImageOption = document.getElementById("uploadImageOption");
+  var captureContainer = document.getElementById("capture-container");
+  var uploadContainer = document.getElementById("upload-container");
+
+  captureImageOption.onclick = function() {
+    captureContainer.style.display = "block";
+    uploadContainer.style.display = "none";
+    startCamera();
+  }
+
+  uploadImageOption.onclick = function() {
+    uploadContainer.style.display = "block";
+    captureContainer.style.display = "none";
+    stopCamera();
+  }
+
+  var video = document.getElementById('video');
+  var canvas = document.getElementById('canvas');
+  var context = canvas.getContext('2d');
+  var snapButton = document.getElementById('snap');
+
+  function startCamera() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function(s) {
+        stream = s;
+        video.srcObject = stream;
+      })
+      .catch(function(err) {
+        console.log("An error occurred: " + err);
+      });
+  }
+
+  function stopCamera() {
+    if (stream) {
+      stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
+      stream = null;
+    }
+  }
+
+  snapButton.addEventListener('click', function() {
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    var data = canvas.toDataURL('image/png');
+    console.log(data); 
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEEKSMART</title>
+  <link rel="stylesheet" href="css/studentcontacts.css">
+
+ <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+    authDomain: "seeksmart-database.firebaseapp.com",
+    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+    projectId: "seeksmart-database",
+    storageBucket: "seeksmart-database.appspot.com",
+    messagingSenderId: "1066553932800",
+    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById("nameForm").addEventListener("submit", submitForm);
+
+    function submitForm(e) {
+      e.preventDefault();
+
+      var firstName = getElementVal("firstName");
+      var lastName = getElementVal("lastName");
+      var email = getElementVal("email");
+      var helpMsg= getElementVal("helpMsg");
+
+      saveMessages(firstName, lastName, email, helpMsg);
+
+      alert("Your message has been sent!");
+
+      document.getElementById("nameForm").reset();
+    }
+
+    const saveMessages = (firstName, lastName, email, helpMsg) => {
+      var newContactForm = push(ref(database, 'contactForm'));
+
+      set(newContactForm, {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        helpMsg: helpMsg,
+      });
+    };
+
+    const getElementVal = (id) => {
+      return document.getElementById(id).value;
+    };
+  });
+</script>
+
+</head>
+<body background="images/bg.png">
+  <nav class="navbar">
+    <div class="navbarlc">
+      <p id="navbar__logo"><img src="images/hccslogo.png" class="navbar__image" alt="Logo"></p>
+    </div>
+    <div class="navbtncon">
+      <a href="index.html" class="btns">Home</a>
+      <a href="studentcontact.html" class="btns">Contact Us</a>
+      <button class="login-button transition-btn">Login</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="main__container">
+      <div class="main__content">
+        <h1>Contact Us</h1>
+        <p>Need to get in touch with us? Fill out the form with your inquiry to contact us.</p>
+      </div>
+      <div class="form-box">
+        <form id="nameForm">
+          <div class="name-fields">
+            <div>
+              <label for="firstName"><b>First Name:</b></label>
+              <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div>
+              <label for="lastName"><b>Last Name:</b></label>
+              <input type="text" id="lastName" name="lastName" required>
+            </div>
+          </div>
+          <div class="email-field">
+            <label for="email"><b>Email:</b></label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="helpMsg-field">
+            <label for="helpMsg"><b>What can we help you with?</b></label>
+            <textarea id="helpMsg" name="helpMsg" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="form-submit-button">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+ <div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img id="loginimage" src="images/loginlogo.png">
+    <form>
+      <div class="input-container">
+        <input type="text" id="username" name="username" placeholder="Username">
+        <img src="images/username.png" class="username-logo" alt="Second Logo">
+      <input type="password" id="password" name="password" placeholder="Password"><br><br>
+      <img src="images/lock.png" class="password-logo" alt="Second Logo">
+    </div>
+      <button type="submit" class="modal-button">Login</button>
+    </form>
+    
+  </div>
+</div>
+  
+  <script>
+    var modal = document.getElementById("loginModal");
+
+    var btn = document.querySelector(".login-button");
+
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    document.getElementById("username").addEventListener("focus", function() {
+      document.querySelector(".username-logo").style.display = "none";
+    });
+
+    document.getElementById("username").addEventListener("blur", function() {
+      if (this.value === "") {
+        document.querySelector(".username-logo").style.display = "block";
+      }
+    });
+
+    document.getElementById("password").addEventListener("focus", function() {
+      document.querySelector(".password-logo").style.display = "none";
+    });
+
+    document.getElementById("password").addEventListener("blur", function() {
+      if (this.value === "") {
+        document.querySelector(".password-logo").style.display = "block";
+      }
+    });
+    
+var modal = document.getElementById("loginModal");
+
+var btn = document.querySelector(".login-button");
+
+var span = document.getElementsByClassName("close")[0];
+
+var loginForm = document.querySelector("#loginModal form");
+
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+loginForm.addEventListener("submit", function(event) {
+  event.preventDefault(); 
+
+  window.location.href = "lostitemstud.html";
+});
+</script>
+</body>
+</html>

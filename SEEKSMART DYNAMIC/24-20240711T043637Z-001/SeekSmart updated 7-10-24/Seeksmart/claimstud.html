@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEEKSMART</title>
+  <link rel="stylesheet" href="css/claimedstud1.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="profile">
+    <img src="images/picon.png" alt="Profile Icon">
+    <h1>Student</h1>
+  </div>
+  
+  <a href="lostitemstud.html">Search Lost Items</a>
+  <a href="addloststud.html">Add Lost Items</a>
+  <a href="claimedstud.html">Claimed Items</a>
+  <a href="settings.html">Change Password</a>
+  <a href="index.html">Log Out</a>
+</div>
+
+<div class="content">
+  <div class="content-header">
+    <h1>Claimed Items</h1>
+    <img src="images/dblogo.png" class="logo" alt="Logo">
+  </div>
+
+  <input type="text" id="searchInput" placeholder="Search for items..." class="search-bar">
+
+  <div id="container" class="items-container"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+    authDomain: "seeksmart-database.firebaseapp.com",
+    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+    projectId: "seeksmart-database",
+    storageBucket: "seeksmart-database.appspot.com",
+    messagingSenderId: "1066553932800",
+    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+};
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const container = document.getElementById("container");
+  const searchInput = document.getElementById("searchInput");
+
+  let claimedItems = [];
+
+  function addItemToContainer(itemNo, item, itemDescription, claimedDate, foundLocation, claimedBy, photo, photoId) {
+    const itemContainer = document.createElement("div");
+    itemContainer.className = "item-container";
+    itemContainer.innerHTML = `
+      <div class="item-header">
+        <h2>Item No. ${itemNo}</h2>
+        <p>${claimedDate}</p>
+      </div>
+      <div class="item-body">
+        <p><strong>Item:</strong> ${item}</p>
+        <p><strong>Description:</strong> ${itemDescription}</p>
+        <p><strong>Found Location:</strong> ${foundLocation}</p>
+        <p><strong>Claimed By:</strong> ${claimedBy}</p>
+      </div>
+      <div class="item-footer">
+        <div><strong>Item Photo:</strong> <img src="${photo}" alt="Item Photo" width="50"></div>
+        <div><strong>Claimant Photo:</strong> <img src="${photoId}" alt="Claimant Photo" width="50"></div>
+      </div>
+    `;
+    container.appendChild(itemContainer);
+  }
+
+  function addAllItemsToContainer(claimedItems) {
+    container.innerHTML = "";
+    let itemNo = 1;
+    claimedItems.forEach(element => {
+      addItemToContainer(itemNo++, element.itemName, element.itemDescription, element.claimedDate, element.foundLocation, element.claimedBy, element.photo, element.photoId);
+    });
+  }
+
+  function getAllClaimedDataOnce() {
+    const dbRef = ref(db);
+    get(child(dbRef, "claimedItems")).then((snapshot) => {
+      claimedItems = [];
+      snapshot.forEach(childSnapshot => {
+        const item = childSnapshot.val();
+        claimedItems.push(item);
+      });
+      addAllItemsToContainer(claimedItems);
+    });
+  }
+
+  function filterItems() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const filteredItems = claimedItems.filter(item => {
+      return item.itemName.toLowerCase().includes(searchTerm) ||
+             item.itemDescription.toLowerCase().includes(searchTerm) ||
+             item.claimedDate.toLowerCase().includes(searchTerm) ||
+             item.foundLocation.toLowerCase().includes(searchTerm) ||
+             item.claimedBy.toLowerCase().includes(searchTerm);
+    });
+    addAllItemsToContainer(filteredItems);
+  }
+
+  searchInput.addEventListener('input', filterItems);
+
+  window.onload = getAllClaimedDataOnce;
+</script>
+</body>
+</html>

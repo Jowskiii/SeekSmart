@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEEKSMART</title>
+    <link rel="stylesheet" href="css/lafstylesss.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="profile">
+    <img src="images/picon.png" alt="Profile Icon">
+    <h1>Admin</h1>
+  </div>
+  
+  <a href="dbadmin.html">Dashboard</a>
+  <a href="laf.html">Lost And Found Items</a>
+  <a href="claimedadmin.html">Claimed Items</a>
+  <a href="index.html">Log Out</a>
+</div>
+
+<div class="content">
+  <div class="content-header">
+    <h1>Lost And Found Items</h1>
+    <img src="images/dblogo.png" class="logo" alt="Logo">
+  </div>
+
+  <div class="container-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Item No.</th>
+          <th>Item</th>
+          <th>Item Description</th>
+          <th>Found Date</th>
+          <th>Found Location</th>
+          <th>Founder Name</th>
+          <th>Photo</th>
+          <th>Expire After</th>
+          <th>Keyword</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="tbody1"></tbody>
+    </table>
+  </div>
+</div>
+
+<div id="viewItemModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="viewItemClose">&times;</span>
+    <h2>Item Details</h2>
+    <div id="itemDetails"></div>
+  </div>
+</div>
+
+<div id="claimantModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="claimantClose">&times;</span>
+    <h2>Claimant Details</h2>
+    <form id="claimantForm">
+      <div class="form-group">
+        <label for="claimantName">Claimant Name:</label>
+        <input type="text" id="claimantName" name="claimantName" required>
+      </div>
+      <div class="form-group">
+        <label for="claimantPhoto">Photo ID:</label>
+        <input type="file" id="claimantPhoto" name="claimantPhoto" accept="image/*" required>
+      </div>
+      <input type="hidden" id="itemId" name="itemId">
+      <div class="form-actions">
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, child, get, onValue, update, remove, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+    authDomain: "seeksmart-database.firebaseapp.com",
+    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+    projectId: "seeksmart-database",
+    storageBucket: "seeksmart-database.appspot.com",
+    messagingSenderId: "1066553932800",
+    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+};
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const storage = getStorage(app);
+
+  var tbody = document.getElementById("tbody1");
+
+  function AddItemToTable(itemNo, item, itemDescription, foundDate, foundLocation, founderName, photo, keyword, itemId) {
+    let trow = document.createElement("tr");
+    trow.innerHTML = `
+      <td>${itemNo}</td>
+      <td>${item}</td>
+      <td>${itemDescription}</td>
+      <td>${foundDate}</td>
+      <td>${foundLocation}</td>
+      <td>${founderName}</td>
+      <td><img src="${photo}" alt="Item Photo" width="50"></td>
+      <td>${new Date(new Date(foundDate).setDate(new Date(foundDate).getDate() + 90)).toLocaleDateString()}</td>
+      <td>${keyword}</td>
+      <td>
+        <div class="dropdown">
+          <button class="dropdown-btn">Action</button>
+          <div class="dropdown-content">
+            <button class="view-btn" data-item-id="${itemId}">View</button>
+            <button class="yes-btn" data-item-id="${itemId}">Returned</button>            
+            <button class="delete-btn" data-item-id="${itemId}">Delete</button>
+          </div>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(trow);
+  }
+
+  function AddAllItemsToTable(LostFound) {
+    tbody.innerHTML = "";
+    let itemNo = 1;
+    LostFound.forEach(element => {
+      AddItemToTable(itemNo++, element.itemName, element.itemDescription, element.foundDate, element.foundLocation, element.founderName, element.photo, element.keyword, element.itemId);
+    });
+  }
+
+  function GetAllDataOnce() {
+    const dbRef = ref(db);
+    get(child(dbRef, "lostItemForm")).then((snapshot) => {
+      var items = [];
+      snapshot.forEach(childSnapshot => {
+        let item = childSnapshot.val();
+        item.itemId = childSnapshot.key;
+        items.push(item);
+      });
+      AddAllItemsToTable(items);
+    });
+  }
+
+  function handleReturnedButtonClick(event) {
+    const itemId = event.target.dataset.itemId;
+    document.getElementById('itemId').value = itemId;
+    document.getElementById('claimantModal').style.display = 'block';
+  }
+
+  function handleDeleteButtonClick(event) {
+    const itemId = event.target.dataset.itemId;
+    const itemRef = ref(db, `lostItemForm/${itemId}`);
+    
+    remove(itemRef).then(() => {
+      GetAllDataOnce(); 
+    });
+  }
+
+  function handleViewButtonClick(event) {
+    const itemId = event.target.dataset.itemId;
+    const itemRef = ref(db, `lostItemForm/${itemId}`);
+    get(itemRef).then((snapshot) => {
+      const itemData = snapshot.val();
+      const itemDetails = `
+        <p><strong>Item:</strong> ${itemData.itemName}</p>
+        <p><strong>Description:</strong> ${itemData.itemDescription}</p>
+        <p><strong>Found Date:</strong> ${itemData.foundDate}</p>
+        <p><strong>Found Location:</strong> ${itemData.foundLocation}</p>
+        <p><strong>Founder Name:</strong> ${itemData.founderName}</p>
+        <p><strong>Keyword:</strong> ${itemData.keyword}</p>
+        <p><img src="${itemData.photo}" alt="Item Photo" width="100"></p>
+      `;
+      document.getElementById('itemDetails').innerHTML = itemDetails;
+      document.getElementById('viewItemModal').style.display = 'block';
+    });
+  }
+
+  var claimantModal = document.getElementById("claimantModal");
+  var claimantClose = document.getElementById("claimantClose");
+  var viewItemModal = document.getElementById("viewItemModal");
+  var viewItemClose = document.getElementById("viewItemClose");
+
+  claimantClose.onclick = function() {
+    claimantModal.style.display = "none";
+  }
+
+  viewItemClose.onclick = function() {
+    viewItemModal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == claimantModal) {
+      claimantModal.style.display = "none";
+    }
+    if (event.target == viewItemModal) {
+      viewItemModal.style.display = "none";
+    }
+  }
+
+  document.getElementById('claimantForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const claimantName = document.getElementById('claimantName').value;
+    const claimantPhoto = document.getElementById('claimantPhoto').files[0];
+    const itemId = document.getElementById('itemId').value;
+
+    if (!claimantPhoto) {
+      alert('Please select a photo');
+      return;
+    }
+
+    const itemRef = ref(db, `lostItemForm/${itemId}`);
+    get(itemRef).then((snapshot) => {
+      const itemData = snapshot.val();
+      const claimedItemRef = ref(db, `claimedItems/${itemId}`);
+
+      const photoRef = storageRef(storage, `claimant_photos/${itemId}/${claimantPhoto.name}`);
+      const uploadTask = uploadBytesResumable(photoRef, claimantPhoto);
+
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+        }, 
+        (error) => {
+          console.error('Photo upload failed:', error);
+        }, 
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            set(claimedItemRef, {
+              ...itemData,
+              claimedDate: new Date().toISOString().split('T')[0],
+              claimedBy: claimantName,
+              photoId: downloadURL 
+            }).then(() => {
+              remove(itemRef).then(() => {
+                claimantModal.style.display = "none";
+                GetAllDataOnce(); 
+              });
+            });
+          });
+        }
+      );
+    });
+  });
+
+  window.onload = GetAllDataOnce;
+
+  tbody.addEventListener('click', function(event) {
+    if (event.target.classList.contains('yes-btn')) {
+      handleReturnedButtonClick(event);
+    } else if (event.target.classList.contains('delete-btn')) {
+      handleDeleteButtonClick(event);
+    } else if (event.target.classList.contains('view-btn')) {
+      handleViewButtonClick(event);
+    }
+  });
+</script>
+</body>
+</html>

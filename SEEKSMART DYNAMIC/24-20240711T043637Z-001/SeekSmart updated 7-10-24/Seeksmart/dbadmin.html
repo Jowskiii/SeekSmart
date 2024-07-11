@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEEKSMART</title>
+  <link rel="stylesheet" href="css/dbadminstyless12345679.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="profile">
+    <img src="images/picon.png" alt="Profile Icon">
+    <h1>Admin</h1>
+  </div>
+  
+  <a href="dbadmin.html">Dashboard</a>
+  <a href="laf.html">Lost And Found Items</a>
+  <a href="claimedadmin.html">Claimed Items</a>
+  <a href="index.html">Log Out</a>
+</div>
+
+<div class="content">
+  <div class="content-header">
+    <h1>Dashboard</h1>
+    <img src="images/dblogo.png" class="logo" alt="Logo">
+  </div>
+  <div class="container">
+    <div class="box">
+      <p class="title"><b>Total Lost Items: <span id="total-lost">0</span></b></p>
+    </div>
+    <div class="box">
+      <p class="title"><b>Total Claimed Items: <span id="total-claimed">0"></span></b></p>
+    </div>
+  </div>
+  <div class="charts-container">
+    <div class="box">
+      <h2>Weekly Lost Items</h2>
+      <canvas id="lostItemsChart"></canvas>
+    </div>
+    <div class="box">
+      <h2>Weekly Claimed Items</h2>
+      <canvas id="claimedItemsChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="notification-icon">
+  <img src="images/notificon.png" alt="Notification Icon" id="notificationIcon">
+</div>
+
+<div class="notifications-container" id="notificationsContainer">
+  <h2>Contact Us Notifications</h2>
+  <div id="notifications"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+  // Your Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+    authDomain: "seeksmart-database.firebaseapp.com",
+    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+    projectId: "seeksmart-database",
+    storageBucket: "seeksmart-database.appspot.com",
+    messagingSenderId: "1066553932800",
+    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+};
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  function updateCounts() {
+    const lostItemsRef = ref(db, 'lostItemForm');
+    const claimedItemsRef = ref(db, 'claimedItems');
+
+    onValue(lostItemsRef, (snapshot) => {
+      const lostCount = snapshot.exists() ? snapshot.size || snapshot.numChildren() : 0;
+      document.getElementById('total-lost').textContent = lostCount;
+    });
+
+    onValue(claimedItemsRef, (snapshot) => {
+      const claimedCount = snapshot.exists() ? snapshot.size || snapshot.numChildren() : 0;
+      document.getElementById('total-claimed').textContent = claimedCount;
+    });
+  }
+
+  function updateNotifications() {
+    const contactFormRef = ref(db, 'contactForm');
+    const notificationsContainer = document.getElementById('notifications');
+
+    onValue(contactFormRef, (snapshot) => {
+      notificationsContainer.innerHTML = '';
+      snapshot.forEach((childSnapshot) => {
+        const notification = childSnapshot.val();
+        const notificationElement = document.createElement('div');
+        notificationElement.className = 'notification';
+        notificationElement.textContent = `Message from ${notification.firstName} ${notification.lastName}: ${notification.helpMsg}`;
+        notificationsContainer.appendChild(notificationElement);
+      });
+    });
+  }
+
+  function toggleNotifications() {
+    const notificationsContainer = document.getElementById('notificationsContainer');
+    if (notificationsContainer.style.display === 'none' || notificationsContainer.style.display === '') {
+      notificationsContainer.style.display = 'block';
+    } else {
+      notificationsContainer.style.display = 'none';
+    }
+  }
+
+  document.getElementById('notificationIcon').addEventListener('click', toggleNotifications);
+
+  function getWeekNumber(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return [d.getUTCFullYear(), weekNo];
+  }
+
+  function updateCharts() {
+    const lostItemsRef = ref(db, 'lostItemForm');
+    const claimedItemsRef = ref(db, 'claimedItems');
+
+    const lostItemsData = {};
+    const claimedItemsData = {};
+
+    onValue(lostItemsRef, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const item = childSnapshot.val();
+        const date = new Date(item.foundDate);
+        const [year, week] = getWeekNumber(date);
+        const weekLabel = `Week ${week}, ${year}`;
+        if (!lostItemsData[weekLabel]) lostItemsData[weekLabel] = 0;
+        lostItemsData[weekLabel]++;
+      });
+
+      const labels = Object.keys(lostItemsData).sort();
+      const data = labels.map(label => lostItemsData[label]);
+
+      new Chart(document.getElementById('lostItemsChart'), {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Lost Items',
+            data: data,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    });
+
+    onValue(claimedItemsRef, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const item = childSnapshot.val();
+        const date = new Date(item.claimedDate);
+        const [year, week] = getWeekNumber(date);
+        const weekLabel = `Week ${week}, ${year}`;
+        if (!claimedItemsData[weekLabel]) claimedItemsData[weekLabel] = 0;
+        claimedItemsData[weekLabel]++;
+      });
+
+      const labels = Object.keys(claimedItemsData).sort();
+      const data = labels.map(label => claimedItemsData[label]);
+
+      new Chart(document.getElementById('claimedItemsChart'), {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Claimed Items',
+            data: data,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    });
+  }
+
+  window.addEventListener('load', () => {
+    updateCounts();
+    updateNotifications();
+    updateCharts();
+  });
+</script>
+
+</body>
+</html>
