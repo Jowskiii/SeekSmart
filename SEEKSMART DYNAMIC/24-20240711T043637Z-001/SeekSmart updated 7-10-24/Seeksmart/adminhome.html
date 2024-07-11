@@ -167,6 +167,63 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Firebase scripts -->
+    <script type="module">
+      // Import Firebase modules
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+      import { getDatabase, ref, update } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+      import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+  
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+        authDomain: "seeksmart-database.firebaseapp.com",
+        databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+        projectId: "seeksmart-database",
+        storageBucket: "seeksmart-database.appspot.com",
+        messagingSenderId: "1066553932800",
+        appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+      };
+  
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+  
+      // Firebase references
+      const db = getDatabase(app);
+      const auth = getAuth(app);
+  
+      // Login form submission
+      document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+  
+        // Firebase login with email and password
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Login successful
+            const user = userCredential.user;
+            if (user) {
+              const dt = new Date();
+              const dbRef = ref(db, 'usersAdmin/' + user.uid);
+              update(dbRef, {
+                last_login: dt.toString()
+              }).then(() => {
+                alert('User logged in successfully!');
+                window.location.href = "dbadmin.html";
+              }).catch((error) => {
+                console.error('Error updating database:', error);
+              });
+            }
+          })
+          .catch((error) => {
+            // Handle login errors
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(errorMessage);
+          });
+      });
+    </script>
 
 </body>
 </html>
