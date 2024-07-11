@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SEEKSMART</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <!-- Bootstrap CSS link -->
 
   <style>
     body {
@@ -13,31 +12,107 @@
       background-size: cover;
     }
 
-    .navbar__image {
-      max-width: 100%;
-      height: auto;
+    .navbar {
+      background: #020079;
+      height: 100px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 1.2rem;
+      top: 0;
+      z-index: 999;
     }
 
-    #main__img, #loginimage {
-      max-width: 100%;
-      height: auto;
+    .navbar-brand {
+      padding-left: 15px;
     }
 
-    /* Additional styling for mobile */
-    @media (max-width: 768px) {
-      .navbar__image {
-        width: 200px; /* Adjust logo size for smaller screens */
-        height: auto;
-      }
+    .main__container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); 
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      height: 80vh;
+      z-index: 1;
+      width: 100%;
+      max-width: 1500px;
+      padding-right: 50px;
+      padding-left: 50px;
+      padding-top: 50px;
+    }
 
-      #main__img, #loginimage {
-        width: 100%;
-      }
+    .main__img--container {
+      margin-right: 5%;
+    }
 
-      .modal-dialog {
-        max-width: 100%;
-        margin: 0 10px;
-      }
+    #main__img {
+      display: flex;
+      max-width: 100%;
+      height: auto;
+      margin-right: 35rem;
+    }
+
+    .vertical-line {
+      width: 3px;
+      height: 80%;
+      background-color: #000000;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .main__content {
+      grid-column: span 2;
+      margin-left: -200px;
+    }
+
+    .main__content p {
+      font-size: 1.5rem;
+      color: #ffffff;
+      max-width: 100%;
+      overflow-wrap: break-word;
+    }
+
+    .login-button {
+      position: relative;
+      background-color: rgb(255, 255, 255);
+      border-radius: 5px;
+      background-repeat: no-repeat;
+      cursor: pointer;
+      box-sizing: border-box;
+      width: 154px;
+      height: 49px;
+      color: #020079;
+      border: 2px solid #000000;
+      font-size: 20px;
+      transition: all 0.3s ease-in-out;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: "";
+      background-color: #f7f302;
+      width: 0;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      transition: width 700ms ease-in-out;
+      display: inline-block;
+    }
+
+    button:hover::before {
+      width: 100%;
+    }
+
+    /* Center modal vertically */
+    .modal-dialog {
+      min-height: calc(100vh - 1rem); /* Adjust according to your modal content */
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   </style>
 </head>
@@ -45,7 +120,7 @@
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-subtle">
-    <a class="navbar-brand" href="#"><img src="images/hccslogo.png" class="navbar__image" alt="Logo"></a>
+    <a class="navbar-brand" href="#"><img src="images/hccslogo.png" width="200" height="100" class="d-inline-block align-top" alt="Logo"></a>
   </nav>
 
   <!-- Main Content -->
@@ -64,7 +139,7 @@
 
   <!-- Bootstrap Modal -->
   <div id="loginModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="loginModalLabel">Login</h5>
@@ -88,69 +163,10 @@
     </div>
   </div>
 
-
   <!-- Bootstrap and Firebase Scripts -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  
-  <!-- Firebase scripts -->
-  <script type="module">
-    // Import Firebase modules
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getDatabase, ref, update } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
-    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
-      authDomain: "seeksmart-database.firebaseapp.com",
-      databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
-      projectId: "seeksmart-database",
-      storageBucket: "seeksmart-database.appspot.com",
-      messagingSenderId: "1066553932800",
-      appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-
-    // Firebase references
-    const db = getDatabase(app);
-    const auth = getAuth(app);
-
-    // Login form submission
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      // Firebase login with email and password
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Login successful
-          const user = userCredential.user;
-          if (user) {
-            const dt = new Date();
-            const dbRef = ref(db, 'usersAdmin/' + user.uid);
-            update(dbRef, {
-              last_login: dt.toString()
-            }).then(() => {
-              alert('User logged in successfully!');
-              window.location.href = "dbadmin.html";
-            }).catch((error) => {
-              console.error('Error updating database:', error);
-            });
-          }
-        })
-        .catch((error) => {
-          // Handle login errors
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          alert(errorMessage);
-        });
-    });
-  </script>
 
 </body>
 </html>
