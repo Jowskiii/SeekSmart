@@ -8,14 +8,44 @@
   <!-- Bootstrap CSS link -->
 
   <style>
-    /* Your custom CSS can go here for specific adjustments */
+    body {
+      background: url('images/bg.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .navbar__image {
+      max-width: 100%;
+      height: auto;
+    }
+
+    #main__img, #loginimage {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Additional styling for mobile */
+    @media (max-width: 768px) {
+      .navbar__image {
+        width: 200px; /* Adjust logo size for smaller screens */
+        height: auto;
+      }
+
+      #main__img, #loginimage {
+        width: 100%;
+      }
+
+      .modal-dialog {
+        max-width: 100%;
+        margin: 0 10px;
+      }
+    }
   </style>
 </head>
-<body background="images/bg.png">
+<body>
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-subtle">
-    <a class="navbar-brand" href="#"><img src="images/hccslogo.png" width="300" height="100" class="navbar__image" alt="Logo"></a>
+    <a class="navbar-brand" href="#"><img src="images/hccslogo.png" class="navbar__image" alt="Logo"></a>
   </nav>
 
   <!-- Main Content -->
@@ -57,6 +87,7 @@
       </div>
     </div>
   </div>
+
 
   <!-- Bootstrap and Firebase Scripts -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
