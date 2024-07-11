@@ -26,6 +26,15 @@
     <img src="images/dblogo.png" class="logo" alt="Logo">
   </div>
 
+  <div class="notification-icon">
+    <img src="images/notificon.png" alt="Notification Icon" id="notificationIcon">
+  </div>
+  
+  <div class="notifications-container" id="notificationsContainer">
+    <h2>Contact Us Notifications</h2>
+    <div id="notifications"></div>
+  </div>
+
   <div class="container-table">
     <table>
       <thead>
@@ -92,6 +101,33 @@
     tbody.appendChild(trow);
   }
 
+  function updateNotifications() {
+    const contactFormRef = ref(db, 'contactForm');
+    const notificationsContainer = document.getElementById('notifications');
+
+    onValue(contactFormRef, (snapshot) => {
+      notificationsContainer.innerHTML = '';
+      snapshot.forEach((childSnapshot) => {
+        const notification = childSnapshot.val();
+        const notificationElement = document.createElement('div');
+        notificationElement.className = 'notification';
+        notificationElement.textContent = `Message from ${notification.firstName} ${notification.lastName}: ${notification.helpMsg}`;
+        notificationsContainer.appendChild(notificationElement);
+      });
+    });
+  }
+
+  function toggleNotifications() {
+    const notificationsContainer = document.getElementById('notificationsContainer');
+    if (notificationsContainer.style.display === 'none' || notificationsContainer.style.display === '') {
+      notificationsContainer.style.display = 'block';
+    } else {
+      notificationsContainer.style.display = 'none';
+    }
+  }
+
+  document.getElementById('notificationIcon').addEventListener('click', toggleNotifications);
+
   function AddAllItemsToTable(ClaimedItems) {
     tbody.innerHTML = "";
     let itemNo = 1;
@@ -113,6 +149,7 @@
     });
   }
 
+
   window.onload = GetAllClaimedDataOnce;
 
   tbody.addEventListener('click', function(event) {
@@ -131,6 +168,10 @@
     }
   });
 
+  window.addEventListener('load', () => {
+    updateNotifications();
+  });
+
   function deleteItem(itemId) {
     const dbRef = ref(db, `claimedItems/${itemId}`);
     remove(dbRef).then(() => {
@@ -140,6 +181,8 @@
       console.error("Error removing item: ", error);
     });
   }
+
+
 </script>
 
 </body>
