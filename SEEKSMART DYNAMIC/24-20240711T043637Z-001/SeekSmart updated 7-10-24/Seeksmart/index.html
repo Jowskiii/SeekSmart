@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seeksmart</title>
-    <link rel="icon" type="image/x-icon" href="images\favicon.ico">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -15,7 +15,8 @@
         }
         .navbar {
             background: #020079;
-        }    
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
         .navbar-brand {
             margin-right: auto;
         }
@@ -23,57 +24,83 @@
             margin-left: auto;
         }
         .navbar-collapse .navbar-nav .nav-link {
-            color: rgb(255, 255, 255) !important; /* Text color */
-            transition: color 0.3s; /* Smooth transition for color change */
+            color: #fff !important;
+            font-size: 1.2em; /* Increase font size */
+            transition: color 0.3s;
         }
         .navbar-collapse .navbar-nav .nav-link:hover {
-            color: #000000 !important; /* Change text color on hover */
+            color: #000 !important;
         }
         .navbar-collapse {
-            background-color: transparent; /* Background color for the collapsed navbar */
+            background-color: transparent;
         }
         .main-content {
-            color: #ffffff; /* Change this to your desired text color */
-        }  
+            color: #fff;
+            text-align: center;
+            margin-top: 80px;
+        }
         .main-content h1 {
-            font-weight: 700; /* Make the h1 tags bold */
-            margin-top: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .main-content img {
+            max-width: 100%;
+            height: auto;
+        }
+        /* Media Queries for Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-brand img {
+                width: 120px;
+                height: auto;
+            }
+            .main-content {
+                margin-top: 40px;
+            }
+            .main-content h1 {
+                font-size: 1.5em;
+            }
+            .main-content img {
+                width: 80%;
+                margin: 0 auto;
+            }
+            .navbar-collapse .navbar-nav .nav-link {
+                font-size: 1em;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-subtle">
-        <a class="navbar-brand" href="#">
-            <img src="images/hccslogo.png" alt="Seeksmart" width="200" height="100" class="d-inline-block align-top">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Correct dropdown structure -->
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="adminhome.html">Admin <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="studenthome.html">Student</a>
-                </li>
-                <!-- Dropdown menu -->
-                
-            </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="images/hccslogo.png" alt="Seeksmart" width="175" height="100" class="d-inline-block align-top">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="adminhome.html">Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="studenthome.html">Student</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-5">
-        <div class="row main-content">
-            <div class="col-md-8 text-center">
+    <div class="container main-content">
+        <div class="row">
+            <div class="col-md-8">
                 <h1>Holy Child Catholic School</h1>
-                <h1>SEEKSMART</h1>
+                <h1>Lost and Found Management System</h1>
             </div>
-            <div class="col-md-4 text-right">
-                <img src="images/sslogo.png" alt="Seeksmart" width="400" height="400" class="img-fluid">
+            <div class="col-md-4">
+                <img src="images/sslogo.png" alt="Seeksmart" class="img-fluid">
             </div>
         </div>
     </div>
