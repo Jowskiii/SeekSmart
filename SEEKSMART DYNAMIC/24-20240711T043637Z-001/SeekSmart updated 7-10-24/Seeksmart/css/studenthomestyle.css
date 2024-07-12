@@ -1,3 +1,4 @@
+/* Global Reset and Base Styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -14,6 +15,7 @@
   }
 }
 
+/* Navbar Styles */
 .navbar {
   background: #020079;
   height: 100px;
@@ -25,60 +27,39 @@
   z-index: 999;
 }
 
-.navbarlc {
-  display: flex;
-  justify-content: space-between;
-  height: 80px;
-  z-index: 1;
-  width: 100%;
-  max-width: 1300px;
-  margin-right: auto;
+.navbar-toggler {
   margin-left: auto;
-  padding-right: 50px;
-  padding-left: 50px;
 }
 
-.navbtncon {
-  display: flex;
-  justify-content: space-between;
-  height: 80px;
-  z-index: 1;
+.navbar-collapse {
+  background-color: #020079 !important;
+  padding: 10px; /* Adjust padding as needed */
+  width: 100%; /* Ensure it spans the full width */
+}
+
+.navbar-collapse .navbar-nav {
   width: 100%;
-  max-width: 1300px;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 50px;
-  padding-left: 50px;
+  text-align: center; /* Center align the links */
 }
 
-
-.btns {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  text-decoration: none;
-  position: relative;
-  margin-top: 20px;
-  background-color: rgb(255, 255, 255);
-  border-radius: 5px;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  box-sizing: border-box;
-  width: 154px;
-  height: 49px;
-  color: #020079;
-  border: 2px solid #000000;
-  font-size: 20px;
-  transition: all 0.3s ease-in-out;
-  z-index: 1;
-  overflow: hidden;
+.navbar-collapse .nav-item {
+  display: block;
+  text-align: center; /* Center align the links */
 }
 
-.btns:hover {
-  background-color: rgb(255, 255, 255); /* Ensure hover color matches the normal state */
+.navbar-collapse .nav-link {
+  color: #ffffff !important;
+  text-align: center; /* Center align the links */
 }
 
+.navbar-collapse .login-button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  text-align: center; /* Center align the login button */
+}
+
+/* Main Container and Content Styles */
 .main__container {
   display: grid;
   grid-template-columns: repeat(4, 1fr); 
@@ -125,28 +106,7 @@
   overflow-wrap: break-word;
 }
 
-.login-button  {
-  position: relative;
-  background-color: rgb(255, 255, 255);
-  border-radius: 5px;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  box-sizing: border-box;
-  width: 154px;
-  margin-top: 20px;
-  height: 49px;
-  color: #020079;
-  border: 2px solid #000000;
-  font-size: 20px;
-  transition: all 0.3s ease-in-out;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.login-button:hover {
-  background-color: rgb(255, 255, 255); /* Ensure hover color matches the normal state */
-}
-
+/* Login Modal Styles */
 .modal {
   display: none; 
   position: fixed; 
