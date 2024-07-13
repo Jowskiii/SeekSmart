@@ -53,17 +53,19 @@
     }
     
     .chart-box {
-      flex: 1 1 100%; /* Ensure charts take full width initially */
+      flex: 1 1 50%; /* Ensure charts take full width initially */
       margin-bottom: 20px; /* Space between charts */
     }
     
     .chart {
-      background-color: #1c1c1e;
-      color: white;
-      padding: 20px;
-      border-radius: 5px;
-      height: 100%; /* Ensure charts fill container height */
-    }
+  background-color: #1c1c1e;
+  color: white;
+  padding: 20px;
+  border-radius: 5px;
+  height: auto; /* Adjusted to auto for dynamic height based on content */
+  width: 100%; /* Ensures charts fill the container width */
+  box-sizing: border-box; /* Ensures padding is included in total width */
+}
     
     .notification-icon {
       position: fixed;
