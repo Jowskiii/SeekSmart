@@ -7,68 +7,93 @@
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-      import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-      import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    
+    <!-- Firebase scripts -->
+  <script type="module">
+    // Import functions 
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   
-      // Web app Firebase config
-      const firebaseConfig = {
-        apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+    // Web app Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
       authDomain: "seeksmart-database.firebaseapp.com",
       databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
       projectId: "seeksmart-database",
       storageBucket: "seeksmart-database.appspot.com",
       messagingSenderId: "1066553932800",
       appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
-      };
+    };
   
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const database = getDatabase(app);
-      const auth = getAuth();
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth();
   
-      document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
-          e.preventDefault();
-          var email = document.getElementById('email').value;
-          var password = document.getElementById('password').value;
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const loginDate = new Date().toLocaleString();
   
-          signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-              const user = userCredential.user;
-  
-              if (user) {
-                const dt = new Date();
-                const dbRef = ref(database, 'usersStudents/' + user.uid);
-                update(dbRef, {
-                  last_login: dt.toString(),
-                })
-                .then(() => {
-                  alert('User logged in!');
-                  window.location.href = "lostitemstud.html";
-                })
-                .catch((error) => {
-                  console.error('Error updating database:', error);
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          if (user) {
+            const userRef = ref(database, 'usersStudents/' + user.uid);
+            get(userRef).then((snapshot) => {
+              if (!snapshot.exists()) {
+                // New user, add to database
+                set(userRef, {
+                  email: user.email,
+                  role: "student", // Default role, change as needed
+                  lastLogin: loginDate
+                }).then(() => {
+                  alert('New user added to the database. Login again.');
+                  auth.signOut();
+                }).catch((error) => {
+                  console.error('Error adding new user:', error);
                 });
               } else {
-                alert('Authentication failed');
+                // Existing user, update login date and check role
+                const userData = snapshot.val();
+                update(userRef, { lastLogin: loginDate }).then(() => {
+                  if (userData.role === "student") {
+                    alert('Student logged in!');
+                    window.location.href = "addloststud.html";
+                  } else {
+                    alert('Access denied. Students only.');
+                    auth.signOut();
+                  }
+                }).catch((error) => {
+                  console.error('Error updating login date:', error);
+                });
               }
-            })
-            .catch((error) => {
-              const errorMessage = error.message;
-              alert(errorMessage);
+            }).catch((error) => {
+              console.error('Error fetching user data:', error);
             });
-        });
-  
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            const uid = user.uid;
           } else {
+            alert('Authentication failed');
           }
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          alert(errorMessage);
         });
-      });
-    </script>
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        // Perform actions based on user state
+      } else {
+        // User is signed out
+        // Perform actions based on user state
+      }
+    });
+  </script>
+  
     <!-- Custom CSS -->
     <style>
         body {
