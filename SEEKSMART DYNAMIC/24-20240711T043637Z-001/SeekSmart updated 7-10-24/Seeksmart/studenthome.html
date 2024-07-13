@@ -41,7 +41,7 @@
         .then((userCredential) => {
           const user = userCredential.user;
           if (user) {
-            const userRef = ref(database, 'usersStudents/' + user.uid);
+            const userRef = ref(database, 'StudentUsers/' + user.uid);
             get(userRef).then((snapshot) => {
               if (!snapshot.exists()) {
                 // New user, add to database
