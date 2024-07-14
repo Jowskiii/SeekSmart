@@ -12,9 +12,11 @@
  
   
   <style>
-    body {
-      padding-top: 56px; /* Adjusted for navbar height */
-    }
+   body {
+    background-color: whitesmoke;
+}
+
+
     
     .navbar-nav .nav-link {
       color: white !important;
@@ -22,7 +24,7 @@
     
     .content {
       padding: 20px;
-      background-color: #7c3aed; /* Purple background color */
+      background-color: transparent; 
     }
     
     .content-header {
@@ -57,7 +59,7 @@
     
     .chart-box {
       flex: 1 1 50%; /* Ensure charts take full width initially */
-      margin-bottom: 20px; /* Space between charts */
+      margin-bottom: 10px; /* Space between charts */
     }
     
     .chart {
@@ -144,7 +146,7 @@
 
 <div class="content" id="invoice">
   <div class="content-header">
-    <h1>Dashboard</h1>
+    <h2>Dashboard</h2>
   </div>
   <div class="container">
     <div class="box">
@@ -233,97 +235,125 @@
 
   document.getElementById('notificationIcon').addEventListener('click', toggleNotifications);
 
-  function getWeekNumber(d) {
-    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-    return [d.getUTCFullYear(), weekNo];
-  }
+  function getWeekDates(d) {
+  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 
-  function updateCharts() {
-    const lostItemsRef = ref(db, 'lostItemForm');
-    const claimedItemsRef = ref(db, 'claimedItems');
+  // Get the start date of the week
+  const weekStart = new Date(d);
+  weekStart.setUTCDate(d.getUTCDate() - d.getUTCDay() + 1);
 
-    const lostItemsData = {};
-    const claimedItemsData = {};
+  // Get the end date of the week
+  const weekEnd = new Date(d);
+  weekEnd.setUTCDate(d.getUTCDate() - d.getUTCDay() + 7);
 
-    onValue(lostItemsRef, (snapshot) => {
-      snapshot.forEach((childSnapshot) => {
-        const item = childSnapshot.val();
-        const date = new Date(item.foundDate);
-        const [year, week] = getWeekNumber(date);
-        const weekLabel = `Week ${week}, ${year}`;
-        if (!lostItemsData[weekLabel]) lostItemsData[weekLabel] = 0;
-        lostItemsData[weekLabel]++;
-      });
+  return [d.getUTCFullYear(), weekNo, weekStart, weekEnd];
+}
 
-      const labels = Object.keys(lostItemsData).sort();
-      const data = labels.map(label => lostItemsData[label]);
+function formatWeekLabel(weekStart, weekEnd) {
+  const options = { month: 'short', day: 'numeric' };
+  const startLabel = weekStart.toLocaleDateString(undefined, options);
+  const endLabel = weekEnd.toLocaleDateString(undefined, options);
+  return `${startLabel} - ${endLabel}`;
+}
 
-      new Chart(document.getElementById('lostItemsChart'), {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Lost Items',
-            data: data,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
+function updateCharts() {
+  const lostItemsRef = ref(db, 'lostItemForm');
+  const claimedItemsRef = ref(db, 'claimedItems');
+
+  const lostItemsData = [];
+  const claimedItemsData = [];
+
+  onValue(lostItemsRef, (snapshot) => {
+    snapshot.forEach((childSnapshot) => {
+      const item = childSnapshot.val();
+      const date = new Date(item.foundDate);
+      const [year, week, weekStart, weekEnd] = getWeekDates(date);
+      const weekLabel = formatWeekLabel(weekStart, weekEnd);
+      const weekStartTime = weekStart.getTime();
+
+      if (!lostItemsData[weekStartTime]) {
+        lostItemsData[weekStartTime] = { label: weekLabel, count: 0 };
+      }
+      lostItemsData[weekStartTime].count++;
     });
 
-    onValue(claimedItemsRef, (snapshot) => {
-      snapshot.forEach((childSnapshot) => {
-        const item = childSnapshot.val();
-        const date = new Date(item.claimedDate);
-        const [year, week] = getWeekNumber(date);
-        const weekLabel = `Week ${week}, ${year}`;
-        if (!claimedItemsData[weekLabel]) claimedItemsData[weekLabel] = 0;
-        claimedItemsData[weekLabel]++;
-      });
+    const sortedLostItemsData = Object.keys(lostItemsData).sort((a, b) => a - b).map(key => lostItemsData[key]);
+    const labels = sortedLostItemsData.map(item => item.label);
+    const data = sortedLostItemsData.map(item => item.count);
 
-      const labels = Object.keys(claimedItemsData).sort();
-      const data = labels.map(label => claimedItemsData[label]);
-
-      new Chart(document.getElementById('claimedItemsChart'), {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Claimed Items',
-            data: data,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
+    new Chart(document.getElementById('lostItemsChart'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Lost Items',
+          data: data,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
           }
         }
-      });
+      }
     });
-  }
-
-  window.addEventListener('load', () => {
-    updateCounts();
-    updateNotifications();
-    updateCharts();
   });
+
+  onValue(claimedItemsRef, (snapshot) => {
+    snapshot.forEach((childSnapshot) => {
+      const item = childSnapshot.val();
+      const date = new Date(item.claimedDate);
+      const [year, week, weekStart, weekEnd] = getWeekDates(date);
+      const weekLabel = formatWeekLabel(weekStart, weekEnd);
+      const weekStartTime = weekStart.getTime();
+
+      if (!claimedItemsData[weekStartTime]) {
+        claimedItemsData[weekStartTime] = { label: weekLabel, count: 0 };
+      }
+      claimedItemsData[weekStartTime].count++;
+    });
+
+    const sortedClaimedItemsData = Object.keys(claimedItemsData).sort((a, b) => a - b).map(key => claimedItemsData[key]);
+    const labels = sortedClaimedItemsData.map(item => item.label);
+    const data = sortedClaimedItemsData.map(item => item.count);
+
+    new Chart(document.getElementById('claimedItemsChart'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Claimed Items',
+          data: data,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  });
+}
+
+window.addEventListener('load', () => {
+  updateCounts();
+  updateNotifications();
+  updateCharts();
+});
+
+
 
 
  

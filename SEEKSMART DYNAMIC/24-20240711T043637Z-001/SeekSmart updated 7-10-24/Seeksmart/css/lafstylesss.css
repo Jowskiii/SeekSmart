@@ -5,10 +5,7 @@
     font-family: 'Kumbh Sans', sans-serif;
 }
 
-body {
-    background-color: #665dda;
-    color: #000000;
-}
+
 
 .sidebar {
     width: 200px;
@@ -288,4 +285,9 @@ h2 {
 
 .notification:last-child {
     border-bottom: none;
+}
+
+.navbar {
+    background-color: #020079;
+    width: 100%;
 }
