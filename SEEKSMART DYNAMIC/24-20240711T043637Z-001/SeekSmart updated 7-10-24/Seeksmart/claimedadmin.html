@@ -156,13 +156,34 @@
             <th>Item Photo</th>
             <th>Claimer's Photo</th>
             <th>Action</th>
-            <!-- Add more headers as needed -->
           </tr>
         </thead>
         <tbody id="tbody2">
           <!-- Table rows will be dynamically added here -->
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- Bootstrap Modal for Item Details -->
+  <div class="modal fade" id="itemDetailsModal" tabindex="-1" role="dialog" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="itemDetailsModalLabel">Item Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="itemDetailsContent">
+            <!-- Item details will be dynamically inserted here -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -181,8 +202,10 @@
     messagingSenderId: "1066553932800",
     appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
     };
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database(); // Initialize Firebase database
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
     const tbody = document.getElementById('tbody2');
 
@@ -196,7 +219,7 @@
         <td>${foundLocation}</td>
         <td>${claimedBy}</td>
         <td><img src="${photo}" alt="Item Photo" width="50"></td>
-        <td><img src="${photoId}" alt="Claimant Photo" width="50"></td>
+        <td><img src="${photoId}" alt="Claimer's Photo" width="50"></td>
         <td>
           <div class="dropdown">
             <button class="dropdown-toggle action-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -225,7 +248,7 @@
       const itemsRef = db.ref("claimedItems");
       itemsRef.once("value", function(snapshot) {
         if (snapshot.exists()) {
-          var items = [];
+          let items = [];
           snapshot.forEach(function(childSnapshot) {
             let item = childSnapshot.val();
             item.itemId = childSnapshot.key;
@@ -240,11 +263,29 @@
       });
     }
 
-    // Function to handle view button click
+    // Function to handle view button click and populate modal
     $(document).on('click', '.view-btn', function() {
       let itemId = $(this).data('item-id');
-      alert(`View item ${itemId}`);
-      // Add your logic here to show item details
+      const itemRef = db.ref(`claimedItems/${itemId}`);
+      itemRef.once("value", function(snapshot) {
+        if (snapshot.exists()) {
+          let itemDetails = snapshot.val();
+          $('#itemDetailsContent').html(`
+            <p><strong>Item:</strong> ${itemDetails.itemName}</p>
+            <p><strong>Description:</strong> ${itemDetails.itemDescription}</p>
+            <p><strong>Claimed Date:</strong> ${itemDetails.claimedDate}</p>
+            <p><strong>Found Location:</strong> ${itemDetails.foundLocation}</p>
+            <p><strong>Claimer's Name:</strong> ${itemDetails.claimedBy}</p>
+            <p><strong>Item Photo:</strong> <img src="${itemDetails.photo}" alt="Item Photo" width="100"></p>
+            <p><strong>Claimer's Photo:</strong> <img src="${itemDetails.photoId}" alt="Claimer's Photo" width="100"></p>
+          `);
+          $('#itemDetailsModal').modal('show');
+        } else {
+          console.log("No data available for this item");
+        }
+      }, function(error) {
+        console.error(error);
+      });
     });
 
     // Function to handle print button click
