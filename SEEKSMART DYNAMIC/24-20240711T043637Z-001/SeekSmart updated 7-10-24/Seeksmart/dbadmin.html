@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEEKSMART</title>
+  <title>Dashboard</title>
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/dbadminstyless12345679.css">
@@ -14,7 +14,7 @@
   <style>
    body {
     background-color: whitesmoke;
-}
+    }
 
 
     
@@ -38,13 +38,55 @@
       height: auto;
     }
     
-    .box {
-      background-color: #1c1c1e;
-      color: white;
-      padding: 20px;
-      margin: 10px 0;
-      border-radius: 5px;
+    .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adds space between .box and .charts-container */
     }
+
+    .box {
+        background-color: #1c1c1e;
+        color: white;
+        padding: 20px;
+        border-radius: 5px;
+        flex: 1 1 calc(50% - 10px); /* Each box takes up about half the container width, minus the gap */
+        box-sizing: border-box; /* Ensures padding is included in total width */
+    }
+
+    .charts-container {
+        display: flex;
+        flex-wrap: wrap; /* Allows chart-box elements to wrap on smaller screens */
+        gap: 20px; /* Adds space between chart-box elements */
+        justify-content: space-between; /* Distributes items evenly across the main axis */
+    }
+
+    .chart-box {
+        flex: 0 1 calc(50% - 20px); /* Each chart-box takes up about half the container width, minus the gap */
+        box-sizing: border-box; /* Ensures padding is included in total width */
+    }
+
+    .chart {
+        background-color: #1c1c1e;
+        color: white;
+        padding: 20px;
+        border-radius: 5px;
+        width: 100%; /* Ensures charts fill the container width */
+        box-sizing: border-box; /* Ensures padding is included in total width */
+    }
+
+    /* Adjust layout for smaller screens */
+    @media (max-width: 768px) {
+        .charts-container {
+            flex-direction: column; /* Stacks charts vertically on smaller screens */
+        }
+
+        .chart-box {
+            flex: 1 1 100%; /* Each chart-box takes full width on smaller screens */
+            margin-bottom: 20px; /* Adds space between chart-box elements when stacked */
+        }
+    }
+
+
     
     .title {
       font-size: 1.5rem;
