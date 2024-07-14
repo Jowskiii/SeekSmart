@@ -7,7 +7,11 @@
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/dbadminstyless12345679.css">
+  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script scr="pdf.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.js"></script>
+  
   <style>
     body {
       padding-top: 56px; /* Adjusted for navbar height */
@@ -130,9 +134,19 @@
   </div>
 </nav>
 
-<div class="content">
+<div class="notification-icon" id="notificationIcon">
+  <img src="images/notificon.png" alt="Notification Icon" width="40" height="40">
+</div>
+
+<div class="notifications-container" id="notificationsContainer">
+  <h2>Contact Us Notifications</h2>
+  <div id="notifications"></div>
+</div>
+
+<div class="content" id="invoice">
   <div class="content-header">
     <h1>Dashboard</h1>
+    <button class ="btn btn-primary" id ="download">download pdf</button>
   </div>
   <div class="container">
     <div class="box">
@@ -158,14 +172,6 @@
   </div>
 </div>
 
-<div class="notification-icon" id="notificationIcon">
-  <img src="images/notificon.png" alt="Notification Icon" width="40" height="40">
-</div>
-
-<div class="notifications-container" id="notificationsContainer">
-  <h2>Contact Us Notifications</h2>
-  <div id="notifications"></div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

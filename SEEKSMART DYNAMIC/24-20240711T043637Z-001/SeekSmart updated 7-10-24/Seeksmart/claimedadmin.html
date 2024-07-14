@@ -5,22 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEEKSMART</title>
     <link rel="icon" type="image/x-icon" href="images\favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/claimedstylesss.css">
 </head>
+<style>
+  body {
+    padding-top: 56px; /* Adjusted for navbar height */
+  }
+  
+  .navbar-nav .nav-link {
+    color: white !important;
+  }
+  
+  .content {
+    padding: 20px;
+    background-color: #7c3aed; /* Purple background color */
+  }
+  
+  .content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 50px;
+    height: auto;
+  }
+  
+  .box {
+    background-color: #1c1c1e;
+    color: white;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  .charts-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Allows charts to wrap on smaller screens */
+  }
+  
+  .chart-box {
+    flex: 1 1 50%; /* Ensure charts take full width initially */
+    margin-bottom: 20px; /* Space between charts */
+  }
+  
+  .chart {
+background-color: #1c1c1e;
+color: white;
+padding: 20px;
+border-radius: 5px;
+height: auto; /* Adjusted to auto for dynamic height based on content */
+width: 100%; /* Ensures charts fill the container width */
+box-sizing: border-box; /* Ensures padding is included in total width */
+}
+  
+  .notification-icon {
+    position: fixed;
+    top: 70px; /* Adjusted to be below navbar */
+    right: 20px; /* Adjusted to top right */
+    cursor: pointer;
+    width: 40px; /* Set a fixed width */
+    height: 40px; /* Set a fixed height */
+  }
+  
+  .notifications-container {
+    position: fixed;
+    top: 120px; /* Adjusted to be below navbar */
+    right: 20px; /* Adjusted to top right */
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+    display: none;
+    padding: 20px;
+  }
+  
+  .notification {
+    margin-bottom: 10px;
+  }
+  
+  @media (min-width: 768px) {
+    .chart-box {
+      flex: 1 1 48%; /* Adjusted for two-column layout on larger screens */
+      margin-right: 2%; /* Space between charts */
+    }
+  }
+</style>
 <body>
 
-<div class="sidebar">
-  <div class="profile">
-    <img src="images/picon.png" alt="Profile Icon">
-    <h1>Admin</h1>
-  </div>
-  
-  <a href="dbadmin.html">Dashboard</a>
-  <a href="laf.html">Lost And Found Items</a>
-  <a href="claimedadmin.html">Claimed Items</a>
-  <a href="index.html">Log Out</a>
-</div>
-
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">
+      <img src="images/picon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+      Admin
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="dbadmin.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="laf.html">Lost And Found Items</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="claimedadmin.html">Claimed Items</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Log Out</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 <div class="content">
   <div class="content-header">
     <h1>Claimed Items</h1>
