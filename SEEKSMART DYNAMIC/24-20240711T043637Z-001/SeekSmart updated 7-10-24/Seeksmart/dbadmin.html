@@ -186,6 +186,7 @@
   <div id="notifications"></div>
 </div>
 
+
 <div class="content" id="invoice">
   <div class="content-header">
     <h2>Dashboard</h2>
@@ -255,25 +256,46 @@
     const notificationsContainer = document.getElementById('notifications');
 
     onValue(contactFormRef, (snapshot) => {
-      notificationsContainer.innerHTML = '';
-      snapshot.forEach((childSnapshot) => {
-        const notification = childSnapshot.val();
-        const notificationElement = document.createElement('div');
-        notificationElement.className = 'notification';
-        notificationElement.textContent = `Message from ${notification.firstName} ${notification.lastName}: ${notification.helpMsg}`;
-        notificationsContainer.appendChild(notificationElement);
-      });
-    });
-  }
+        notificationsContainer.innerHTML = '';
 
-  function toggleNotifications() {
+        let notifications = [];
+        snapshot.forEach((childSnapshot) => {
+            notifications.push(childSnapshot.val());
+        });
+
+        // Sort notifications by timestamp in descending order
+        notifications.sort((a, b) => b.timestamp - a.timestamp);
+
+        // Prepend sorted notifications to the container
+        notifications.forEach((notification) => {
+            const notificationElement = document.createElement('div');
+            notificationElement.className = 'notification';
+            notificationElement.textContent = `Message from ${notification.firstName} ${notification.lastName}: ${notification.helpMsg}`;
+            notificationsContainer.insertBefore(notificationElement, notificationsContainer.firstChild);
+        });
+    });
+}
+
+function toggleNotifications() {
     const notificationsContainer = document.getElementById('notificationsContainer');
     if (window.getComputedStyle(notificationsContainer).display === 'none') {
-      notificationsContainer.style.display = 'block';
+        notificationsContainer.style.display = 'block';
     } else {
-      notificationsContainer.style.display = 'none';
+        notificationsContainer.style.display = 'none';
     }
-  }
+}
+
+function saveContactInfoToFirebase(fname, lname, email, message) {
+    let newContactInfo = push(saveContactInfo);
+
+    set(newContactInfo, {
+        fname: fname,
+        lname: lname,
+        email: email,
+        message: message,
+        timestamp: Date.now()
+    });
+}
 
   document.getElementById('notificationIcon').addEventListener('click', toggleNotifications);
 

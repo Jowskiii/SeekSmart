@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEEKSMART</title>
+    <title>Add Lost Item</title>
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/lostitemstud123.css">
@@ -16,6 +16,13 @@
             justify-content: space-between;
             align-items: center;
         }
+        body {
+             background-color: whitesmoke;
+        }
+        .navbar {
+            background-color: #020079;
+            width: 100%;
+        }
         .logo {
             width: 50px;
             height: auto;
@@ -26,6 +33,16 @@
         .notification {
             display: none;
         }
+        .fixed-top {
+            position: static;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1030;
+        }
+        .bg-light {
+            background-color: #9ec5feff !important;
+        }
         @media (max-width: 768px) {
             .content {
                 padding: 10px;
@@ -35,7 +52,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-subtle fixed-top">
     <a class="navbar-brand" href="#">
         <img src="images/picon.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Student
@@ -65,7 +82,7 @@
     <div class="row">
         <div class="col-12 content">
             <div class="content-header">
-                <h1>Add Lost Item</h1>
+                <h2>Add Lost Item</h2>
             </div>
             <div class="container mt-4">
                 <div class="box p-4 bg-light rounded">
@@ -100,93 +117,95 @@
                         </div>
                         <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
                     </form>
-                    <div id="notification" class="notification mt-3 alert alert-success">Item added successfully!</div>
+                    <div id="notification" class="notification mt-3 alert alert-success" style="display: none;">Item added successfully!</div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-  import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-  // Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
-    authDomain: "seeksmart-database.firebaseapp.com",
-    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
-    projectId: "seeksmart-database",
-    storageBucket: "seeksmart-database.appspot.com",
-    messagingSenderId: "1066553932800",
-    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const storage = getStorage(app);
-
-  let isSubmitting = false;
-
-  // Form submission handler
-  document.getElementById('lostItemForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    if (isSubmitting) return;
-    isSubmitting = true;
-
-    const submitButton = document.getElementById('submitButton');
-    submitButton.disabled = true;
-
-    const founderName = document.getElementById('founderName').value;
-    const itemName = document.getElementById('itemName').value;
-    const itemDescription = document.getElementById('itemDescription').value;
-    const foundDate = document.getElementById('foundDate').value;
-    const foundLocation = document.getElementById('foundLocation').value;
-    const keywordDescription = document.getElementById('keywordDescription').value;
-    const imageFile = document.getElementById('image').files[0];
-
-    const notification = document.getElementById('notification');
-
-    try {
-      if (imageFile) {
-        const storageReference = storageRef(storage, `images/${imageFile.name}`);
-        await uploadBytes(storageReference, imageFile);
-        const photoURL = await getDownloadURL(storageReference);
-
-        const newItemRef = ref(db, 'lostItemForm/' + Date.now());
-        await set(newItemRef, {
-          founderName,
-          itemName,
-          itemDescription,
-          foundDate,
-          foundLocation,
-          keywordDescription,
-          photo: photoURL,
-          returned: false
-        });
-
-        notification.textContent = 'Item added successfully!';
-      } else {
-        notification.textContent = 'Please upload an image!';
-        notification.classList.replace('alert-success', 'alert-danger');
-      }
-    } catch (error) {
-      console.error('Error writing new message to Firebase Database', error);
-      notification.textContent = 'Failed to add item. Please try again.';
-      notification.classList.replace('alert-success', 'alert-danger');
-    } finally {
-      submitButton.disabled = false;
-      isSubmitting = false;
-      notification.style.display = 'block';
-    }
-  });
-</script>
-
+            
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <script type="module">
+              import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+              import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+              import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+            
+              // Firebase configuration
+              const firebaseConfig = {
+                apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+                authDomain: "seeksmart-database.firebaseapp.com",
+                databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+                projectId: "seeksmart-database",
+                storageBucket: "seeksmart-database.appspot.com",
+                messagingSenderId: "1066553932800",
+                appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+              };
+            
+              // Initialize Firebase
+              const app = initializeApp(firebaseConfig);
+              const db = getDatabase(app);
+              const storage = getStorage(app);
+            
+              let isSubmitting = false;
+            
+              // Form submission handler
+              document.getElementById('lostItemForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+            
+                if (isSubmitting) return;
+                isSubmitting = true;
+            
+                const submitButton = document.getElementById('submitButton');
+                submitButton.disabled = true;
+            
+                const founderName = document.getElementById('founderName').value;
+                const itemName = document.getElementById('itemName').value;
+                const itemDescription = document.getElementById('itemDescription').value;
+                const foundDate = document.getElementById('foundDate').value;
+                const foundLocation = document.getElementById('foundLocation').value;
+                const keywordDescription = document.getElementById('keywordDescription').value;
+                const imageFile = document.getElementById('image').files[0];
+            
+                const notification = document.getElementById('notification');
+            
+                try {
+                  if (imageFile) {
+                    const storageReference = storageRef(storage, `images/${imageFile.name}`);
+                    await uploadBytes(storageReference, imageFile);
+                    const photoURL = await getDownloadURL(storageReference);
+            
+                    const newItemRef = ref(db, 'lostItemForm/' + Date.now());
+                    await set(newItemRef, {
+                      founderName,
+                      itemName,
+                      itemDescription,
+                      foundDate,
+                      foundLocation,
+                      keywordDescription,
+                      photo: photoURL,
+                      returned: false
+                    });
+            
+                    notification.textContent = 'Item added successfully!';
+                    notification.classList.replace('alert-danger', 'alert-success');
+                    notification.style.display = 'block';
+                    setTimeout(() => location.reload(), 2000);  // Refresh the page after 2 seconds
+                  } else {
+                    notification.textContent = 'Please upload an image!';
+                    notification.classList.replace('alert-success', 'alert-danger');
+                    notification.style.display = 'block';
+                    submitButton.disabled = false;
+                    isSubmitting = false;
+                  }
+                } catch (error) {
+                  console.error('Error writing new message to Firebase Database', error);
+                  notification.textContent = 'Failed to add item. Please try again.';
+                  notification.classList.replace('alert-success', 'alert-danger');
+                  notification.style.display = 'block';
+                  submitButton.disabled = false;
+                  isSubmitting = false;
+                }
+              });
+            </script>
+            
 </body>
 </html>

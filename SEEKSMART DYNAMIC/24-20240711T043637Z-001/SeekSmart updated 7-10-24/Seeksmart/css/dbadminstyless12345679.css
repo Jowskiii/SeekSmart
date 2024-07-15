@@ -68,7 +68,7 @@ body {
 
   @media (max-width: 991px) {
     .navbar-nav {
-      text-align: center;
+      text-align: left;
     }
     .navbar-nav .nav-item {
       margin-left: 0;
