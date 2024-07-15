@@ -61,7 +61,7 @@
                 update(userRef, { lastLogin: loginDate }).then(() => {
                   if (userData.role === "student") {
                     alert('Student logged in!');
-                    window.location.href = "addloststud.html";
+                    window.location.href = "lostitemstud.html";
                   } else {
                     alert('Access denied. Students only.');
                     auth.signOut();
