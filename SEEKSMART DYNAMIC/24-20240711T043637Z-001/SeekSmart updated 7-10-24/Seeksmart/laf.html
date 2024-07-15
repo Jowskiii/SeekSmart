@@ -313,7 +313,7 @@
       itemRef.once('value', (snapshot) => {
         const data = snapshot.val();
         document.getElementById("itemDetailsContent").innerHTML = `
-          <p><strong>Item:</strong> ${data.item}</p>
+          <p><strong>Item:</strong> ${data.itemName}</p>
           <p><strong>Description:</strong> ${data.itemDescription}</p>
           <p><strong>Found Date:</strong> ${data.foundDate}</p>
           <p><strong>Found Location:</strong> ${data.foundLocation}</p>
