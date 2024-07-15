@@ -1,4 +1,3 @@
-@ -1,309 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,7 @@
   <title>Lost And Found Items</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-    * {
+       * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -15,20 +14,22 @@
     }
 
     body {
-           background-color: whitesmoke;
-        }
-    .navbar {
-    background-color: #020079;
-    width: 100%;
+      background-color: whitesmoke;
     }
+
+    .navbar {
+      background-color: #020079;
+      width: 100%;
+    }
+
     .navbar-nav .nav-link {
       color: white !important;
     }
 
     .content {
-    margin-top: 55px;
-    padding: 20px;
-    background-color: transparent;
+      margin-top: 55px;
+      padding: 20px;
+      background-color: transparent;
     }
 
     .table-responsive {
@@ -39,18 +40,18 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
-      background-color: white; /* Ensure table background is visible */
+      background-color: white;
     }
 
     th, td {
-      padding: 8px; /* Adjust padding for smaller screens */
+      padding: 8px;
       text-align: center;
-      white-space: nowrap; /* Prevent text wrapping in table cells */
+      white-space: nowrap;
     }
 
     th {
-    background-color: #1c1c1e;
-    color: white;
+      background-color: #1c1c1e;
+      color: white;
     }
 
     tr:nth-child(even) td {
@@ -67,9 +68,11 @@
       .navbar-nav {
         text-align: center;
       }
+
       .navbar-nav .nav-item {
         margin-left: 0;
       }
+
       .content {
         margin-top: 140px;
       }
@@ -84,12 +87,12 @@
       }
 
       th, td {
-        padding: 6px; /* Further adjust padding for smaller cells */
-        font-size: 12px; /* Adjust font size for better readability on mobile */
+        padding: 6px;
+        font-size: 12px;
       }
 
       .dropdown-menu {
-        min-width: unset; /* Ensure dropdown menu width adjusts as needed */
+        min-width: unset;
       }
 
       .action-button {
@@ -100,20 +103,20 @@
 
     @media (min-width: 992px) {
       .table-responsive {
-        width: 100%; /* Use 100% width on wide screens */
-        overflow-x: auto; /* Ensure horizontal scrolling if needed */
-        margin: 0; /* Reset margin to avoid extra space */
+        width: 100%;
+        overflow-x: auto;
+        margin: 0;
       }
 
       table {
-        min-width: 1200px; /* Adjust minimum width for better spread */
-        width: 100%; /* Ensure table fills container */
-        font-size: 14px; /* Maintain font size for readability */
+        min-width: 1200px;
+        width: 100%;
+        font-size: 14px;
       }
 
       th, td {
-        white-space: nowrap; /* Prevent text wrapping in table cells */
-        padding: 12px; /* Adjust padding for larger cells */
+        white-space: nowrap;
+        padding: 12px;
       }
     }
   </style>
@@ -191,11 +194,38 @@
     </div>
   </div>
 
+  <!-- Claimant Modal -->
+  <div id="claimantModal" class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Return Item</h5>
+          <button type="button" id="claimantClose" class="close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="claimantForm">
+            <div class="form-group">
+              <label for="claimantName">Claimant Name</label>
+              <input type="text" id="claimantName" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="claimantPhoto">Upload Photo</label>
+              <input type="file" id="claimantPhoto" class="form-control" required>
+            </div>
+            <input type="hidden" id="itemId">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
@@ -210,6 +240,7 @@
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+    const storage = firebase.storage();
 
     const tbody = document.getElementById('tbody1');
 
@@ -218,9 +249,10 @@
         const items = [];
         snapshot.forEach((childSnapshot) => {
           const item = childSnapshot.val();
-          item.itemId = childSnapshot.key; // Adding itemId to each item object
+          item.itemId = childSnapshot.key;
           items.push(item);
         });
+        console.log('Items fetched:', items); // Debugging line
         AddAllItemsToTable(items);
       });
     }
@@ -236,13 +268,14 @@
           item.founderName,
           item.photo,
           item.keyword,
-          item.itemId  // Using itemId as the last parameter
+          item.itemId
         );
       });
     }
 
     function AddItemToTable(itemNo, item, itemDescription, foundDate, foundLocation, founderName, photo, keyword, itemId) {
       let trow = document.createElement("tr");
+      trow.id = itemId; // Ensure each row has an ID for easy removal
       trow.innerHTML = `
         <td>${itemNo}</td>
         <td>${item}</td>
@@ -260,6 +293,7 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton${itemNo}">
               <button class="dropdown-item" onclick="ViewItem('${itemId}')">View</button>
+              <button class="dropdown-item" onclick="handleReturnedButtonClick(event)" data-item-id="${itemId}">Returned</button>
               <button class="dropdown-item" onclick="DeleteItem('${itemId}')">Delete</button>
             </div>
           </div>
@@ -289,7 +323,6 @@
         db.ref(`lostItemForm/${itemId}`).remove()
           .then(() => {
             alert("Item deleted successfully!");
-            // Optionally remove the item from the table as well
             const rowToRemove = document.getElementById(itemId);
             if (rowToRemove) {
               rowToRemove.remove();
@@ -300,6 +333,70 @@
           });
       }
     }
+
+    function handleReturnedButtonClick(event) {
+      const itemId = event.target.dataset.itemId;
+      document.getElementById('itemId').value = itemId;
+      document.getElementById('claimantModal').style.display = 'block';
+    }
+
+    var claimantModal = document.getElementById("claimantModal");
+    var claimantClose = document.getElementById("claimantClose");
+
+    claimantClose.onclick = function() {
+      claimantModal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == claimantModal) {
+        claimantModal.style.display = "none";
+      }
+    }
+
+    document.getElementById('claimantForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const claimantName = document.getElementById('claimantName').value;
+      const claimantPhoto = document.getElementById('claimantPhoto').files[0];
+      const itemId = document.getElementById('itemId').value;
+
+      if (!claimantPhoto) {
+        alert('Please select a photo');
+        return;
+      }
+
+      const itemRef = db.ref(`lostItemForm/${itemId}`);
+      itemRef.once('value', (snapshot) => {
+        const itemData = snapshot.val();
+        const claimedItemRef = db.ref(`claimedItems/${itemId}`);
+
+        const photoRef = storage.ref(`claimant_photos/${itemId}/${claimantPhoto.name}`);
+        const uploadTask = photoRef.put(claimantPhoto);
+
+        uploadTask.on('state_changed', 
+          (snapshot) => {
+            // Upload progress
+          }, 
+          (error) => {
+            console.error('Photo upload failed:', error);
+          }, 
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              claimedItemRef.set({
+                ...itemData,
+                claimedDate: new Date().toISOString().split('T')[0],
+                claimedBy: claimantName,
+                photoId: downloadURL
+              }).then(() => {
+                itemRef.remove().then(() => {
+                  claimantModal.style.display = "none";
+                  LoadItems();
+                });
+              });
+            });
+          }
+        );
+      });
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       LoadItems();
