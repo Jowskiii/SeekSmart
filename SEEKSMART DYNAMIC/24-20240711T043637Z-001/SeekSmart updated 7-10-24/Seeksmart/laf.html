@@ -267,13 +267,13 @@
           item.foundLocation,
           item.founderName,
           item.photo,
-          item.keyword,
+          item.keywordDescription,
           item.itemId
         );
       });
     }
 
-    function AddItemToTable(itemNo, item, itemDescription, foundDate, foundLocation, founderName, photo, keyword, itemId) {
+    function AddItemToTable(itemNo, item, itemDescription, foundDate, foundLocation, founderName, photo, keywordDescription, itemId) {
       let trow = document.createElement("tr");
       trow.id = itemId; // Ensure each row has an ID for easy removal
       trow.innerHTML = `
@@ -285,7 +285,7 @@
         <td>${founderName}</td>
         <td><img src="${photo}" alt="Item Photo" width="50"></td>
         <td>${new Date(new Date(foundDate).setDate(new Date(foundDate).getDate() + 90)).toLocaleDateString()}</td>
-        <td>${keyword}</td>
+        <td>${keywordDescription}</td>
         <td>
           <div class="dropdown">
             <button class="dropdown-toggle action-button" type="button" id="dropdownMenuButton${itemNo}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -305,7 +305,7 @@
       tbody.innerHTML = "";
       let itemNo = 1;
       ClaimedItems.forEach(element => {
-        AddItemToTable(itemNo++, element.itemName, element.itemDescription, element.claimedDate, element.foundLocation, element.claimedBy, element.photo, element.photoId, element.itemId);
+        AddItemToTable(itemNo++, element.itemName, element.itemDescription, element.foundDate, element.foundLocation, element.founderName, element.photo, element.keywordDescription, element.itemId);
       });
     }
     function ViewItem(itemId) {
