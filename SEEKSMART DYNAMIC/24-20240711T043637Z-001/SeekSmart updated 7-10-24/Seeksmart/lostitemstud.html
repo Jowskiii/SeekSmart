@@ -1,406 +1,493 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEEKSMART</title>
-    
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEEKSMART</title>
+  
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/lostitemstud123.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/lostitemstud123.css">
 
-    <style>
-      /* Add any additional custom styles here */
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
+  <style>
+    /* Add any additional custom styles here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* Ensure the content stretches to at least the height of the viewport */
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .content-header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .content-header .logo {
+      width: 80px;
+      height: auto;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+    }
+
+    .search-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .search-button:hover {
+      background-color: #45a049;
+    }
+
+    .items-container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .item-container {
+      width: calc(50% - 20px);
+      margin: 10px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      background-color: #f9f9f9;
+    }
+
+    .item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .item-header h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .item-header img {
+      width: 50px;
+      height: auto;
+    }
+
+    .item-body {
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .item-footer {
+      text-align: right;
+    }
+
+    .view-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+
+    .view-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      position: relative;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .option-buttons {
+      margin-bottom: 20px;
+    }
+
+    .option-buttons button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .option-buttons button:hover {
+      background-color: #0056b3;
+    }
+
+    #capture-container,
+    #upload-container {
+      margin-bottom: 20px;
+    }
+
+    #capture-container video,
+    #loginimage {
+      width: 100%;
+      height: auto;
+    }
+
+    #canvas {
+      display: none;
+    }
+
+    #specificItemsContainer h2 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    #specificItemsForm {
+      margin-bottom: 20px;
+    }
+
+    #specificItemsForm input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    #specificItemsForm button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    #specificItemsForm button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 992px) {
+      .navbar-expand-lg .navbar-nav {
         flex-direction: column;
-        min-height: 100vh; /* Ensure the content stretches to at least the height of the viewport */
-      }
-
-      .content {
-        flex: 1;
-        padding: 20px;
-      }
-
-      .content-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-
-      .content-header h1 {
-        margin: 0;
-        font-size: 24px;
-        color: #333;
-      }
-
-      .content-header .logo {
-        width: 80px;
-        height: auto;
-      }
-
-      .search-bar {
-        margin-bottom: 20px;
-      }
-
-      .search-button {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        margin-right: 10px;
-      }
-
-      .search-button:hover {
-        background-color: #45a049;
-      }
-
-      .items-container {
-        display: flex;
-        flex-wrap: wrap;
       }
 
       .item-container {
-        width: calc(50% - 20px);
-        margin: 10px;
-        padding: 15px;
-        border: 1px solid #ddd;
-        background-color: #f9f9f9;
+        width: 100%;
       }
 
-      .item-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+      .search-button {
         margin-bottom: 10px;
       }
+    }
+  </style>
+</head>
+<body>
 
-      .item-header h2 {
-        margin: 0;
-        font-size: 18px;
-        color: #333;
-      }
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">
+      <img src="images/picon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+      Student
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="lostitemstud.html">Search Lost Items</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="addloststud.html">Add Lost Items</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="claimstud.html">Claimed Items</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Log Out</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-      .item-header img {
-        width: 50px;
-        height: auto;
-      }
+  <!-- Content -->
+  <div class="content">
+    <div class="content-header">
+      <h1>Lost Items</h1>
+      <img src="images/dblogo.png" class="logo" alt="Logo">
+    </div>
 
-      .item-body {
-        color: #666;
-        margin-bottom: 10px;
-      }
+    <div class="search-bar">
+      <button class="search-button" id="matchingImagesButton">Matching Images</button>
+      <button class="search-button" id="searchSpecificItemsButton">Search Specific Items</button>
+    </div>
 
-      .item-footer {
-        text-align: right;
-      }
-
-      .view-btn {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        cursor: pointer;
-      }
-
-      .view-btn:hover {
-        background-color: #0056b3;
-      }
-
-      /* Modal styles */
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4);
-      }
-
-      .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 600px;
-        position: relative;
-      }
-
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-      }
-
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
-
-      .option-buttons {
-        margin-bottom: 20px;
-      }
-
-      .option-buttons button {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        margin-right: 10px;
-      }
-
-      .option-buttons button:hover {
-        background-color: #0056b3;
-      }
-
-      #capture-container,
-      #upload-container {
-        margin-bottom: 20px;
-      }
-
-      #capture-container video,
-      #loginimage {
-        width: 100%;
-        height: auto;
-      }
-
-      #canvas {
-        display: none;
-      }
-
-      #specificItemsContainer h2 {
-        margin-top: 0;
-        color: #333;
-      }
-
-      #specificItemsForm {
-        margin-bottom: 20px;
-      }
-
-      #specificItemsForm input[type="text"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-      }
-
-      #specificItemsForm button {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-      }
-
-      #specificItemsForm button:hover {
-        background-color: #0056b3;
-      }
-
-      @media (max-width: 992px) {
-        .navbar-expand-lg .navbar-nav {
-          flex-direction: column;
-        }
-
-        .item-container {
-          width: 100%;
-        }
-
-        .search-button {
-          margin-bottom: 10px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="#">
-        <img src="images/picon.png" width="30" height="30" class="d-inline-block align-top" alt="">
-        Student
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="lostitemstud.html">Search Lost Items</a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="addloststud.html">Add Lost Items</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="claimstud.html">Claimed Items</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="index.html">Log Out</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <!-- Content -->
-    <div class="content">
-      <div class="content-header">
-        <h1>Lost Items</h1>
-        <img src="images/dblogo.png" class="logo" alt="Logo">
-      </div>
-
-      <div class="search-bar">
-        <button class="search-button" id="matchingImagesButton">Matching Images</button>
-        <button class="search-button" id="searchSpecificItemsButton">Search Specific Items</button>
-      </div>
-
-      <div class="items-container" id="itemsContainer"></div>
-      
-      <!-- Modal -->
-      <div id="modalContainer" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          
-          <div id="matchingImagesContainer" style="display:none;">
-            <div class="option-buttons">
-              <button id="captureImageOption">Capture Image</button>
-              <button id="uploadImageOption">Upload Image</button>
-            </div>
-            <div id="capture-container" style="display:none;">
-              <video id="video" width="100%" height="auto" autoplay></video>
-              <button id="snap">Capture Image</button>
-              <canvas id="canvas" style="display:none;"></canvas>
-            </div>
-            <div id="upload-container" style="display:none;">
-              <input type="file" id="upload" accept="image/*">
-            </div>
-            <img id="loginimage" src="images/loginlogo.png" alt="Login Logo" style="display:none;">
-          </div>
-
-          <div id="specificItemsContainer" style="display:none;">
-            <h2>Search Specific Items</h2>
-            <form id="specificItemsForm">
-              <input type="text" id="itemName" name="itemName" placeholder="Enter item name">
-              <input type="text" id="itemDescription" name="itemDescription" placeholder="Enter item description">
-              <button type="submit">Search</button>
-            </form>
-          </div>
-        </div>
+    <div class="items-container" id="itemsContainer"></div>
+    
+    <!-- Modal -->
+    <div id="itemModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modalDetails"></div>
       </div>
     </div>
 
-    <!-- Bootstrap JS and dependencies (jQuery and Popper.js) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Modal for image capture/upload -->
+    <div id="modalContainer" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        
+        <div id="matchingImagesContainer" style="display:none;">
+          <div class="option-buttons">
+            <button id="captureImageOption">Capture Image</button>
+            <button id="uploadImageOption">Upload Image</button>
+          </div>
+          <div id="capture-container" style="display:none;">
+            <video id="video" width="100%" height="auto" autoplay></video>
+            <button id="snap">Capture Image</button>
+            <canvas id="canvas" style="display:none;"></canvas>
+          </div>
+          <div id="upload-container" style="display:none;">
+            <input type="file" id="upload" accept="image/*">
+          </div>
+          <img id="loginimage" src="images/loginlogo.png" alt="Login Logo" style="display:none;">
+        </div>
 
-    <!-- Firebase and application logic -->
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-      import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-    
-      const firebaseConfig = {
-        apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+        <div id="specificItemsContainer" style="display:none;">
+          <h2>Search Specific Items</h2>
+          <form id="specificItemsForm">
+            <input type="text" id="itemName" name="itemName" placeholder="Enter item name">
+            <input type="text" id="itemDescription" name="itemDescription" placeholder="Enter item description">
+            <button type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies (jQuery and Popper.js) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Firebase and application logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
       authDomain: "seeksmart-database.firebaseapp.com",
       databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
       projectId: "seeksmart-database",
       storageBucket: "seeksmart-database.appspot.com",
       messagingSenderId: "1066553932800",
       appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
-      };
-    
-      const app = initializeApp(firebaseConfig);
-      const db = getDatabase();
-      const itemsRef = ref(db, 'items');
-    
-      function getItems() {
-  get(itemsRef).then((snapshot) => {
-    if (snapshot.exists()) {
-      const items = snapshot.val();
-      displayItems(items);
-    } else {
-      console.log("No data available");
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+  
+    var itemsContainer = document.getElementById("itemsContainer");
+  
+    function createItemContainer(item) {
+      const container = document.createElement("div");
+      container.classList.add("item-container");
+      container.innerHTML = `
+        <div class="item-header">
+          <h2>${item.itemName}</h2>
+          <img src="${item.photo}" alt="Item Photo" class="item-photo">
+        </div>
+        <div class="item-body">
+          <p><strong>Description:</strong> ${item.itemDescription}</p>
+          <p><strong>Found Date:</strong> ${item.foundDate}</p>
+          <p><strong>Found Location:</strong> ${item.foundLocation}</p>
+          <p><strong>Founder Name:</strong> ${item.founderName}</p>
+          <p><strong>Keyword:</strong> ${item.keyword}</p>
+        </div>
+        <div class="item-footer">
+          <button class="view-btn" data-item-id="${item.itemId}">View</button>
+        </div>
+      `;
+      container.querySelector('.view-btn').addEventListener('click', () => showModal(item));
+      itemsContainer.appendChild(container);
     }
-  }).catch((error) => {
-    console.error(error);
-  });
-}
-
-    
-      function displayItems(items) {
-        const itemsContainer = document.getElementById('itemsContainer');
-        itemsContainer.innerHTML = '';
-        Object.keys(items).forEach(key => {
-          const item = items[key];
-          const itemHTML = `
-            <div class="item-container">
-              <div class="item-header">
-                <h2>${item.name}</h2>
-                <img src="${item.image}" alt="${item.name}">
-              </div>
-              <div class="item-body">
-                <p>Description: ${item.description}</p>
-                <p>Category: ${item.category}</p>
-                <p>Location: ${item.location}</p>
-              </div>
-              <div class="item-footer">
-                <button class="view-btn">View Details</button>
-              </div>
-            </div>
-          `;
-          itemsContainer.innerHTML += itemHTML;
-        });
-      }
-    
-      // Event listeners and other logic goes here
-      document.addEventListener('DOMContentLoaded', function () {
-        getItems();
-    
-        // Modal functionality
-        const modal = document.getElementById('modalContainer');
-        const matchingImagesButton = document.getElementById('matchingImagesButton');
-        const searchSpecificItemsButton = document.getElementById('searchSpecificItemsButton');
-        const close = document.getElementsByClassName('close')[0];
-    
-        matchingImagesButton.onclick = function() {
-          modal.style.display = "block";
-          document.getElementById('matchingImagesContainer').style.display = "block";
-          document.getElementById('specificItemsContainer').style.display = "none";
-        }
-    
-        searchSpecificItemsButton.onclick = function() {
-          modal.style.display = "block";
-          document.getElementById('matchingImagesContainer').style.display = "none";
-          document.getElementById('specificItemsContainer').style.display = "block";
-        }
-    
-        close.onclick = function() {
-          modal.style.display = "none";
-        }
-    
-        window.onclick = function(event) {
-          if (event.target === modal) {
-            modal.style.display = "none";
-          }
-        }
-    
-        // Additional functionality such as capturing images or uploading images can be added here
+  
+    function AddAllItemsToTable(LostFound) {
+      itemsContainer.innerHTML = "";
+      LostFound.forEach(element => {
+        createItemContainer(element);
       });
-    </script>
-  </body>
-  </html>
+    }
+  
+    function GetAllDataOnce() {
+      const dbRef = ref(db);
+      get(child(dbRef, "lostItemForm")).then((snapshot) => {
+        var items = [];
+        snapshot.forEach(childSnapshot => {
+          let item = childSnapshot.val();
+          item.itemId = childSnapshot.key;
+          items.push(item);
+        });
+        AddAllItemsToTable(items);
+      });
+    }
+
+    window.onload = function() {
+  GetAllDataOnce();
+
+  var modal = document.getElementById("modalContainer");
+  var matchingImagesButton = document.getElementById("matchingImagesButton");
+  var searchSpecificItemsButton = document.getElementById("searchSpecificItemsButton");
+  var span = document.getElementsByClassName("close")[0];
+  var matchingImagesContainer = document.getElementById("matchingImagesContainer");
+  var specificItemsContainer = document.getElementById("specificItemsContainer");
+  let stream = null;
+
+  matchingImagesButton.onclick = function() {
+    modal.style.display = "block";
+    matchingImagesContainer.style.display = "block";
+    specificItemsContainer.style.display = "none";
+  }
+
+  searchSpecificItemsButton.onclick = function() {
+    modal.style.display = "block";
+    matchingImagesContainer.style.display = "none";
+    specificItemsContainer.style.display = "block";
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+    stopCamera();
+  }
+
+  // Close modal when clicking outside of modal content
+  window.onclick = function(event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+      stopCamera();
+    }
+  }
+
+  var captureImageOption = document.getElementById("captureImageOption");
+  var uploadImageOption = document.getElementById("uploadImageOption");
+  var captureContainer = document.getElementById("capture-container");
+  var uploadContainer = document.getElementById("upload-container");
+
+  captureImageOption.onclick = function() {
+    captureContainer.style.display = "block";
+    uploadContainer.style.display = "none";
+    startCamera();
+  }
+
+  uploadImageOption.onclick = function() {
+    uploadContainer.style.display = "block";
+    captureContainer.style.display = "none";
+    stopCamera();
+  }
+
+  var video = document.getElementById('video');
+  var canvas = document.getElementById('canvas');
+  var context = canvas.getContext('2d');
+  var snapButton = document.getElementById('snap');
+
+  function startCamera() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function(s) {
+        stream = s;
+        video.srcObject = stream;
+      })
+      .catch(function(err) {
+        console.log("An error occurred: " + err);
+      });
+  }
+
+  function stopCamera() {
+    if (stream) {
+      stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
+      stream = null;
+    }
+  }
+
+  snapButton.addEventListener('click', function() {
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    var data = canvas.toDataURL('image/png');
+    console.log(data); 
+  });
+};
+
+// Function to show modal with item details
+function showModal(item) {
+  const modalDetails = document.getElementById("modalDetails");
+  const itemModal = document.getElementById("itemModal");
+  modalDetails.innerHTML = `
+    <h2>${item.itemName}</h2>
+    <img src="${item.photo}" alt="Item Photo" class="item-photo">
+    <p><strong>Description:</strong> ${item.itemDescription}</p>
+    <p><strong>Found Date:</strong> ${item.foundDate}</p>
+    <p><strong>Found Location:</strong> ${item.foundLocation}</p>
+    <p><strong>Founder Name:</strong> ${item.founderName}</p>
+    <p><strong>Keyword:</strong> ${item.keyword}</p>
+  `;
+  itemModal.style.display = "block";
+
+  // Close modal event listener
+  const closeModal = document.getElementsByClassName("close")[0];
+  closeModal.onclick = function() {
+    itemModal.style.display = "none";
+  }
+}
+  </script>
+</body>
+</html>

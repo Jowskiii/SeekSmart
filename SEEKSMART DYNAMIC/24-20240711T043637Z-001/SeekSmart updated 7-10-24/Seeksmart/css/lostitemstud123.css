@@ -9,7 +9,137 @@
 body {
   background-color: #665dda;
 }
+.items-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  padding: 16px;
+}
 
+.item-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: calc(100% - 32px);
+  max-width: 300px;
+  margin: 16px;
+}
+
+.item-header {
+  background: #f7f7f7;
+  padding: 16px;
+  text-align: center;
+}
+
+.item-header h2 {
+  margin: 0 0 8px;
+  font-size: 1.2em;
+}
+
+.item-photo {
+  max-width: 100%;
+  height: auto;
+}
+
+.item-body {
+  padding: 16px;
+}
+
+.item-body p {
+  margin: 8px 0;
+}
+
+.item-footer {
+  background: #f7f7f7;
+  padding: 16px;
+  text-align: center;
+}
+
+.view-btn {
+  background: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px 16px;
+  text-transform: uppercase;
+}
+
+.view-btn:hover {
+  background: #0056b3;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    margin: 10% auto;
+    width: 90%;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-content {
+    margin: 5% auto;
+    width: 95%;
+  }
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Media Queries */
+@media (min-width: 600px) {
+  .item-container {
+    width: calc(50% - 32px);
+  }
+}
+
+@media (min-width: 900px) {
+  .item-container {
+    width: calc(33.33% - 32px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .item-container {
+    width: calc(25% - 32px);
+  }
+}
 .sidebar {
   width: 200px;
   background-color: #06005a;
