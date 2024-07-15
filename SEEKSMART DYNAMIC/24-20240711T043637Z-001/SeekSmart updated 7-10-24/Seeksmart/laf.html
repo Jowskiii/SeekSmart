@@ -301,7 +301,13 @@
       `;
       tbody.appendChild(trow);
     }
-
+    function AddAllItemsToTable(ClaimedItems) {
+      tbody.innerHTML = "";
+      let itemNo = 1;
+      ClaimedItems.forEach(element => {
+        AddItemToTable(itemNo++, element.itemName, element.itemDescription, element.claimedDate, element.foundLocation, element.claimedBy, element.photo, element.photoId, element.itemId);
+      });
+    }
     function ViewItem(itemId) {
       const itemRef = db.ref(`lostItemForm/${itemId}`);
       itemRef.once('value', (snapshot) => {
