@@ -19,7 +19,15 @@
     top: 0;
     left: 0;
   }
-  
+  .navbar-dark .navbar-nav .nav-link {
+    color: #ffffff;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background-color: #1c1c1e;
+      border-color: #000000;
+  }
   .profile {
     margin-bottom: 100px;
     max-width: 100%;

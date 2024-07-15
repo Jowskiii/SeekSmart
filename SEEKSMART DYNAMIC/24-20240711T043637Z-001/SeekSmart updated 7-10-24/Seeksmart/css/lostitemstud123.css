@@ -16,7 +16,37 @@ body {
   justify-content: center;
   padding: 16px;
 }
+.item-body {
+  color: #000;
+  margin-bottom: 10px;
+}
+.item-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #000000;
+}
+.navbar-dark .navbar-nav .nav-link {
+  color: #ffffff;
+  }
 
+  #snap {
+    display: block;
+    margin: 0 auto;
+    background-color: #1c1c1e;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.option-buttons button {
+  background-color: #1c1c1e;
+  color: white;
+  border: #fff;
+  padding: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
 .item-container {
   border: 1px solid #ddd;
   border-radius: 8px;

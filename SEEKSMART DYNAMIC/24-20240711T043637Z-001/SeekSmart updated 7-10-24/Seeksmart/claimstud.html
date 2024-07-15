@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEEKSMART</title>
+  <title>Claimed Items</title>
   
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -20,11 +20,22 @@
       flex-direction: column;
       min-height: 100vh; /* Ensure the content stretches to at least the height of the viewport */
     }
-
+    .navbar-dark .navbar-nav .nav-link {
+    color: #f8f9fa;
+    }
     .content {
       flex: 1;
       padding: 20px;
       margin-left: 0; /* Remove margin for smaller screens */
+      background: white;
+    }
+
+    .fixed-top {
+    position: static;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
     }
 
     .content-header {
@@ -88,16 +99,40 @@
       align-items: center;
     }
 
-    .item-footer img {
-      border-radius: 50%;
+    
+    .item-container {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
     }
-
+    .item-body {
+    color: #1b1e21;
+    margin-bottom: 10px;
+    }
+    @media (max-width: 768px) {
+    .content-header {
+        justify-content: center; /* Centers content horizontally on mobile */
+        text-align: center; /* Ensures text inside is centered */
+    }
+    }
     @media (max-width: 992px) {
       .content {
         padding-left: 20px;
         padding-right: 20px;
       }
     }
+    @media (min-width: 992px) {
+    .navbar-expand-lg .navbar-collapse {
+        display: -ms-flexbox !important;
+        display: flex !important;
+        -ms-flex-preferred-size: auto;
+        flex-basis: auto;
+        justify-content: flex-start; /* Ensures content is aligned to the left */
+       }
+    }
+
   </style>
 </head>
 <body>
@@ -113,7 +148,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link" href="lostitemstud.html">Search Lost Items</a>
           </li>
@@ -134,7 +169,7 @@
   <!-- Content -->
   <div class="content">
     <div class="content-header">
-      <h1>Claimed Items</h1>
+      <h2>Claimed Items</h2>
     </div>
 
     <!-- Search bar -->

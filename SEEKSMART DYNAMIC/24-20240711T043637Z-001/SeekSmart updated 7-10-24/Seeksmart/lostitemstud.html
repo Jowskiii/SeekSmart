@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEEKSMART</title>
+  <title>Search Lost Item</title>
   
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -21,12 +21,20 @@
       flex-direction: column;
       min-height: 100vh; /* Ensure the content stretches to at least the height of the viewport */
     }
+    .navbar{
+      background-color: #020079;
+      width: 100%;
+    }
 
+    .navbar-dark .navbar-nav .nav-link {
+    color: #ffffff;
+    }
     .content {
       flex: 1;
       padding: 20px;
+      background: white;
     }
-
+  
     .content-header {
       display: flex;
       justify-content: space-between;
@@ -50,7 +58,7 @@
     }
 
     .search-button {
-      background-color: #4CAF50;
+      background-color: #1c1c1e;
       color: white;
       padding: 10px 20px;
       border: none;
@@ -59,7 +67,7 @@
     }
 
     .search-button:hover {
-      background-color: #45a049;
+      background-color: #020079;
     }
 
     .items-container {
@@ -82,20 +90,10 @@
       margin-bottom: 10px;
     }
 
-    .item-header h2 {
-      margin: 0;
-      font-size: 18px;
-      color: #333;
-    }
 
     .item-header img {
       width: 50px;
       height: auto;
-    }
-
-    .item-body {
-      color: #666;
-      margin-bottom: 10px;
     }
 
     .item-footer {
@@ -213,6 +211,55 @@
       background-color: #0056b3;
     }
 
+    .fixed-top {
+            position: static;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1030;
+        }
+        #snap {
+    display: block;
+    margin: 0 auto;
+    background-color: #1c1c1e;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.option-buttons button {
+    background-color: #1c1c1e;
+    color: white;
+    border: #fff;
+    padding: 10px;
+    cursor: pointer;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+}
+#specificItemsContainer form button {
+    padding: 10px 20px;
+    background-color: #1c1c1e;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#specificItemsContainer {
+    margin-top: 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+        .item-footer button {
+            background-color: #1c1c1e;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
     @media (max-width: 992px) {
       .navbar-expand-lg .navbar-nav {
         flex-direction: column;
@@ -231,7 +278,7 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-subtle fixed-top">
     <a class="navbar-brand" href="#">
       <img src="images/picon.png" width="30" height="30" class="d-inline-block align-top" alt="">
       Student
@@ -260,8 +307,7 @@
   <!-- Content -->
   <div class="content">
     <div class="content-header">
-      <h1>Lost Items</h1>
-      <img src="images/dblogo.png" class="logo" alt="Logo">
+      <h2>Lost Items</h2>
     </div>
 
     <div class="search-bar">
