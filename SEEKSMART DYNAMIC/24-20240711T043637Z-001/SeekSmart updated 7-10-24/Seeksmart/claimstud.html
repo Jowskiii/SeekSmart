@@ -4,116 +4,231 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SEEKSMART</title>
-  <link rel="icon" type="image/x-icon" href="images\favicon.ico">
-  <link rel="stylesheet" href="css/claimedstud1.css">
+  
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    /* Additional custom styles */
+    body {
+      font-family: 'Kumbh Sans', sans-serif;
+      background-color: #665dda;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* Ensure the content stretches to at least the height of the viewport */
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      margin-left: 0; /* Remove margin for smaller screens */
+    }
+
+    .content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .content-header h1 {
+      font-size: 3rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    .content-header .logo {
+      height: 100px;
+    }
+
+    .nav-link {
+      color: #fff;
+      font-size: 18px;
+      text-decoration: none;
+      margin-right: 15px;
+    }
+
+    .nav-link:hover {
+      color: #f0f0f0;
+    }
+
+    .item-container {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .item-header h2 {
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    .item-body {
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-footer img {
+      border-radius: 50%;
+    }
+
+    @media (max-width: 992px) {
+      .content {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <div class="profile">
-    <img src="images/picon.png" alt="Profile Icon">
-    <h1>Student</h1>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">SEEKSMART</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="lostitemstud.html">Search Lost Items</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="addloststud.html">Add Lost Items</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="claimedstud.html">Claimed Items</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="settings.html">Change Password</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Log Out</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="content-header">
+      <h1>Claimed Items</h1>
+      <img src="images/dblogo.png" class="logo" alt="Logo">
+    </div>
+
+    <!-- Search bar -->
+    <input type="text" id="searchInput" placeholder="Search for items..." class="form-control mb-4">
+
+    <div id="container" class="items-container"></div>
   </div>
-  
-  <a href="lostitemstud.html">Search Lost Items</a>
-  <a href="addloststud.html">Add Lost Items</a>
-  <a href="claimedstud.html">Claimed Items</a>
-  <a href="settings.html">Change Password</a>
-  <a href="index.html">Log Out</a>
-</div>
 
-<div class="content">
-  <div class="content-header">
-    <h1>Claimed Items</h1>
-    <img src="images/dblogo.png" class="logo" alt="Logo">
-  </div>
+  <!-- Bootstrap Bundle with Popper for Bootstrap components -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-  <input type="text" id="searchInput" placeholder="Search for items..." class="search-bar">
+  <!-- Firebase JavaScript SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-  <div id="container" class="items-container"></div>
-</div>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "seeksmart-database.firebaseapp.com",
+      databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+      projectId: "seeksmart-database",
+      storageBucket: "seeksmart-database.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-  // Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
-    authDomain: "seeksmart-database.firebaseapp.com",
-    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
-    projectId: "seeksmart-database",
-    storageBucket: "seeksmart-database.appspot.com",
-    messagingSenderId: "1066553932800",
-    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
-};
+    const container = document.getElementById("container");
+    const searchInput = document.getElementById("searchInput");
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+    let claimedItems = [];
 
-  const container = document.getElementById("container");
-  const searchInput = document.getElementById("searchInput");
+    function addItemToContainer(itemNo, item, itemDescription, claimedDate, foundLocation, claimedBy, photo, photoId) {
+      const itemContainer = document.createElement("div");
+      itemContainer.className = "item-container";
+      itemContainer.innerHTML = `
+        <div class="item-header">
+          <h2>Item No. ${itemNo}</h2>
+          <p>${claimedDate}</p>
+        </div>
+        <div class="item-body">
+          <p><strong>Item:</strong> ${item}</p>
+          <p><strong>Description:</strong> ${itemDescription}</p>
+          <p><strong>Found Location:</strong> ${foundLocation}</p>
+          <p><strong>Claimed By:</strong> ${claimedBy}</p>
+        </div>
+        <div class="item-footer">
+          <div><strong>Item Photo:</strong> <img src="${photo}" alt="Item Photo" width="50"></div>
+          <div><strong>Claimant Photo:</strong> <img src="${photoId}" alt="Claimant Photo" width="50"></div>
+        </div>
+      `;
+      container.appendChild(itemContainer);
+    }
 
-  let claimedItems = [];
-
-  function addItemToContainer(itemNo, item, itemDescription, claimedDate, foundLocation, claimedBy, photo, photoId) {
-    const itemContainer = document.createElement("div");
-    itemContainer.className = "item-container";
-    itemContainer.innerHTML = `
-      <div class="item-header">
-        <h2>Item No. ${itemNo}</h2>
-        <p>${claimedDate}</p>
-      </div>
-      <div class="item-body">
-        <p><strong>Item:</strong> ${item}</p>
-        <p><strong>Description:</strong> ${itemDescription}</p>
-        <p><strong>Found Location:</strong> ${foundLocation}</p>
-        <p><strong>Claimed By:</strong> ${claimedBy}</p>
-      </div>
-      <div class="item-footer">
-        <div><strong>Item Photo:</strong> <img src="${photo}" alt="Item Photo" width="50"></div>
-        <div><strong>Claimant Photo:</strong> <img src="${photoId}" alt="Claimant Photo" width="50"></div>
-      </div>
-    `;
-    container.appendChild(itemContainer);
-  }
-
-  function addAllItemsToContainer(claimedItems) {
-    container.innerHTML = "";
-    let itemNo = 1;
-    claimedItems.forEach(element => {
-      addItemToContainer(itemNo++, element.itemName, element.itemDescription, element.claimedDate, element.foundLocation, element.claimedBy, element.photo, element.photoId);
-    });
-  }
-
-  function getAllClaimedDataOnce() {
-    const dbRef = ref(db);
-    get(child(dbRef, "claimedItems")).then((snapshot) => {
-      claimedItems = [];
-      snapshot.forEach(childSnapshot => {
-        const item = childSnapshot.val();
-        claimedItems.push(item);
+    function addAllItemsToContainer(claimedItems) {
+      container.innerHTML = "";
+      let itemNo = 1;
+      claimedItems.forEach(element => {
+        addItemToContainer(itemNo++, element.itemName, element.itemDescription, element.claimedDate, element.foundLocation, element.claimedBy, element.photo, element.photoId);
       });
-      addAllItemsToContainer(claimedItems);
-    });
-  }
+    }
 
-  function filterItems() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const filteredItems = claimedItems.filter(item => {
-      return item.itemName.toLowerCase().includes(searchTerm) ||
-             item.itemDescription.toLowerCase().includes(searchTerm) ||
-             item.claimedDate.toLowerCase().includes(searchTerm) ||
-             item.foundLocation.toLowerCase().includes(searchTerm) ||
-             item.claimedBy.toLowerCase().includes(searchTerm);
-    });
-    addAllItemsToContainer(filteredItems);
-  }
+    function getAllClaimedDataOnce() {
+      const dbRef = ref(db, "claimedItems");
+      get(child(dbRef)).then((snapshot) => {
+        claimedItems = [];
+        snapshot.forEach((childSnapshot) => {
+          const item = childSnapshot.val();
+          claimedItems.push(item);
+        });
+        addAllItemsToContainer(claimedItems);
+      }).catch((error) => {
+        console.error("Error retrieving claimed items:", error.message);
+      });
+    }
 
-  searchInput.addEventListener('input', filterItems);
+    function filterItems() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const filteredItems = claimedItems.filter(item => {
+        return item.itemName.toLowerCase().includes(searchTerm) ||
+               item.itemDescription.toLowerCase().includes(searchTerm) ||
+               item.claimedDate.toLowerCase().includes(searchTerm) ||
+               item.foundLocation.toLowerCase().includes(searchTerm) ||
+               item.claimedBy.toLowerCase().includes(searchTerm);
+      });
+      addAllItemsToContainer(filteredItems);
+    }
 
-  window.onload = getAllClaimedDataOnce;
-</script>
+    searchInput.addEventListener('input', filterItems);
+
+    window.onload = getAllClaimedDataOnce;
+  </script>
+
 </body>
 </html>

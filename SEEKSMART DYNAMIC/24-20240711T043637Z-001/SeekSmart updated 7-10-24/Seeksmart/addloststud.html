@@ -4,49 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEEKSMART</title>
-    <link rel="icon" type="image/x-icon" href="images\favicon.ico">
-    <link rel="stylesheet" href="css/addloststud.css">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/lostitemstud123.css">
+    <style>
+        .content {
+            padding: 20px;
+        }
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            width: 50px;
+            height: auto;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .notification {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .content {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="sidebar">
-  <div class="profile">
-    <img src="images/picon.png" alt="Profile Icon">
-    <h2>Student</h2>
-  </div>
-  <a href="lostitemstud.html">Search Lost Items</a>
-  <a href="addloststud.html">Add Lost Items</a>
-  <a href="claimstud.html">Claimed Items</a>
-  <a href="settings.html">Change Password</a>
-  <a href="index.html">Log Out</a>
-</div>
-<div class="content">
-  <div class="content-header">
-    <h1>Add Lost Item</h1>
-    <img src="images/hccslogo.png" class="logo" alt="Logo">
-  </div>
-</div>
-<div class="container">
-    <div class="box">
-        <form id="lostItemForm">
-            <label for="image">Add Image:</label><br>
-            <input type="file" id="image" name="image" autocomplete = "off"><br><br>
-            <label for="founderName">Founder Name:</label><br>
-            <input type="text" id="founderName" name="founderName" autocomplete = "off"><br>
-            <label for="itemName">Item Name:</label><br>
-            <input type="text" id="itemName" name="itemName" autocomplete = "off"><br>
-            <label for="itemDescription">Item Description:</label><br>
-            <textarea id="itemDescription" name="itemDescription" autocomplete = "off"></textarea><br>
-            <label for="foundDate">Found Date:</label><br>
-            <input type="date" id="foundDate" name="foundDate" autocomplete = "off"><br>
-            <label for="foundLocation">Found Location:</label><br>
-            <input type="text" id="foundLocation" name="foundLocation" autocomplete = "off"><br>
-            <label for="keywordDescription">Keyword Description:</label><br>
-            <input type="text" id="keywordDescription" name="keywordDescription" autocomplete = "off"><br><br>
-            <input type="submit" value="Submit" id="submitButton">
-        </form>
-        <div id="notification" class="notification">Item added successfully!</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">
+        <img src="images/picon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Student
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="lostitemstud.html">Search Lost Items</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="addloststud.html">Add Lost Items</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="claimstud.html">Claimed Items</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 content">
+            <div class="content-header">
+                <h1>Add Lost Item</h1>
+            </div>
+            <div class="container mt-4">
+                <div class="box p-4 bg-light rounded">
+                    <form id="lostItemForm">
+                        <div class="form-group">
+                            <label for="image">Add Image:</label>
+                            <input type="file" class="form-control-file" id="image" name="image" autocomplete="off" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="founderName">Founder Name:</label>
+                            <input type="text" class="form-control" id="founderName" name="founderName" autocomplete="off" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemName">Item Name:</label>
+                            <input type="text" class="form-control" id="itemName" name="itemName" autocomplete="off" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemDescription">Item Description:</label>
+                            <textarea class="form-control" id="itemDescription" name="itemDescription" autocomplete="off" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="foundDate">Found Date:</label>
+                            <input type="date" class="form-control" id="foundDate" name="foundDate" autocomplete="off" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="foundLocation">Found Location:</label>
+                            <input type="text" class="form-control" id="foundLocation" name="foundLocation" autocomplete="off" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="keywordDescription">Keyword Description:</label>
+                            <input type="text" class="form-control" id="keywordDescription" name="keywordDescription" autocomplete="off" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
+                    </form>
+                    <div id="notification" class="notification mt-3 alert alert-success">Item added successfully!</div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -54,13 +117,13 @@
 
   // Firebase configuration
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
+    apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
     authDomain: "seeksmart-database.firebaseapp.com",
     databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
     projectId: "seeksmart-database",
     storageBucket: "seeksmart-database.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    messagingSenderId: "1066553932800",
+    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
   };
 
   // Initialize Firebase
@@ -108,24 +171,19 @@
           returned: false
         });
 
-        notification.textContent = "Item added successfully!";
-        notification.classList.add('success');
-        notification.style.display = 'block';
-        setTimeout(() => {
-          notification.style.display = 'none';
-        }, 3000);
-
-        // Clear form fields after submission
-        document.getElementById('lostItemForm').reset();
+        notification.textContent = 'Item added successfully!';
+      } else {
+        notification.textContent = 'Please upload an image!';
+        notification.classList.replace('alert-success', 'alert-danger');
       }
     } catch (error) {
-      notification.textContent = "Error adding item: " + error.message;
-      notification.classList.add('error');
-      notification.style.display = 'block';
-      console.error("Error adding item: ", error);
+      console.error('Error writing new message to Firebase Database', error);
+      notification.textContent = 'Failed to add item. Please try again.';
+      notification.classList.replace('alert-success', 'alert-danger');
     } finally {
       submitButton.disabled = false;
       isSubmitting = false;
+      notification.style.display = 'block';
     }
   });
 </script>
