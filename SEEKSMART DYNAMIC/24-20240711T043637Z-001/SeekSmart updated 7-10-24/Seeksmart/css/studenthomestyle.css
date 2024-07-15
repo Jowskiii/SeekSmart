@@ -14,7 +14,11 @@
     padding-left: 0px;
   }
 }
-
+.btn-primary {
+  color: #fff;
+  background-color: #020079;
+  border-color: #020079;
+}
 /* Navbar Styles */
 .navbar {
   background: #020079;
