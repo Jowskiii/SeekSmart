@@ -1,3 +1,4 @@
+@ -1,309 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,7 +119,6 @@
   </style>
 </head>
 <body>
-
   <nav class="navbar navbar-expand-lg navbar-dark bg-subtle fixed-top">
     <a class="navbar-brand" href="#">
       <img src="images/picon.png" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -144,7 +144,7 @@
       </ul>
     </div>
   </nav>
-  
+
   <div class="content">
     <div class="table-responsive">
       <table class="table table-bordered">
@@ -163,15 +163,13 @@
           </tr>
         </thead>
         <tbody id="tbody1">
-  
-  <div id="viewItemModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="viewItemClose">&times;</span>
-      <h2>Item Details</h2>
-      <div id="itemDetails"></div>
+          <!-- Table rows will be dynamically added here -->
+        </tbody>
+      </table>
     </div>
   </div>
-  
+
+  <!-- Bootstrap Modal for Item Details -->
   <div class="modal fade" id="itemDetailsModal" tabindex="-1" role="dialog" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -192,30 +190,57 @@
       </div>
     </div>
   </div>
-  
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getDatabase, ref, child, get, onValue, update, remove, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-    import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-  
-    // Firebase configuration
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
-      authDomain: "seeksmart-database.firebaseapp.com",
-      databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
-      projectId: "seeksmart-database",
-      storageBucket: "seeksmart-database.appspot.com",
-      messagingSenderId: "1066553932800",
-      appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
-  };
-  
+    authDomain: "seeksmart-database.firebaseapp.com",
+    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+    projectId: "seeksmart-database",
+    storageBucket: "seeksmart-database.appspot.com",
+    messagingSenderId: "1066553932800",
+    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+    };
+
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const storage = getStorage(app);
-  
-    var tbody = document.getElementById("tbody1");
-  
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const tbody = document.getElementById('tbody1');
+
+    function LoadItems() {
+      db.ref('lostItemForm').once('value', (snapshot) => {
+        const items = [];
+        snapshot.forEach((childSnapshot) => {
+          const item = childSnapshot.val();
+          item.itemId = childSnapshot.key; // Adding itemId to each item object
+          items.push(item);
+        });
+        AddAllItemsToTable(items);
+      });
+    }
+
+    function AddAllItemsToTable(items) {
+      items.forEach((item) => {
+        AddItemToTable(
+          item.itemNo,
+          item.item,
+          item.itemDescription,
+          item.foundDate,
+          item.foundLocation,
+          item.founderName,
+          item.photo,
+          item.keyword,
+          item.itemId  // Using itemId as the last parameter
+        );
+      });
+    }
+
     function AddItemToTable(itemNo, item, itemDescription, foundDate, foundLocation, founderName, photo, keyword, itemId) {
       let trow = document.createElement("tr");
       trow.innerHTML = `
@@ -230,183 +255,55 @@
         <td>${keyword}</td>
         <td>
           <div class="dropdown">
-            <button class="dropdown-btn">Action</button>
-            <div class="dropdown-content">
-              <button class="view-btn" data-item-id="${itemId}">View</button>
-              <button class="yes-btn" data-item-id="${itemId}">Returned</button>            
-              <button class="delete-btn" data-item-id="${itemId}">Delete</button>
+            <button class="dropdown-toggle action-button" type="button" id="dropdownMenuButton${itemNo}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Actions
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton${itemNo}">
+              <button class="dropdown-item" onclick="ViewItem('${itemId}')">View</button>
+              <button class="dropdown-item" onclick="DeleteItem('${itemId}')">Delete</button>
             </div>
           </div>
         </td>
       `;
       tbody.appendChild(trow);
     }
-  
-    function updateNotifications() {
-      const contactFormRef = ref(db, 'contactForm');
-      const notificationsContainer = document.getElementById('notifications');
-  
-      onValue(contactFormRef, (snapshot) => {
-        notificationsContainer.innerHTML = '';
-        snapshot.forEach((childSnapshot) => {
-          const notification = childSnapshot.val();
-          const notificationElement = document.createElement('div');
-          notificationElement.className = 'notification';
-          notificationElement.textContent = `Message from ${notification.firstName} ${notification.lastName}: ${notification.helpMsg}`;
-          notificationsContainer.appendChild(notificationElement);
-        });
-      });
-    }
-  
-    function toggleNotifications() {
-      const notificationsContainer = document.getElementById('notificationsContainer');
-      if (notificationsContainer.style.display === 'none' || notificationsContainer.style.display === '') {
-        notificationsContainer.style.display = 'block';
-      } else {
-        notificationsContainer.style.display = 'none';
-      }
-    }
-  
-    document.getElementById('notificationIcon').addEventListener('click', toggleNotifications);
-  
-  
-    function AddAllItemsToTable(LostFound) {
-      tbody.innerHTML = "";
-      let itemNo = 1;
-      LostFound.forEach(element => {
-        AddItemToTable(itemNo++, element.itemName, element.itemDescription, element.foundDate, element.foundLocation, element.founderName, element.photo, element.keyword, element.itemId);
-      });
-    }
-  
-    function GetAllDataOnce() {
-      const dbRef = ref(db);
-      get(child(dbRef, "lostItemForm")).then((snapshot) => {
-        var items = [];
-        snapshot.forEach(childSnapshot => {
-          let item = childSnapshot.val();
-          item.itemId = childSnapshot.key;
-          items.push(item);
-        });
-        AddAllItemsToTable(items);
-      });
-    }
-  
-    function handleReturnedButtonClick(event) {
-      const itemId = event.target.dataset.itemId;
-      document.getElementById('itemId').value = itemId;
-      document.getElementById('claimantModal').style.display = 'block';
-    }
-  
-    function handleDeleteButtonClick(event) {
-      const itemId = event.target.dataset.itemId;
-      const itemRef = ref(db, `lostItemForm/${itemId}`);
-      
-      remove(itemRef).then(() => {
-        GetAllDataOnce(); 
-      });
-    }
-  
-    function handleViewButtonClick(event) {
-      const itemId = event.target.dataset.itemId;
-      const itemRef = ref(db, `lostItemForm/${itemId}`);
-      get(itemRef).then((snapshot) => {
-        const itemData = snapshot.val();
-        const itemDetails = `
-          <p><strong>Item:</strong> ${itemData.itemName}</p>
-          <p><strong>Description:</strong> ${itemData.itemDescription}</p>
-          <p><strong>Found Date:</strong> ${itemData.foundDate}</p>
-          <p><strong>Found Location:</strong> ${itemData.foundLocation}</p>
-          <p><strong>Founder Name:</strong> ${itemData.founderName}</p>
-          <p><strong>Keyword:</strong> ${itemData.keyword}</p>
-          <p><img src="${itemData.photo}" alt="Item Photo" width="100"></p>
+
+    function ViewItem(itemId) {
+      const itemRef = db.ref(`lostItemForm/${itemId}`);
+      itemRef.once('value', (snapshot) => {
+        const data = snapshot.val();
+        document.getElementById("itemDetailsContent").innerHTML = `
+          <p><strong>Item:</strong> ${data.item}</p>
+          <p><strong>Description:</strong> ${data.itemDescription}</p>
+          <p><strong>Found Date:</strong> ${data.foundDate}</p>
+          <p><strong>Found Location:</strong> ${data.foundLocation}</p>
+          <p><strong>Founder Name:</strong> ${data.founderName}</p>
+          <img src="${data.photo}" alt="Item Photo" width="200">
         `;
-        document.getElementById('itemDetails').innerHTML = itemDetails;
-        document.getElementById('viewItemModal').style.display = 'block';
+        $('#itemDetailsModal').modal('show');
       });
     }
-  
-    var claimantModal = document.getElementById("claimantModal");
-    var claimantClose = document.getElementById("claimantClose");
-    var viewItemModal = document.getElementById("viewItemModal");
-    var viewItemClose = document.getElementById("viewItemClose");
-  
-    claimantClose.onclick = function() {
-      claimantModal.style.display = "none";
-    }
-  
-    viewItemClose.onclick = function() {
-      viewItemModal.style.display = "none";
-    }
-  
-    window.onclick = function(event) {
-      if (event.target == claimantModal) {
-        claimantModal.style.display = "none";
-      }
-      if (event.target == viewItemModal) {
-        viewItemModal.style.display = "none";
+
+    function DeleteItem(itemId) {
+      if (confirm("Are you sure you want to delete this item?")) {
+        db.ref(`lostItemForm/${itemId}`).remove()
+          .then(() => {
+            alert("Item deleted successfully!");
+            // Optionally remove the item from the table as well
+            const rowToRemove = document.getElementById(itemId);
+            if (rowToRemove) {
+              rowToRemove.remove();
+            }
+          })
+          .catch((error) => {
+            console.error("Error removing item: ", error);
+          });
       }
     }
-  
-    document.getElementById('claimantForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const claimantName = document.getElementById('claimantName').value;
-      const claimantPhoto = document.getElementById('claimantPhoto').files[0];
-      const itemId = document.getElementById('itemId').value;
-  
-      if (!claimantPhoto) {
-        alert('Please select a photo');
-        return;
-      }
-  
-      const itemRef = ref(db, `lostItemForm/${itemId}`);
-      get(itemRef).then((snapshot) => {
-        const itemData = snapshot.val();
-        const claimedItemRef = ref(db, `claimedItems/${itemId}`);
-  
-        const photoRef = storageRef(storage, `claimant_photos/${itemId}/${claimantPhoto.name}`);
-        const uploadTask = uploadBytesResumable(photoRef, claimantPhoto);
-  
-        uploadTask.on('state_changed', 
-          (snapshot) => {
-          }, 
-          (error) => {
-            console.error('Photo upload failed:', error);
-          }, 
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              set(claimedItemRef, {
-                ...itemData,
-                claimedDate: new Date().toISOString().split('T')[0],
-                claimedBy: claimantName,
-                photoId: downloadURL 
-              }).then(() => {
-                remove(itemRef).then(() => {
-                  claimantModal.style.display = "none";
-                  GetAllDataOnce(); 
-                });
-              });
-            });
-          }
-        );
-      });
-    });
-  
-    window.onload = GetAllDataOnce;
-  
-    window.addEventListener('load', () => {
-      updateNotifications();
-    });
-  
-    tbody.addEventListener('click', function(event) {
-      if (event.target.classList.contains('yes-btn')) {
-        handleReturnedButtonClick(event);
-      } else if (event.target.classList.contains('delete-btn')) {
-        handleDeleteButtonClick(event);
-      } else if (event.target.classList.contains('view-btn')) {
-        handleViewButtonClick(event);
-      }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      LoadItems();
     });
   </script>
-  </body>
-  </html>
-  
+</body>
+</html>
