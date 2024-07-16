@@ -393,3 +393,14 @@
     .modal-button:hover::before {
         width: 100%;
     }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+      }
+    .nav-link svg {
+        margin-right: 5px; /* Adjust space between icon and text */
+        width: 1em; /* Adjust the width to match text size */
+        height: 1em; /* Adjust the height to match text size */
+        vertical-align: middle;
+      }

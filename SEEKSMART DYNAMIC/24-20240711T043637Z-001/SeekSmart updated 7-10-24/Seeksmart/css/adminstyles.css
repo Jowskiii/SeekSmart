@@ -112,3 +112,13 @@ button:hover::before {
   left: 0;
   top: 0;
 }
+.nav-link {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link svg {
+  margin-right: 5px; /* Adjust space between icon and text */
+  width: 1.2em; /* Adjust the width to match text size */
+  height: 1.2em; /* Adjust the height to match text size */
+}

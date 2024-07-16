@@ -85,7 +85,11 @@
       align-items: center;
     }
 
-    
+    .form-control{
+      background-color: #f9f9f9;
+      border: 1px solid #000000;
+      color: #000000;
+    }
     .item-container {
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -161,7 +165,7 @@
     <!-- Search bar -->
     <input type="text" id="searchInput" placeholder="Search for items..." class="form-control mb-4">
 
-    <div class="container">
+    <div class="center-container">
       <div class="row" id="container"></div>
     </div>
   </div>
@@ -245,6 +249,7 @@
     const filteredItems = claimedItems.filter(item => {
       return item.itemDescription.toLowerCase().includes(searchTerm)||
              item.foundLocation.toLowerCase().includes(searchTerm)||
+             item.itemName.toLowerCase().includes(searchTerm)||
              item.claimedBy.toLowerCase().includes(searchTerm);
 
     });
