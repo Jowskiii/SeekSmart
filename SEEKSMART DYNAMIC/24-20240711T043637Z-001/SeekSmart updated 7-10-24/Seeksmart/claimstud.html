@@ -258,7 +258,8 @@
     const searchTerm = searchInput.value.toLowerCase();
     const filteredItems = claimedItems.filter(item => {
       return item.itemDescription.toLowerCase().includes(searchTerm)||
-             item.foundLocation.toLowerCase().includes(searchTerm);
+             item.foundLocation.toLowerCase().includes(searchTerm)||
+             item.claimedBy.toLowerCase().includes(searchTerm);
 
     });
     addAllItemsToContainer(filteredItems);
