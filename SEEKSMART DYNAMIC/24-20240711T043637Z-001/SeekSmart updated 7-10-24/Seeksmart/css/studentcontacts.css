@@ -18,7 +18,17 @@
     top: 0;
     z-index: 999;
 }
-
+.btn-primary {
+    color: #fff;
+    background-color: #020079;
+    border-color: #020079;
+}
+.btn-primary.focus, .btn-primary:focus {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+    box-shadow: 0 0 0 .2rem rgba(38, 143, 255, .5);
+}
 .navbarlc {
     display: flex;
     justify-content: space-between;

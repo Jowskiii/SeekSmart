@@ -6,9 +6,6 @@
   font-family: 'Kumbh Sans', sans-serif;
 }
 
-body {
-  background-color: #665dda;
-}
 .items-container {
   display: flex;
   flex-wrap: wrap;
