@@ -554,9 +554,9 @@
   // Filter items based on description, found date, found location, and keyword
   const filteredItems = items.filter(item => 
     item.itemDescription.toLowerCase().includes(itemDescription) ||
-    item.foundDate.toLowerCase().includes(itemDescription) ||
-    item.foundLocation.toLowerCase().includes(itemDescription) ||
-    item.keywordDescription.toLowerCase().includes(itemDescription)
+    item.foundDate.toLowerCase().includes(foundDate) ||
+    item.foundLocation.toLowerCase().includes(foundLocation) ||
+    item.keywordDescription.toLowerCase().includes(keywordDescription)
   );
 
   // Clear previous items and display filtered items
