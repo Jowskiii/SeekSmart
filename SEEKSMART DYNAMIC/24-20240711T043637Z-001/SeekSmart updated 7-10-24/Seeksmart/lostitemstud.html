@@ -312,7 +312,7 @@
 
     <div class="search-bar">
       <button class="search-button" id="matchingImagesButton">Matching Images</button>
-      <button class="search-button" id="searchSpecificItemsButton">Search Specific Items</button>
+      <button class="search-button" id="searchSpecificItemsButton">Search Items</button>
     </div>
 
     <div class="items-container" id="itemsContainer"></div>
@@ -349,8 +349,7 @@
         <div id="specificItemsContainer" style="display:none;">
           <h2>Search Specific Items</h2>
           <form id="specificItemsForm">
-            <input type="text" id="itemName" name="itemName" placeholder="Enter item name">
-            <input type="text" id="itemDescription" name="itemDescription" placeholder="Enter item description">
+            <input type="text" id="itemDescription" name="itemDescription" placeholder="Search Description">
             <button type="submit">Search</button>
           </form>
         </div>
@@ -398,7 +397,7 @@
           <p><strong>Found Date:</strong> ${item.foundDate}</p>
           <p><strong>Found Location:</strong> ${item.foundLocation}</p>
           <p><strong>Founder Name:</strong> ${item.founderName}</p>
-          <p><strong>Keyword:</strong> ${item.keyword}</p>
+          <p><strong>Keyword:</strong> ${item.keywordDescription}</p>
         </div>
         <div class="item-footer">
           <button class="view-btn" data-item-id="${item.itemId}">View</button>
@@ -524,7 +523,7 @@ function showModal(item) {
     <p><strong>Found Date:</strong> ${item.foundDate}</p>
     <p><strong>Found Location:</strong> ${item.foundLocation}</p>
     <p><strong>Founder Name:</strong> ${item.founderName}</p>
-    <p><strong>Keyword:</strong> ${item.keyword}</p>
+    <p><strong>Keyword:</strong> ${item.keywordDescription}</p>
   `;
   itemModal.style.display = "block";
 
