@@ -23,7 +23,7 @@
       width: 100%;
     }
     .navbar-brand {
-      margin-right: auto;
+      margin-right: auto !important;
     }
     .navbar-toggler {
       margin-left: auto;
@@ -308,8 +308,9 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #020079;">
+  <div class="container">
   <a class="navbar-brand" href="#">
-    <img src="images/hccslogo.png" alt="Logo" style="width: 200px; height: 100px;">
+    <img src="images/hccslogo.png" alt="Logo" width="200" height="100" class="d-inline-block align-top">
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -323,6 +324,7 @@
       </li>
     </ul>
   </div>
+</div>
 </nav>
 
 <!-- Modal -->
