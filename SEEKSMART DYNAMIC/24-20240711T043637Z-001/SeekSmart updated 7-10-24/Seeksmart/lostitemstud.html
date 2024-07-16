@@ -545,18 +545,20 @@
       });
   
       // Function to handle form submission for specific item search
-      function handleSpecificItemSearch(event) {
+      // Function to handle form submission for specific item search
+      // Function to handle form submission for specific item search
+function handleSpecificItemSearch(event) {
   event.preventDefault(); // Prevent form submission
   
-  // Get input values
+  // Get input value
   const itemDescription = document.getElementById("itemDescription").value.trim().toLowerCase();
   
   // Filter items based on description, found date, found location, and keyword
   const filteredItems = items.filter(item => 
     item.itemDescription.toLowerCase().includes(itemDescription) ||
-    item.foundDate.toLowerCase().includes(foundDate) ||
-    item.foundLocation.toLowerCase().includes(foundLocation) ||
-    item.keywordDescription.toLowerCase().includes(keywordDescription)
+    item.foundDate.toLowerCase().includes(itemDescription) ||
+    item.foundLocation.toLowerCase().includes(itemDescription) ||
+    item.keywordDescription.toLowerCase().includes(itemDescription)
   );
 
   // Clear previous items and display filtered items
@@ -573,6 +575,7 @@
 // Add event listener to the specific items search form
 const specificItemsForm = document.getElementById("specificItemsForm");
 specificItemsForm.addEventListener("submit", handleSpecificItemSearch);
+
   
       // Function to show modal with item details
       function showModal(item) {
