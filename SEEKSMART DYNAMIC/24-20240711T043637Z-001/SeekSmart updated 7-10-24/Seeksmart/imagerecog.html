@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Object Detection Demo</title>
+    <style>
+        #video, #canvas {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+        }
+        #video {
+            position: absolute;
+        }
+        #canvas {
+            position: absolute;
+        }
+        #container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+        #results {
+            font-family: monospace;
+            white-space: pre;
+            padding-top: 620px; /* Adjust based on the height of the video/canvas */
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Object Detection Demo</h1>
+    
+    <div id="container">
+        <video id="video" autoplay></video>
+        <canvas id="canvas"></canvas>
+    </div>
+    <p id="results"></p>
+    <input type="file" id="upload-image" accept="image/*">
+    
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <canvas id="modal-canvas"></canvas>
+            <p id="modal-results"></p>
+        </div>
+    </div>
+
+    <!-- Include TensorFlow.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <!-- Include Object Detection model (e.g., COCO-SSD) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+
+    <script>
+        async function runObjectDetection() {
+            // Load the model (COCO-SSD in this example)
+            const model = await cocoSsd.load();
+
+            // Get video element and canvas
+            const videoElement = document.getElementById('video');
+            const canvasElement = document.getElementById('canvas');
+            const canvasContext = canvasElement.getContext('2d');
+            const modal = document.getElementById('myModal');
+            const modalCanvas = document.getElementById('modal-canvas');
+            const modalContext = modalCanvas.getContext('2d');
+            const span = document.getElementsByClassName('close')[0];
+
+            // Initialize camera
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+            } catch (err) {
+                console.error('Error accessing the camera:', err);
+            }
+
+            // Function to capture frames and run object detection
+            async function detectFrame() {
+                // Ensure the video dimensions are set
+                if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
+                    canvasElement.width = videoElement.videoWidth;
+                    canvasElement.height = videoElement.videoHeight;
+
+                    // Draw the video frame to the canvas
+                    canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+                    // Detect objects in the frame
+                    const predictions = await model.detect(canvasElement);
+
+                    // Clear previous drawings
+                    canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
+                    canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+                    // Display results and draw bounding boxes
+                    const resultsElement = document.getElementById('results');
+                    resultsElement.innerHTML = '';
+                    predictions.forEach(prediction => {
+                        const [x, y, width, height] = prediction.bbox;
+                        const text = `${prediction.class}: ${Math.round(prediction.score * 100)}%`;
+
+                        // Draw bounding box
+                        canvasContext.strokeStyle = 'red';
+                        canvasContext.lineWidth = 2;
+                        canvasContext.strokeRect(x, y, width, height);
+
+                        // Draw label background
+                        canvasContext.fillStyle = 'red';
+                        const textWidth = canvasContext.measureText(text).width;
+                        const textHeight = parseInt(canvasContext.font, 10); // base 10
+                        canvasContext.fillRect(x, y - textHeight, textWidth, textHeight);
+
+                        // Draw text
+                        canvasContext.fillStyle = 'white';
+                        canvasContext.fillText(text, x, y);
+
+                        // Display results in text format below video
+                        resultsElement.innerHTML += `${text}<br>`;
+                    });
+                }
+
+                // Request the next frame
+                requestAnimationFrame(detectFrame);
+            }
+
+            // Handle image upload
+            document.getElementById('upload-image').onchange = async (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const img = new Image();
+                    img.onload = async () => {
+                        modalCanvas.width = img.width;
+                        modalCanvas.height = img.height;
+                        modalContext.drawImage(img, 0, 0);
+
+                        // Detect objects in the uploaded image
+                        const predictions = await model.detect(modalCanvas);
+
+                        // Clear previous drawings
+                        modalContext.clearRect(0, 0, modalCanvas.width, modalCanvas.height);
+                        modalContext.drawImage(img, 0, 0, modalCanvas.width, modalCanvas.height);
+
+                        // Display results and draw bounding boxes
+                        const modalResultsElement = document.getElementById('modal-results');
+                        modalResultsElement.innerHTML = '';
+                        predictions.forEach(prediction => {
+                            const [x, y, width, height] = prediction.bbox;
+                            const text = `${prediction.class}: ${Math.round(prediction.score * 100)}%`;
+
+                            // Draw bounding box
+                            modalContext.strokeStyle = 'red';
+                            modalContext.lineWidth = 2;
+                            modalContext.strokeRect(x, y, width, height);
+
+                            // Draw label background
+                            modalContext.fillStyle = 'red';
+                            const textWidth = modalContext.measureText(text).width;
+                            const textHeight = parseInt(modalContext.font, 10); // base 10
+                            modalContext.fillRect(x, y - textHeight, textWidth, textHeight);
+
+                            // Draw text
+                            modalContext.fillStyle = 'white';
+                            modalContext.fillText(text, x, y);
+
+                            // Detect the color of the object
+                            const colorName = detectColorName(modalContext, x, y, width, height);
+
+                            // Display results in text format in modal
+                            modalResultsElement.innerHTML += `${text} - Color: ${colorName}<br>`;
+                        });
+
+                        // Show the modal
+                        modal.style.display = "block";
+                    };
+                    img.src = URL.createObjectURL(file);
+                }
+            };
+
+            // Close the modal when the user clicks on <span> (x)
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // Close the modal when the user clicks anywhere outside of the modal
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            // Start detection after video metadata is loaded
+            videoElement.onloadedmetadata = detectFrame;
+        }
+
+        function detectColorName(context, x, y, width, height) {
+    const imageData = context.getImageData(x, y, width, height);
+    const data = imageData.data;
+
+    // Initialize variables for color analysis
+    let totalRed = 0;
+    let totalGreen = 0;
+    let totalBlue = 0;
+    let pixelCount = 0;
+
+    // Loop through pixels and accumulate color values
+    for (let i = 0; i < data.length; i += 4) {
+        totalRed += data[i];
+        totalGreen += data[i + 1];
+        totalBlue += data[i + 2];
+        pixelCount++;
+    }
+
+    // Calculate average color
+    const averageRed = Math.round(totalRed / pixelCount);
+    const averageGreen = Math.round(totalGreen / pixelCount);
+    const averageBlue = Math.round(totalBlue / pixelCount);
+
+    // Determine closest color based on average RGB values
+    const colorMap = {
+        'black': { r: 0, g: 0, b: 0 },
+        'white': { r: 255, g: 255, b: 255 },
+        'red': { r: 255, g: 0, b: 0 },
+        'green': { r: 0, g: 255, b: 0 },
+        'blue': { r: 0, g: 0, b: 255 },
+        'yellow': { r: 255, g: 255, b: 0 },
+        'cyan': { r: 0, g: 255, b: 255 },
+        'magenta': { r: 255, g: 0, b: 255 },
+        'gray': { r: 128, g: 128, b: 128 },
+        'purple': { r: 128, g: 0, b: 128 },
+        'orange': { r: 255, g: 165, b: 0 },
+        'brown': { r: 165, g: 42, b: 42 }
+        // Add more colors as needed
+    };
+
+    let minDistance = Infinity;
+    let closestColor = null;
+
+    // Calculate color distance using Euclidean distance
+    function getColorDistance(c1, c2) {
+        return Math.sqrt(
+            Math.pow(c1.r - c2.r, 2) +
+            Math.pow(c1.g - c2.g, 2) +
+            Math.pow(c1.b - c2.b, 2)
+        );
+    }
+
+    // Find the closest color in the map
+    for (const color in colorMap) {
+        const colorRGB = colorMap[color];
+        const distance = getColorDistance(
+            { r: averageRed, g: averageGreen, b: averageBlue },
+            colorRGB
+        );
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestColor = color;
+        }
+    }
+
+    return closestColor || 'unknown';
+}
+
+        // Call function to run object detection when the page is loaded
+        document.addEventListener('DOMContentLoaded', runObjectDetection);
+    </script>
+</body>
+</html>

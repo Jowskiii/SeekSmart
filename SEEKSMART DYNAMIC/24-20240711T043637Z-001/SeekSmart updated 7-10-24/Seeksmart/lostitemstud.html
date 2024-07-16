@@ -348,50 +348,50 @@
 
     <div class="items-container" id="itemsContainer"></div>
     
-    <!-- Modal -->
-    <div id="itemModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <div id="modalDetails"></div>
-      </div>
-    </div>
+  <!-- Modal for item details -->
+<div id="itemModal" class="modal">
+  <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="modalDetails"></div>
+  </div>
+</div>
 
-    <!-- Modal for image capture/upload -->
-    <div id="modalContainer" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        
-        <div id="matchingImagesContainer" style="display:none;">
+<!-- Modal for image capture/upload and specific item search -->
+<div id="modalContainer" class="modal">
+  <div class="modal-content">
+      <span class="close">&times;</span>
+      
+      <div id="matchingImagesContainer" style="display:none;">
           <div class="option-buttons">
-            <button id="captureImageOption">Capture Image</button>
-            <button id="uploadImageOption">Upload Image</button>
+              <button id="captureImageOption">Capture Image</button>
+              <button id="uploadImageOption">Upload Image</button>
           </div>
           <div id="capture-container" style="display:none;">
-            <video id="video" width="100%" height="auto" autoplay></video>
-            <button id="snap">Capture Image</button>
-            <canvas id="canvas" style="display:none;"></canvas>
+              <video id="video" width="100%" height="auto" autoplay></video>
+              <button id="snap">Capture Image</button>
+              <canvas id="canvas" style="display:none;"></canvas>
           </div>
           <div id="upload-container" style="display:none;">
-            <input type="file" id="upload" accept="image/*">
+              <input type="file" id="upload" accept="image/*">
           </div>
           <img id="loginimage" src="images/loginlogo.png" alt="Login Logo" style="display:none;">
-        </div>
+      </div>
 
-        <div id="specificItemsContainer" style="display:none;">
+      <div id="specificItemsContainer" style="display:none;">
           <h2>Search Specific Items</h2>
           <form id="specificItemsForm">
-            <input type="text" id="itemDescription" name="itemDescription" placeholder="Search Description">
-            <button type="submit">Search</button>
+              <input type="text" id="itemDescription" name="itemDescription" placeholder="Search Description">
+              <button type="submit">Search</button>
           </form>
-        </div>
       </div>
-    </div>
   </div>
+</div>
 
   <!-- Bootstrap JS and dependencies (jQuery and Popper.js) -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 
   <!-- Firebase and application logic -->
   <script type="module">
@@ -409,196 +409,199 @@
     appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
     };
   
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-  
-    var itemsContainer = document.getElementById("itemsContainer");
-    var items = []; // Array to store retrieved items
-  
-    function createItemContainer(item) {
-      const container = document.createElement("div");
-      container.classList.add("item-container");
-      container.innerHTML = `
-        <div class="item-header">
-          <h2>${item.itemName}</h2>
-          <img src="${item.photo}" alt="Item Photo" class="item-photo">
-        </div>
-        <div class="item-body">
-          <p><strong>Description:</strong> ${item.itemDescription}</p>
-          <p><strong>Found Date:</strong> ${item.foundDate}</p>
-          <p><strong>Found Location:</strong> ${item.foundLocation}</p>
-          <p><strong>Founder Name:</strong> ${item.founderName}</p>
-          <p><strong>Keyword:</strong> ${item.keywordDescription}</p>
-        </div>
-        <div class="item-footer">
-          <button class="view-btn" data-item-id="${item.itemId}">View</button>
-        </div>
-      `;
-      container.querySelector('.view-btn').addEventListener('click', () => showModal(item));
-      itemsContainer.appendChild(container);
+ // Initialize Firebase
+ const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  var itemsContainer = document.getElementById("itemsContainer");
+  var items = []; // Array to store retrieved items
+  function showModal(item) {
+    const modalDetails = document.getElementById("modalDetails");
+    const itemModal = document.getElementById("itemModal");
+
+    if (!modalDetails || !itemModal) {
+        console.error("Modal elements not found.");
+        return;
     }
-  
-    function AddAllItemsToTable(LostFound) {
-      itemsContainer.innerHTML = "";
-      LostFound.forEach(element => {
-        items.push(element); // Push each element to the items array
-        createItemContainer(element);
+
+    modalDetails.innerHTML = `
+        <h2>${item.itemName}</h2>
+        <img src="${item.photo}" alt="Item Photo" class="item-photo">
+        <p><strong>Description:</strong> ${item.itemDescription}</p>
+        <p><strong>Found Date:</strong> ${item.foundDate}</p>
+        <p><strong>Found Location:</strong> ${item.foundLocation}</p>
+        <p><strong>Founder Name:</strong> ${item.founderName}</p>
+        <p><strong>Keyword:</strong> ${item.keywordDescription}</p>
+    `;
+
+    itemModal.style.display = "block"; // Show the modal
+
+    console.log("Modal shown with item:", item);
+}
+  function createItemContainer(item) {
+    const container = document.createElement("div");
+    container.classList.add("item-container");
+    container.innerHTML = `
+      <div class="item-header">
+        <h2>${item.itemName}</h2>
+        <img src="${item.photo}" alt="Item Photo" class="item-photo">
+      </div>
+      <div class="item-body">
+        <p><strong>Description:</strong> ${item.itemDescription}</p>
+        <p><strong>Found Date:</strong> ${item.foundDate}</p>
+        <p><strong>Found Location:</strong> ${item.foundLocation}</p>
+        <p><strong>Founder Name:</strong> ${item.founderName}</p>
+        <p><strong>Keyword:</strong> ${item.keywordDescription}</p>
+      </div>
+      <div class="item-footer">
+        <button class="view-btn" data-item-id="${item.itemId}">View</button>
+      </div>
+    `;
+    container.querySelector('.view-btn').addEventListener('click', () => {
+  console.log('Button clicked'); 
+  showModal(item);
+});
+    itemsContainer.appendChild(container);
+  }
+
+  function AddAllItemsToTable(LostFound) {
+    itemsContainer.innerHTML = "";
+    LostFound.forEach(element => {
+      items.push(element); // Push each element to the items array
+      createItemContainer(element);
+    });
+  }
+
+  function GetAllDataOnce() {
+    const dbRef = ref(db);
+    get(child(dbRef, "lostItemForm")).then((snapshot) => {
+      var items = [];
+      snapshot.forEach(childSnapshot => {
+        let item = childSnapshot.val();
+        item.itemId = childSnapshot.key;
+        items.push(item);
       });
+      AddAllItemsToTable(items);
+    });
+  }
+
+  window.onload = function () {
+    GetAllDataOnce();
+
+    var modal = document.getElementById("modalContainer");
+    var matchingImagesButton = document.getElementById("matchingImagesButton");
+    var searchSpecificItemsButton = document.getElementById("searchSpecificItemsButton");
+    var span = document.getElementsByClassName("close")[0];
+    var matchingImagesContainer = document.getElementById("matchingImagesContainer");
+    var specificItemsContainer = document.getElementById("specificItemsContainer");
+    let stream = null;
+
+    matchingImagesButton.onclick = function () {
+      modal.style.display = "block";
+      matchingImagesContainer.style.display = "block";
+      specificItemsContainer.style.display = "none";
     }
-  
-    function GetAllDataOnce() {
-      const dbRef = ref(db);
-      get(child(dbRef, "lostItemForm")).then((snapshot) => {
-        var items = [];
-        snapshot.forEach(childSnapshot => {
-          let item = childSnapshot.val();
-          item.itemId = childSnapshot.key;
-          items.push(item);
-        });
-        AddAllItemsToTable(items);
-      });
+
+    searchSpecificItemsButton.onclick = function () {
+      modal.style.display = "block";
+      matchingImagesContainer.style.display = "none";
+      specificItemsContainer.style.display = "block";
     }
-  
-    window.onload = function() {
-      GetAllDataOnce();
-  
-      var modal = document.getElementById("modalContainer");
-      var matchingImagesButton = document.getElementById("matchingImagesButton");
-      var searchSpecificItemsButton = document.getElementById("searchSpecificItemsButton");
-      var span = document.getElementsByClassName("close")[0];
-      var matchingImagesContainer = document.getElementById("matchingImagesContainer");
-      var specificItemsContainer = document.getElementById("specificItemsContainer");
-      let stream = null;
-  
-      matchingImagesButton.onclick = function() {
-        modal.style.display = "block";
-        matchingImagesContainer.style.display = "block";
-        specificItemsContainer.style.display = "none";
-      }
-  
-      searchSpecificItemsButton.onclick = function() {
-        modal.style.display = "block";
-        matchingImagesContainer.style.display = "none";
-        specificItemsContainer.style.display = "block";
-      }
-  
-      span.onclick = function() {
+
+    span.onclick = function () {
+      modal.style.display = "none";
+      stopCamera();
+    }
+
+    // Close modal when clicking outside of modal content
+    window.onclick = function (event) {
+      if (event.target === modal) {
         modal.style.display = "none";
         stopCamera();
       }
-  
-      // Close modal when clicking outside of modal content
-      window.onclick = function(event) {
-        if (event.target === modal) {
-          modal.style.display = "none";
-          stopCamera();
-        }
+    }
+
+    var captureImageOption = document.getElementById("captureImageOption");
+    var uploadImageOption = document.getElementById("uploadImageOption");
+    var captureContainer = document.getElementById("capture-container");
+    var uploadContainer = document.getElementById("upload-container");
+
+    captureImageOption.onclick = function () {
+      captureContainer.style.display = "block";
+      uploadContainer.style.display = "none";
+      startCamera();
+    }
+
+    uploadImageOption.onclick = function () {
+      uploadContainer.style.display = "block";
+      captureContainer.style.display = "none";
+      stopCamera();
+    }
+
+    var video = document.getElementById('video');
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var snapButton = document.getElementById('snap');
+
+    function startCamera() {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (s) {
+          stream = s;
+          video.srcObject = stream;
+        })
+        .catch(function (err) {
+          console.log("An error occurred: " + err);
+        });
+    }
+
+    function stopCamera() {
+      if (stream) {
+        stream.getTracks().forEach(function (track) {
+          track.stop();
+        });
+        stream = null;
       }
-  
-      var captureImageOption = document.getElementById("captureImageOption");
-      var uploadImageOption = document.getElementById("uploadImageOption");
-      var captureContainer = document.getElementById("capture-container");
-      var uploadContainer = document.getElementById("upload-container");
-  
-      captureImageOption.onclick = function() {
-        captureContainer.style.display = "block";
-        uploadContainer.style.display = "none";
-        startCamera();
-      }
-  
-      uploadImageOption.onclick = function() {
-        uploadContainer.style.display = "block";
-        captureContainer.style.display = "none";
-        stopCamera();
-      }
-  
-      var video = document.getElementById('video');
-      var canvas = document.getElementById('canvas');
-      var context = canvas.getContext('2d');
-      var snapButton = document.getElementById('snap');
-  
-      function startCamera() {
-        navigator.mediaDevices.getUserMedia({ video: true })
-          .then(function(s) {
-            stream = s;
-            video.srcObject = stream;
-          })
-          .catch(function(err) {
-            console.log("An error occurred: " + err);
-          });
-      }
-  
-      function stopCamera() {
-        if (stream) {
-          stream.getTracks().forEach(function(track) {
-            track.stop();
-          });
-          stream = null;
-        }
-      }
-  
-      snapButton.addEventListener('click', function() {
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        var data = canvas.toDataURL('image/png');
-        console.log(data); 
+    }
+   
+    snapButton.addEventListener('click', function () {
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      var data = canvas.toDataURL('image/png');
+      console.log(data);
+    });
+
+    // Function to handle form submission for specific item search
+    function handleSpecificItemSearch(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Get input value
+      const itemDescription = document.getElementById("itemDescription").value.trim().toLowerCase();
+
+      // Filter items based on description, found date, found location, and keyword
+      const filteredItems = items.filter(item =>
+        item.itemDescription.toLowerCase().includes(itemDescription) ||
+        item.foundDate.toLowerCase().includes(itemDescription) ||
+        item.foundLocation.toLowerCase().includes(itemDescription) ||
+        item.keywordDescription.toLowerCase().includes(itemDescription)
+      );
+
+      // Clear previous items and display filtered items
+      itemsContainer.innerHTML = "";
+      filteredItems.forEach(item => {
+        createItemContainer(item);
       });
-  
-      // Function to handle form submission for specific item search
-      // Function to handle form submission for specific item search
-      // Function to handle form submission for specific item search
-function handleSpecificItemSearch(event) {
-  event.preventDefault(); // Prevent form submission
-  
-  // Get input value
-  const itemDescription = document.getElementById("itemDescription").value.trim().toLowerCase();
-  
-  // Filter items based on description, found date, found location, and keyword
-  const filteredItems = items.filter(item => 
-    item.itemDescription.toLowerCase().includes(itemDescription) ||
-    item.foundDate.toLowerCase().includes(itemDescription) ||
-    item.foundLocation.toLowerCase().includes(itemDescription) ||
-    item.keywordDescription.toLowerCase().includes(itemDescription)
-  );
 
-  // Clear previous items and display filtered items
-  itemsContainer.innerHTML = "";
-  filteredItems.forEach(item => {
-    createItemContainer(item);
-  });
+      // Close the modal
+      const modal = document.getElementById("modalContainer");
+      modal.style.display = "none";
+    }
 
-  // Close the modal
-  const modal = document.getElementById("modalContainer");
-  modal.style.display = "none";
-}
+    // Add event listener to the specific items search form
+    const specificItemsForm = document.getElementById("specificItemsForm");
+    specificItemsForm.addEventListener("submit", handleSpecificItemSearch);
 
-// Add event listener to the specific items search form
-const specificItemsForm = document.getElementById("specificItemsForm");
-specificItemsForm.addEventListener("submit", handleSpecificItemSearch);
-
-  
-      // Function to show modal with item details
-      function showModal(item) {
-        const modalDetails = document.getElementById("modalDetails");
-        const itemModal = document.getElementById("itemModal");
-        modalDetails.innerHTML = `
-          <h2>${item.itemName}</h2>
-          <img src="${item.photo}" alt="Item Photo" class="item-photo">
-          <p><strong>Description:</strong> ${item.itemDescription}</p>
-          <p><strong>Found Date:</strong> ${item.foundDate}</p>
-          <p><strong>Found Location:</strong> ${item.foundLocation}</p>
-          <p><strong>Founder Name:</strong> ${item.founderName}</p>
-          <p><strong>Keyword:</strong> ${item.keywordDescription}</p>
-        `;
-        itemModal.style.display = "block";
-  
-        // Close modal event listener
-        const closeModal = document.getElementsByClassName("close")[0];
-        closeModal.onclick = function() {
-          itemModal.style.display = "none";
-        }
-      }
-    };
-  </script>
+    // Function to show modal with item details
+   
+  }
+</script>
 </body>
 </html>
