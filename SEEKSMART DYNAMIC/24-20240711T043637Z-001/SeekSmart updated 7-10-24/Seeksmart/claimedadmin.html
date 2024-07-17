@@ -87,6 +87,20 @@
         height: 1em; /* Adjust the height to match text size */
         vertical-align:-0.125em;
       }
+      .btn-success {
+        color: #fff;
+        background-color: #1c1c1e;
+        border-color: #1c1c1e;
+      }
+
+      .btn-success:hover,
+      .btn-success:focus,
+      .btn-success:active,
+      .btn-success:active:focus {
+      color: #fff; /* Ensure the text color remains white */
+      background-color: #424247; /* Keep the background color the same */
+      border-color: #424247; /* Keep the border color the same */
+      }
 
     @media (max-width: 991px) {
       .navbar-nav {
@@ -144,6 +158,20 @@
         white-space: nowrap; /* Prevent text wrapping in table cells */
         padding: 12px; /* Adjust padding for larger cells */
       }
+      @media print {
+    body * {
+      visibility: hidden;
+    }
+    #itemDetailsContent, #itemDetailsContent * {
+      visibility: visible;
+    }
+    #itemDetailsContent {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 200%;
+    }
+    }
     }
   </style>
 </head>
@@ -228,6 +256,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           <button type="button" class="btn btn-success print-btn">Print</button>
         </div>
       </div>
     </div>
@@ -273,7 +302,7 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <button class="dropdown-item view-btn action-button" data-item-id="${itemId}">View</button>
-              <button class="dropdown-item print-btn action-button" data-item-id="${itemId}">Print</button>
+             
               <button class="dropdown-item delete-btn action-button" data-item-id="${itemId}">Delete</button>
             </div>
           </div>
@@ -334,12 +363,20 @@
       });
     });
 
-    // Function to handle print button click
     $(document).on('click', '.print-btn', function() {
-      let itemId = $(this).data('item-id');
-      alert(`Print item ${itemId}`);
-      // Add your logic here to print item details
-    });
+    printModalContent();
+  });
+
+  // Function to print the content of the modal
+  function printModalContent() {
+    const printContent = document.getElementById('itemDetailsContent').innerHTML;
+    const originalContent = document.body.innerHTML;
+
+    document.body.innerHTML = `<div>${printContent}</div>`;
+    window.print();
+    document.body.innerHTML = originalContent;
+    window.location.reload(); // Refresh to rebind events
+  }
 
     // Function to handle delete button click
     $(document).on('click', '.delete-btn', function() {
