@@ -50,7 +50,7 @@
         }
         .modal-content {
             background-color: #fefefe;
-            margin: 5% auto; /* 15% from the top and centered */
+            margin: 5% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%; /* Could be more or less, depending on screen size */
@@ -410,77 +410,43 @@
 <!-- Modal for image capture/upload and specific item search -->
 <div id="modalContainer" class="modal">
   <div class="modal-content">
-      <span class="close">&times;</span>
-      <div class="modal-footer"></div>
-      
-      <div id="matchingImagesContainer" style="display:none;">
-        <div class="option-buttons">
-            <button id="uploadImageOption">Upload Image</button>
-        </div>
-        <div id="upload-container">
-            <input type="file" id="upload-image" accept="image/*">
-        </div>
-    </div>
-          <div id="capture-container" style="display:none;">
-            <video id="video" width="100%" height="auto" autoplay playsinline></video>
-            <button id="captureImageOption">Capture Image</button>
-              <canvas id="canvas" style="display:none;"></canvas>
-          </div>
-          <div id="upload-container" style="display:none;">
-              <input type="file" id="upload" accept="image/*">
-          </div>
-          <img id="loginimage" src="images/loginlogo.png" alt="Login Logo" style="display:none;">
-      </div>
+    <span class="close">&times;</span>
+    <div class="modal-footer"></div>
 
-      <div id="specificItemsContainer" style="display:none;">
-          <h2>Search Specific Items</h2>
-          <form id="specificItemsForm">
-              <input type="text" id="itemDescription" name="itemDescription" placeholder="Search Description">
-              <button type="submit">Search</button>
-          </form>
+    <div id="matchingImagesContainer" style="display:none;">
+      <div class="option-buttons">
+        <button id="uploadImageOption">Upload Image</button>
       </div>
+      <div id="upload-container">
+        <input type="file" id="upload-image" accept="image/*">
+      </div>
+    </div>
+
+    <div id="capture-container" style="display:none;">
+      <video id="video" width="100%" height="auto" autoplay playsinline></video>
+      <button id="captureImageOption">Capture Image</button>
+      <canvas id="canvas" style="display:none;"></canvas>
+    </div>
+    
+    <img id="loginimage" src="images/loginlogo.png" alt="Login Logo" style="display:none;">
+
+    <div id="specificItemsContainer" style="display:none;">
+      <h2>Search Specific Items</h2>
+      <form id="specificItemsForm">
+        <input type="text" id="itemDescription" name="itemDescription" placeholder="Search Description">
+        <button type="submit">Search</button>
+      </form>
+    </div>
   </div>
 </div>
+
 <div id="myModal" class="modal">
   <div class="modal-content">
-      
-      <canvas id="modal-canvas"></canvas>
-      <p id="modal-results"></p>
-      <div class="modal-footer">
-          <button id="closeModalButton">Close</button>
-      </div>
-  </div>
-</div>
-  <div class="modal-content">
-      <span class="close">&times;</span>
-      <div class="modal-footer"></div>
-      
-      <div id="matchingImagesContainer" style="display:none;">
-        <div class="option-buttons">
-            <button id="uploadImageOption">Upload Image</button>
-        </div>
-        <div id="upload-container">
-            <input type="file" id="upload-image" accept="image/*">
-        </div>
+    <canvas id="modal-canvas"></canvas>
+    <p id="modal-results"></p>
+    <div class="modal-footer">
+      <button id="closeModalButton">Close</button>
     </div>
-          <div id="capture-container" style="display:none;">
-            <video id="video" width="100%" height="auto" autoplay playsinline></video>
-            <button id="captureImageOption">Capture Image</button>
-              <canvas id="canvas" style="display:none;"></canvas>
-          </div>
-          <div id="upload-container" style="display:none;">
-              <input type="file" id="upload" accept="image/*">
-          </div>
-          <img id="loginimage" src="images/loginlogo.png" alt="Login Logo" style="display:none;">
-      </div>
-
-      <div id="specificItemsContainer" style="display:none;">
-          <h2>Search Specific Items</h2>
-          <form id="specificItemsForm">
-              <input type="text" id="itemDescription" name="itemDescription" placeholder="Search Description">
-              <button type="submit">Search</button>
-          </form>
-      </div>
   </div>
 </div>
 
