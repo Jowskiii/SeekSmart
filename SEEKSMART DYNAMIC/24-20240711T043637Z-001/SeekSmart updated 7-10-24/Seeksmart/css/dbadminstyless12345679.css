@@ -43,19 +43,7 @@ body {
     height: 40px; /* Set a fixed height */
   }
   
-  .notifications-container {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 300px;
-    max-height: 400px;
-    overflow-y: auto;
-    background-color: #333;
-    color: white;
-    border-radius: 5px;
-    display: none;
-    padding: 20px;
-  }
+  
   
   .notification {
     margin-bottom: 10px;

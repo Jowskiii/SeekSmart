@@ -25,11 +25,11 @@
       background-color: transparent; 
     }
     
-    .content-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .btn-primary {
+    color: #fff;
+    background-color: #1c1c1e;
+    border-color: #1c1c1e;
+    } 
     
     .logo {
       width: 50px;
@@ -40,26 +40,27 @@
     display: flex;
     flex-wrap: wrap;
     gap: 20px; /* Adds space between .box and .charts-container */
-    }
+}
 
-    .box {
-        background-color: #1c1c1e;
-        color: white;
-        padding: 20px;
-        border-radius: 5px;
-        flex: 1 1 calc(50% - 10px); /* Each box takes up about half the container width, minus the gap */
-        box-sizing: border-box; /* Ensures padding is included in total width */
-    }
+.box {
+    background-color: #1c1c1e;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    flex: 1 1 calc(50% - 20px); /* Each box takes up about half the container width, minus the gap */
+    box-sizing: border-box; /* Ensures padding is included in total width */
+    margin-bottom: 20px; /* Optional: Adds space below each box */
+}
 
     .charts-container {
-        display: flex;
-        flex-wrap: wrap; /* Allows chart-box elements to wrap on smaller screens */
-        gap: 20px; /* Adds space between chart-box elements */
-        justify-content: space-between; /* Distributes items evenly across the main axis */
+    display: flex;
+    justify-content: space-between; /* Ensures space between chart-box elements */
+   
     }
 
     .chart-box {
-        flex: 0 1 calc(50% - 20px); /* Each chart-box takes up about half the container width, minus the gap */
+        flex: 1; /* Each chart-box will take up equal space */
+        max-width: calc(50% - 10px); /* Each chart-box will take up about half the container width, minus half of the gap */
         box-sizing: border-box; /* Ensures padding is included in total width */
     }
 
@@ -68,21 +69,33 @@
         color: white;
         padding: 20px;
         border-radius: 5px;
-        width: 100%; /* Ensures charts fill the container width */
+        width: 100%; /* Ensures charts fill the chart-box width */
+        box-sizing: border-box; /* Ensures padding is included in total width */
+        height: auto; 
+    }
+
+   
+    @media (max-width: 768px) {
+    .charts-container {
+        display: flex;
+        flex-direction: column; /* Stacks charts vertically on smaller screens */
+    }
+
+    .chart-box {
+        flex: 1 1 100%; /* Each chart-box takes full width on smaller screens */
+        margin-bottom: 20px; /* Adds space between chart-box elements when stacked */
+    }
+
+    .chart {
+        background-color: #1c1c1e;
+        color: white;
+        padding: 20px;
+        border-radius: 5px;
+        width: auto; /* Ensures charts fill the chart-box width */
         box-sizing: border-box; /* Ensures padding is included in total width */
     }
+}
 
-    /* Adjust layout for smaller screens */
-    @media (max-width: 768px) {
-        .charts-container {
-            flex-direction: column; /* Stacks charts vertically on smaller screens */
-        }
-
-        .chart-box {
-            flex: 1 1 100%; /* Each chart-box takes full width on smaller screens */
-            margin-bottom: 20px; /* Adds space between chart-box elements when stacked */
-        }
-    }
 
 
     
@@ -91,31 +104,14 @@
       text-align: center;
     }
     
-    .charts-container {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap; /* Allows charts to wrap on smaller screens */
-    }
+
     
-    .chart-box {
-      flex: 1 1 50%; /* Ensure charts take full width initially */
-      margin-bottom: 10px; /* Space between charts */
-    }
-    
-    .chart {
-  background-color: #1c1c1e;
-  color: white;
-  padding: 20px;
-  border-radius: 5px;
-  height: auto; /* Adjusted to auto for dynamic height based on content */
-  width: 100%; /* Ensures charts fill the container width */
-  box-sizing: border-box; /* Ensures padding is included in total width */
-}
+
     
     .notification-icon {
       position: fixed;
-      top: 70px; /* Adjusted to be below navbar */
-      right: 20px; /* Adjusted to top right */
+      top: 90px; /* Adjusted to be below navbar */
+      right: 30px; /* Adjusted to top right */
       cursor: pointer;
       width: 40px; /* Set a fixed width */
       height: 40px; /* Set a fixed height */
@@ -133,6 +129,7 @@
       border-radius: 5px;
       display: none;
       padding: 20px;
+      z-index: 1;
     }
     
     .notification {
@@ -158,12 +155,42 @@
         height: 1em; /* Adjust the height to match text size */
         vertical-align:-0.125em;
       }
+      .container-main {
+            padding: 15px;
+            background-color: transparent;
+            border-radius: 10px;
+    
+            transition: transform 0
+
+
+        }
+        .box {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .chart {
+            margin-top: 20px;
+        }
+        .chart h2 {
+            font-size: 1.25rem;
+        }
     @media (min-width: 768px) {
       .chart-box {
         flex: 1 1 48%; /* Adjusted for two-column layout on larger screens */
         margin-right: 2%; /* Space between charts */
       }
     }
+    .print-button-container {
+      margin-right: auto;
+    }
+
+    @media print {
+    .notification-icon,
+    .print-button-container {
+      display: none !important; /* Ensure they are hidden when printing */
+    }
+  }
+
   </style>
 </head>
 <body>
@@ -209,42 +236,47 @@
   </div>
 </nav>
 
-<div class="notification-icon" id="notificationIcon">
-  <img src="images/notificon.png" alt="Notification Icon" width="40" height="40">
-</div>
 
-<div class="notifications-container" id="notificationsContainer">
-  <h2>Contact Us Notifications</h2>
-  <div id="notifications"></div>
-</div>
-
-
-<div class="content" id="invoice">
-  <div class="content-header">
-    <h2>Dashboard</h2>
-  </div>
-  <div class="container">
-    <div class="box">
-      <p class="title"><b>Total Lost Items: <span id="total-lost">0</span></b></p>
+  <div class="container-fluid container-main">
+    <div class="notification-icon" id="notificationIcon">
+      <img src="images/notificon.png" alt="Notification Icon" width="40" height="40">
     </div>
-    <div class="box">
-      <p class="title"><b>Total Claimed Items: <span id="total-claimed">0</span></b></p>
+    
+    <div class="notifications-container" id="notificationsContainer">
+      <h2>Contact Us Notifications</h2>
+      <div id="notifications"></div>
     </div>
-  </div>
-  <div class="charts-container">
-    <div class="chart-box">
-      <div class="chart">
-        <h2>Weekly Lost Items</h2>
-        <canvas id="lostItemsChart"></canvas>
+    
+    
+    <div class="content" id="invoice">
+      <div class="print-button-container">
+        <button onclick="window.print()" class="btn btn-primary print-button">Print</button>
       </div>
+    <div class="row">
+        <div class="col-md-6 col-12">
+            <div class="wrapper">
+                <div class="box">
+                    <p class="title"><b>Total Lost Items: <span id="total-lost">0</span></b></p>
+                </div>
+                <div class="chart">
+                    <h2>Weekly Lost Items</h2>
+                    <canvas id="lostItemsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-12">
+            <div class="wrapper">
+                <div class="box">
+                    <p class="title"><b>Total Claimed Items: <span id="total-claimed">0</span></b></p>
+                </div>
+                <div class="chart">
+                    <h2>Weekly Claimed Items</h2>
+                    <canvas id="claimedItemsChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="chart-box">
-      <div class="chart">
-        <h2>Weekly Claimed Items</h2>
-        <canvas id="claimedItemsChart"></canvas>
-      </div>
-    </div>
-  </div>
+</div>
 </div>
 
 
