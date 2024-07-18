@@ -537,19 +537,24 @@
     }
     
     function searchSpecificItems(description) {
-        const dbRef = ref(db);
-        get(child(dbRef, "lostItemForm")).then((snapshot) => {
-            var items = [];
-            snapshot.forEach(childSnapshot => {
-                let item = childSnapshot.val();
-                if (item.itemDescription.toLowerCase().includes(description.toLowerCase())) {
-                    item.itemId = childSnapshot.key;
-                    items.push(item);
-                }
-            });
-            AddAllItemsToTable(items);
+    const dbRef = ref(db);
+    get(child(dbRef, "lostItemForm")).then((snapshot) => {
+        var items = [];
+        snapshot.forEach(childSnapshot => {
+            let item = childSnapshot.val();
+            if (
+                item.itemDescription.toLowerCase().includes(description.toLowerCase()) ||
+                item.foundDate.toLowerCase().includes(description.toLowerCase()) ||
+                item.foundLocation.toLowerCase().includes(description.toLowerCase()) ||
+                item.keywordDescription.toLowerCase().includes(description.toLowerCase())
+            ) {
+                item.itemId = childSnapshot.key;
+                items.push(item);
+            }
         });
-    }
+        AddAllItemsToTable(items);
+    });
+}
 
  document.getElementById("specificItemsForm").addEventListener("submit", function (event) {
             event.preventDefault();
@@ -692,6 +697,9 @@ if (captureImageOption) {
       // Filter items based on description, found date, found location, and keyword
       const filteredItems = items.filter(item =>
         item.itemDescription.toLowerCase().includes(itemDescription) ||
+        item.foundDate.toLowerCase().includes(foundDate) ||
+        item.foundLocation.toLowerCase().includes(foundLocation) ||
+        item.keywordDescription.toLowerCase().includes(keywordDescription) ||
         item.foundDate.toLowerCase().includes(itemDescription) ||
         item.foundLocation.toLowerCase().includes(itemDescription) ||
         item.keywordDescription.toLowerCase().includes(itemDescription)
