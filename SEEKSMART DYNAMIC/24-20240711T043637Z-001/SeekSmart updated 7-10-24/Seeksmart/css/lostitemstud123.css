@@ -328,20 +328,16 @@
   height: 50px;
 }
 
-.modal form input[type="text"],
-.modal form input[type="password"] {
-  width: calc(100% - 160px);
+.modal form input[type="text"], .modal form input[type="password"] {
+  width: 100%;
   padding: 20px;
-  margin: 0 80px;
   margin-bottom: 20px;
-  border: none;
   background: none;
   border-radius: 0;
-  border-bottom: 2px solid #000000;
   display: flex;
   box-sizing: border-box;
-  text-align: center;
-}
+  text-align: left;
+  }
 
 .modal form input[type="text"]::placeholder,
 .modal form input[type="password"]::placeholder {

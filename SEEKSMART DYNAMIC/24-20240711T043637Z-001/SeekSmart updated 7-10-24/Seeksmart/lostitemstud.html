@@ -179,7 +179,49 @@
       overflow: auto;
       background-color: rgba(0,0,0,0.4);
     }
+    .modal button {
+    position: relative;
+    background-color: #1c1c1e;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+    color: #ffffff;
+    border: 2px solid #000000;
+    font-size: 20px;
+    transition: all 0.3s ease-in-out;
+    z-index: 1;
+    overflow: hidden;
+    margin: 0 auto;
+    display: block;
+    margin-bottom: 20px;
+    }
+    .btn-primary:hover {
+    color: #fff;
+    background-color: #020079;
+    border-color: #020079;
+    }
+    .modal form input[type="text"], .modal form input[type="password"] {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: none;
+    border-radius: 0;
+    display: flex;
+    box-sizing: border-box;
+    text-align: left;
+    }
 
+    button, input {
+    overflow: visible;
+    background: #1c1c1e;
+    color: white;
+    }
+    .h2, h2 {
+    font-size: 2rem;
+    color: #333;
+    }
     .modal-content {
       background-color: #fefefe;
       margin: 15% auto;
@@ -337,6 +379,8 @@
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
+    color: black;
+    text-align: center;
 }
     @media (max-width: 992px) {
       .navbar-expand-lg .navbar-nav {
@@ -455,7 +499,7 @@
 
     <div id="matchingImagesContainer" style="display:none;">
       <div class="option-buttons">
-        <button id="uploadImageOption">Upload Image</button>
+        <h2>Upload Image</h2>
       </div>
       <div id="upload-container">
         <input type="file" id="upload-image" accept="image/*">
