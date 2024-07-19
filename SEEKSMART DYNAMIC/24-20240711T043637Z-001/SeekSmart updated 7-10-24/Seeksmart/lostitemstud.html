@@ -246,7 +246,7 @@
     }
 
     #specificItemsForm input[type="text"] {
-      width: 100%;
+      width: 95%;
       padding: 10px;
       margin-bottom: 10px;
       border: 1px solid #ccc;
@@ -254,6 +254,11 @@
       box-sizing: border-box;
     }
 
+   
+   
+
+      
+    
     #specificItemsForm button {
       background-color: #007bff;
       color: white;
@@ -265,7 +270,6 @@
     #specificItemsForm button:hover {
       background-color: #0056b3;
     }
-  
     .item-photo {
     max-width: 2in;
     height: 2in;
@@ -299,6 +303,8 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    height: auto;
+    width: 100%;
 }
 #specificItemsContainer {
     margin-top: 5px;
@@ -325,6 +331,13 @@
         height: 1em; /* Adjust the height to match text size */
         vertical-align:-0.125em;
       }
+
+      #specificItemsContainer form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
     @media (max-width: 992px) {
       .navbar-expand-lg .navbar-nav {
         flex-direction: column;
@@ -333,11 +346,7 @@
       .item-container {
         width: 100%;
       }
-
-      .search-button {
-        margin-bottom: 10px;
-      }
-    }
+  }
   </style>
 </head>
 <body>
