@@ -815,72 +815,13 @@ async function detectObjectsInImage(file) {
             modalContext.fillStyle = 'white';
             modalContext.fillText(text, x, y);
 
-            const colorName = detectColorName(modalContext, x, y, width, height);
-
-            modalResultsElement.innerHTML += `${text} - Color: ${colorName}<br>`;
+            modalResultsElement.innerHTML += `${text}<br>`;
         });
 
         document.getElementById('myModal').style.display = "block";
     };
     img.src = URL.createObjectURL(file);
 }
-        function detectColorName(context, x, y, width, height) {
-            const imageData = context.getImageData(x, y, width, height);
-            const data = imageData.data;
-
-            let totalRed = 0, totalGreen = 0, totalBlue = 0, pixelCount = 0;
-
-            for (let i = 0; i < data.length; i += 4) {
-                totalRed += data[i];
-                totalGreen += data[i + 1];
-                totalBlue += data[i + 2];
-                pixelCount++;
-            }
-
-            const averageRed = Math.round(totalRed / pixelCount);
-            const averageGreen = Math.round(totalGreen / pixelCount);
-            const averageBlue = Math.round(totalBlue / pixelCount);
-
-            const colorMap = {
-                'black': { r: 0, g: 0, b: 0 },
-                'white': { r: 255, g: 255, b: 255 },
-                'red': { r: 255, g: 0, b: 0 },
-                'green': { r: 0, g: 255, b: 0 },
-                'blue': { r: 0, g: 0, b: 255 },
-                'yellow': { r: 255, g: 255, b: 0 },
-                'cyan': { r: 0, g: 255, b: 255 },
-                'magenta': { r: 255, g: 0, b: 255 },
-                'gray': { r: 128, g: 128, b: 128 },
-                'purple': { r: 128, g: 0, b: 128 },
-                'orange': { r: 255, g: 165, b: 0 },
-                'brown': { r: 165, g: 42, b: 42 }
-            };
-
-            let minDistance = Infinity;
-            let closestColor = null;
-
-            function getColorDistance(c1, c2) {
-                return Math.sqrt(
-                    Math.pow(c1.r - c2.r, 2) +
-                    Math.pow(c1.g - c2.g, 2) +
-                    Math.pow(c1.b - c2.b, 2)
-                );
-            }
-
-            for (const color in colorMap) {
-                const colorRGB = colorMap[color];
-                const distance = getColorDistance(
-                    { r: averageRed, g: averageGreen, b: averageBlue },
-                    colorRGB
-                );
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestColor = color;
-                }
-            }
-
-            return closestColor || 'unknown';
-        }
 
         document.addEventListener('DOMContentLoaded', function() {
           runObjectDetection();
