@@ -59,17 +59,21 @@
       background-color: #e9ecef;
       color: #000;
     }
+
     .table thead th {
-    vertical-align: bottom;
-    border-bottom: 1px solid #1c1c1e;
+      vertical-align: bottom;
+      border-bottom: 1px solid #1c1c1e;
     }
+
     .table td, .table th {
-    padding: .75rem;
-    vertical-align: middle;
+      padding: .75rem;
+      vertical-align: middle;
     }
+
     .table-bordered td, .table-bordered th {
-    border: 1px solid #1c1c1e;
+      border: 1px solid #1c1c1e;
     }
+
     .navbar-brand {
       display: flex;
       align-items: center;
@@ -80,43 +84,49 @@
       width: 1.25em; /* Adjust width relative to text size */
       height: 1.25em; /* Adjust height relative to text size */
     }
-    .nav-link {
-        display: flex;
-        align-items: center;
-      }
-    .nav-link svg {
-        margin-right: 5px; /* Adjust space between icon and text */
-        width: 1em; /* Adjust the width to match text size */
-        height: 1em; /* Adjust the height to match text size */
-        vertical-align:-0.125em;
-      }
-      .btn-success {
-        color: #fff;
-        background-color: #1c1c1e;
-        border-color: #1c1c1e;
-      }
 
-      .btn-success:hover,
-      .btn-success:focus,
-      .btn-success:active,
-      .btn-success:active:focus {
+    .nav-link {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-link svg {
+      margin-right: 5px; /* Adjust space between icon and text */
+      width: 1em; /* Adjust the width to match text size */
+      height: 1em; /* Adjust the height to match text size */
+      vertical-align: -0.125em;
+    }
+
+    .btn-success {
+      color: #fff;
+      background-color: #1c1c1e;
+      border-color: #1c1c1e;
+    }
+
+    .btn-success:hover,
+    .btn-success:focus,
+    .btn-success:active,
+    .btn-success:active:focus {
       color: #fff; /* Ensure the text color remains white */
       background-color: #424247; /* Keep the background color the same */
       border-color: #424247; /* Keep the border color the same */
-      }
-      img {
-          vertical-align: middle;
-          border-style: none;
-          border-radius: 0.04in;
-      }
+    }
+
+    img {
+      vertical-align: middle;
+      border-style: none;
+      border-radius: 0.04in;
+    }
 
     @media (max-width: 991px) {
       .navbar-nav {
         text-align: left;
       }
+
       .navbar-nav .nav-item {
         margin-left: 0;
       }
+
       .content {
         margin-top: 5px;
       }
@@ -146,9 +156,10 @@
     }
 
     .navbar {
-    background-color: #020079;
-    width: 100%;
+      background-color: #020079;
+      width: 100%;
     }
+
     @media (min-width: 992px) {
       .table-responsive {
         width: 100%; /* Use 100% width on wide screens */
@@ -166,20 +177,60 @@
         white-space: nowrap; /* Prevent text wrapping in table cells */
         padding: 12px; /* Adjust padding for larger cells */
       }
-      @media print {
-    body * {
-      visibility: hidden;
     }
-    #itemDetailsContent, #itemDetailsContent * {
-      visibility: visible;
+
+    .printable-area {
+      display: none;
     }
-    #itemDetailsContent {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 200%;
-    }
-    }
+
+    @media print {
+      body {
+        border: 2px solid black;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .printable-area {
+        display: block;
+        padding: 20px;
+        margin: 0;
+      }
+
+      .print-header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .print-header img {
+        width: 100px;
+        height: auto;
+      }
+
+      .print-header h1 {
+        margin: 10px 0;
+        font-size: 24px;
+      }
+
+      body * {
+        visibility: hidden;
+      }
+
+      .printable-area, .printable-area * {
+        visibility: visible;
+      }
+
+      .printable-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 20px;
+        margin: 0;
+      }
+
+      .content-to-print {
+        page-break-after: always;
+      }
     }
   </style>
 </head>
@@ -205,7 +256,7 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="laf.html"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16">
-            <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+            <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
           </svg>Lost And Found Items</a>
         </li>
         <li class="nav-item active">
@@ -247,6 +298,17 @@
     </div>
   </div>
 
+  <div class="printable-area">
+    <div class="print-header">
+      <img src="images/dblogo.png" alt="Logo">
+      <h1>Holy Child Catholic School</h1>
+      <p>Weekly Report</p>
+    </div>
+    <div class="content-to-print">
+      <!-- Content that needs to be printed will be copied here dynamically -->
+    </div>
+  </div>
+
   <!-- Bootstrap Modal for Item Details -->
   <div class="modal fade" id="itemDetailsModal" tabindex="-1" role="dialog" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -264,7 +326,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-           <button type="button" class="btn btn-success print-btn">Print</button>
+          <button type="button" class="btn btn-success print-btn">Print</button>
         </div>
       </div>
     </div>
@@ -278,12 +340,12 @@
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
-    authDomain: "seeksmart-database.firebaseapp.com",
-    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
-    projectId: "seeksmart-database",
-    storageBucket: "seeksmart-database.appspot.com",
-    messagingSenderId: "1066553932800",
-    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+      authDomain: "seeksmart-database.firebaseapp.com",
+      databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+      projectId: "seeksmart-database",
+      storageBucket: "seeksmart-database.appspot.com",
+      messagingSenderId: "1066553932800",
+      appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
     };
 
     // Initialize Firebase
@@ -310,7 +372,6 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <button class="dropdown-item view-btn action-button" data-item-id="${itemId}">View</button>
-             
               <button class="dropdown-item delete-btn action-button" data-item-id="${itemId}">Delete</button>
             </div>
           </div>
@@ -372,19 +433,15 @@
     });
 
     $(document).on('click', '.print-btn', function() {
-    printModalContent();
-  });
+      printModalContent();
+    });
 
-  // Function to print the content of the modal
-  function printModalContent() {
-    const printContent = document.getElementById('itemDetailsContent').innerHTML;
-    const originalContent = document.body.innerHTML;
-
-    document.body.innerHTML = `<div>${printContent}</div>`;
-    window.print();
-    document.body.innerHTML = originalContent;
-    window.location.reload(); // Refresh to rebind events
-  }
+    // Function to print the content of the modal
+    function printModalContent() {
+      const printContent = document.getElementById('itemDetailsContent').innerHTML;
+      document.querySelector('.content-to-print').innerHTML = printContent;
+      window.print();
+    }
 
     // Function to handle delete button click
     $(document).on('click', '.delete-btn', function() {

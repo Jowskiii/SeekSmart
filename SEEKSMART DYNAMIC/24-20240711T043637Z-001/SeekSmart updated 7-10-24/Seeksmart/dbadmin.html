@@ -7,120 +7,88 @@
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/dbadminstyless12345679.css">
-  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
- 
-  
   <style>
-   body {
-    background-color: whitesmoke;
-    font-family: 'Kumbh Sans', sans-serif;
+    body {
+      background: url('images/bg.png') no-repeat center center fixed;
+      font-family: 'Kumbh Sans', sans-serif;
     }
     .navbar-nav .nav-link {
       color: white !important;
     }
-    
     .content {
       padding: 20px;
-      background-color: transparent; 
+      background-color: transparent;
     }
-    
     .btn-primary {
-    color: #fff;
-    background-color: #1c1c1e;
-    border-color: #1c1c1e;
-    } 
-    
+      color: #fff;
+      background-color: #1c1c1e;
+      border-color: #1c1c1e;
+    }
     .logo {
       width: 50px;
       height: auto;
     }
-    
     .container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px; /* Adds space between .box and .charts-container */
-}
-
-.box {
-    background-color: #1c1c1e;
-    color: white;
-    padding: 20px;
-    border-radius: 5px;
-    flex: 1 1 calc(50% - 20px); /* Each box takes up about half the container width, minus the gap */
-    box-sizing: border-box; /* Ensures padding is included in total width */
-    margin-bottom: 20px; /* Optional: Adds space below each box */
-}
-
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .box {
+      background-color: #1c1c1e;
+      color: white;
+      padding: 20px;
+      border-radius: 5px;
+      flex: 1 1 calc(50% - 20px);
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
     .charts-container {
-    display: flex;
-    justify-content: space-between; /* Ensures space between chart-box elements */
-   
+      display: flex;
+      justify-content: space-between;
     }
-
     .chart-box {
-        flex: 1; /* Each chart-box will take up equal space */
-        max-width: calc(50% - 10px); /* Each chart-box will take up about half the container width, minus half of the gap */
-        box-sizing: border-box; /* Ensures padding is included in total width */
+      flex: 1;
+      max-width: calc(50% - 10px);
+      box-sizing: border-box;
     }
-
     .chart {
-        background-color: #1c1c1e;
-        color: white;
-        padding: 20px;
-        border-radius: 5px;
-        width: 100%; /* Ensures charts fill the chart-box width */
-        box-sizing: border-box; /* Ensures padding is included in total width */
-        height: auto; 
+      background-color: #1c1c1e;
+      color: white;
+      padding: 20px;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+      height: auto;
     }
-
-   
     @media (max-width: 768px) {
-    .charts-container {
-        display: flex;
-        flex-direction: column; /* Stacks charts vertically on smaller screens */
+      .charts-container {
+        flex-direction: column;
+      }
+      .chart-box {
+        flex: 1 1 100%;
+        margin-bottom: 20px;
+      }
+      .chart {
+        width: auto;
+      }
     }
-
-    .chart-box {
-        flex: 1 1 100%; /* Each chart-box takes full width on smaller screens */
-        margin-bottom: 20px; /* Adds space between chart-box elements when stacked */
-    }
-
-    .chart {
-        background-color: #1c1c1e;
-        color: white;
-        padding: 20px;
-        border-radius: 5px;
-        width: auto; /* Ensures charts fill the chart-box width */
-        box-sizing: border-box; /* Ensures padding is included in total width */
-    }
-}
-
-
-
-    
     .title {
       font-size: 1.5rem;
       text-align: center;
     }
-    
-
-    
-
-    
     .notification-icon {
       position: fixed;
-      top: 90px; /* Adjusted to be below navbar */
-      right: 30px; /* Adjusted to top right */
+      top: 90px;
+      right: 30px;
       cursor: pointer;
-      width: 40px; /* Set a fixed width */
-      height: 40px; /* Set a fixed height */
+      width: 40px;
+      height: 40px;
     }
-    
     .notifications-container {
       position: fixed;
-      top: 120px; /* Adjusted to be below navbar */
-      right: 20px; /* Adjusted to top right */
+      top: 120px;
+      right: 20px;
       width: 300px;
       max-height: 400px;
       overflow-y: auto;
@@ -131,7 +99,6 @@
       padding: 20px;
       z-index: 1;
     }
-    
     .notification {
       margin-bottom: 10px;
     }
@@ -139,66 +106,82 @@
       display: flex;
       align-items: center;
     }
-
     .navbar-brand svg {
-      margin-right: 5px; /* Adjust space between icon and text */
-      width: 1.25em; /* Adjust width relative to text size */
-      height: 1.25em; /* Adjust height relative to text size */
+      margin-right: 5px;
+      width: 1.25em;
+      height: 1.25em;
     }
     .nav-link {
-        display: flex;
-        align-items: center;
-      }
+      display: flex;
+      align-items: center;
+    }
     .nav-link svg {
-        margin-right: 5px; /* Adjust space between icon and text */
-        width: 1em; /* Adjust the width to match text size */
-        height: 1em; /* Adjust the height to match text size */
-        vertical-align:-0.125em;
-      }
-      .container-main {
-            padding: 15px;
-            background-color: transparent;
-            border-radius: 10px;
-    
-            transition: transform 0
-
-
-        }
-        .box {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .chart {
-            margin-top: 20px;
-        }
-        .chart h2 {
-            font-size: 1.25rem;
-        }
+      margin-right: 5px;
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+    }
+    .container-main {
+      padding: 15px;
+      background-color: transparent;
+      border-radius: 10px;
+      transition: transform 0;
+    }
+    .box {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .chart {
+      margin-top: 20px;
+    }
+    .chart h2 {
+      font-size: 1.25rem;
+    }
     @media (min-width: 768px) {
       .chart-box {
-        flex: 1 1 48%; /* Adjusted for two-column layout on larger screens */
-        margin-right: 2%; /* Space between charts */
+        flex: 1 1 48%;
+        margin-right: 2%;
       }
     }
     .print-button-container {
       margin-right: auto;
     }
-
-    @media print {
-    .notification-icon,
-    .print-button-container {
-      display: none !important; /* Ensure they are hidden when printing */
+    .printable-area {
+      padding: 20px;
+      margin: 20px;
     }
-  }
-
+    .print-header {
+      display: none;
+    }
+    @media print {
+      .notification-icon,
+      .print-button-container {
+        display: none !important;
+      }
+      .printable-area {
+        border: 2px solid black;
+      }
+      .print-header {
+        display: block;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .print-header img {
+        width: 100px;
+        height: auto;
+      }
+      .print-header h1 {
+        margin: 10px 0;
+        font-size: 24px;
+      }
+    }
   </style>
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <a class="navbar-brand" href="#">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lock" viewBox="0 0 16 16">
-      <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m0 5.996V14H3s-1 0-1-1 1-4 6-4q.845.002 1.544.107a4.5 4.5 0 0 0-.803.918A11 11 0 0 0 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664zM9 13a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
+      <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m0 5.996V14H3s-1 0-1-1 1-4 6-4q.845.002 1.544.107a4.5 4.5 0 0 0-.803.918A11 11 0 0 0 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664zM9 13a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
     </svg>
     Admin
   </a>
@@ -235,51 +218,59 @@
     </ul>
   </div>
 </nav>
-
-
-  <div class="container-fluid container-main">
-    <div class="notification-icon" id="notificationIcon">
-      <img src="images/notificon.png" alt="Notification Icon" width="40" height="40">
+<div class="container-fluid container-main">
+  <div class="notification-icon" id="notificationIcon">
+    <img src="images/notificon.png" alt="Notification Icon" width="40" height="40">
+  </div>
+  <div class="notifications-container" id="notificationsContainer">
+    <h2>Contact Us Notifications</h2>
+    <div id="notifications"></div>
+  </div>
+  <div class="content" id="invoice">
+    <div class="print-button-container">
+      <button onclick="window.print()" class="btn btn-primary print-button">Print</button>
     </div>
-    
-    <div class="notifications-container" id="notificationsContainer">
-      <h2>Contact Us Notifications</h2>
-      <div id="notifications"></div>
-    </div>
-    
-    
-    <div class="content" id="invoice">
-      <div class="print-button-container">
-        <button onclick="window.print()" class="btn btn-primary print-button">Print</button>
+    <div class="printable-area">
+      <div class="print-header">
+        <img src="images/dblogo.png" alt="Logo">
+        <h1>Holy Child Catholic School</h1>
+        <br> Weekly Report </br>
       </div>
-    <div class="row">
+      <div class="row">
         <div class="col-md-6 col-12">
-            <div class="wrapper">
-                <div class="box">
-                    <p class="title"><b>Total Lost Items: <span id="total-lost">0</span></b></p>
-                </div>
-                <div class="chart">
-                    <h2>Weekly Lost Items</h2>
-                    <canvas id="lostItemsChart"></canvas>
-                </div>
+          <div class="wrapper">
+            <div class="box">
+              <p class="title"><b>Total Lost Items: <span id="total-lost">0</span></b></p>
             </div>
+            <div class="chart">
+              <h2>Weekly Lost Items</h2>
+              <canvas id="lostItemsChart"></canvas>
+            </div>
+          </div>
         </div>
         <div class="col-md-6 col-12">
-            <div class="wrapper">
-                <div class="box">
-                    <p class="title"><b>Total Claimed Items: <span id="total-claimed">0</span></b></p>
-                </div>
-                <div class="chart">
-                    <h2>Weekly Claimed Items</h2>
-                    <canvas id="claimedItemsChart"></canvas>
-                </div>
+          <div class="wrapper">
+            <div class="box">
+              <p class="title"><b>Total Claimed Items: <span id="total-claimed">0</span></b></p>
             </div>
+            <div class="chart">
+              <h2>Weekly Claimed Items</h2>
+              <canvas id="claimedItemsChart"></canvas>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="chart">
+                  <h2>Daily Items</h2>
+                  <canvas id="dailyItemsChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-</div>
-
-
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -289,12 +280,12 @@
 
   const firebaseConfig = {
     apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
-      authDomain: "seeksmart-database.firebaseapp.com",
-      databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
-      projectId: "seeksmart-database",
-      storageBucket: "seeksmart-database.appspot.com",
-      messagingSenderId: "1066553932800",
-      appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+    authDomain: "seeksmart-database.firebaseapp.com",
+    databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+    projectId: "seeksmart-database",
+    storageBucket: "seeksmart-database.appspot.com",
+    messagingSenderId: "1066553932800",
+    appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -303,12 +294,10 @@
   function updateCounts() {
     const lostItemsRef = ref(db, 'lostItemForm');
     const claimedItemsRef = ref(db, 'claimedItems');
-
     onValue(lostItemsRef, (snapshot) => {
       const lostCount = snapshot.exists() ? snapshot.size || snapshot.numChildren() : 0;
       document.getElementById('total-lost').textContent = lostCount;
     });
-
     onValue(claimedItemsRef, (snapshot) => {
       const claimedCount = snapshot.exists() ? snapshot.size || snapshot.numChildren() : 0;
       document.getElementById('total-claimed').textContent = claimedCount;
@@ -318,176 +307,206 @@
   function updateNotifications() {
     const contactFormRef = ref(db, 'contactForm');
     const notificationsContainer = document.getElementById('notifications');
-
     onValue(contactFormRef, (snapshot) => {
-        notificationsContainer.innerHTML = '';
-
-        let notifications = [];
-        snapshot.forEach((childSnapshot) => {
-            notifications.push(childSnapshot.val());
-        });
-
-        // Sort notifications by timestamp in descending order
-        notifications.sort((a, b) => b.timestamp - a.timestamp);
-
-        // Prepend sorted notifications to the container
-        notifications.forEach((notification) => {
-            const notificationElement = document.createElement('div');
-            notificationElement.className = 'notification';
-            notificationElement.textContent = `Message from ${notification.firstName} ${notification.lastName}: ${notification.helpMsg}`;
-            notificationsContainer.insertBefore(notificationElement, notificationsContainer.firstChild);
-        });
+      notificationsContainer.innerHTML = '';
+      let notifications = [];
+      snapshot.forEach((childSnapshot) => {
+        notifications.push(childSnapshot.val());
+      });
+      notifications.sort((a, b) => b.timestamp - a.timestamp);
+      notifications.forEach((notification) => {
+        const notificationElement = document.createElement('div');
+        notificationElement.className = 'notification';
+        notificationElement.textContent = `Message from ${notification.firstName} ${notification.lastName}: ${notification.helpMsg}`;
+        notificationsContainer.insertBefore(notificationElement, notificationsContainer.firstChild);
+      });
     });
-}
+  }
 
-function toggleNotifications() {
+  function toggleNotifications() {
     const notificationsContainer = document.getElementById('notificationsContainer');
     if (window.getComputedStyle(notificationsContainer).display === 'none') {
-        notificationsContainer.style.display = 'block';
+      notificationsContainer.style.display = 'block';
     } else {
-        notificationsContainer.style.display = 'none';
+      notificationsContainer.style.display = 'none';
     }
-}
+  }
 
-function saveContactInfoToFirebase(fname, lname, email, message) {
+  function saveContactInfoToFirebase(fname, lname, email, message) {
     let newContactInfo = push(saveContactInfo);
-
     set(newContactInfo, {
-        fname: fname,
-        lname: lname,
-        email: email,
-        message: message,
-        timestamp: Date.now()
+      fname: fname,
+      lname: lname,
+      email: email,
+      message: message,
+      timestamp: Date.now()
     });
-}
+  }
 
   document.getElementById('notificationIcon').addEventListener('click', toggleNotifications);
 
   function getWeekDates(d) {
-  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    const weekStart = new Date(d);
+    weekStart.setUTCDate(d.getUTCDate() - d.getUTCDay() + 1);
+    const weekEnd = new Date(d);
+    weekEnd.setUTCDate(d.getUTCDate() - d.getUTCDay() + 7);
+    return [d.getUTCFullYear(), weekNo, weekStart, weekEnd];
+  }
 
-  // Get the start date of the week
-  const weekStart = new Date(d);
-  weekStart.setUTCDate(d.getUTCDate() - d.getUTCDay() + 1);
+  function formatWeekLabel(weekStart, weekEnd) {
+    const options = { month: 'short', day: 'numeric' };
+    const startLabel = weekStart.toLocaleDateString(undefined, options);
+    const endLabel = weekEnd.toLocaleDateString(undefined, options);
+    return `${startLabel} - ${endLabel}`;
+  }
 
-  // Get the end date of the week
-  const weekEnd = new Date(d);
-  weekEnd.setUTCDate(d.getUTCDate() - d.getUTCDay() + 7);
-
-  return [d.getUTCFullYear(), weekNo, weekStart, weekEnd];
-}
-
-function formatWeekLabel(weekStart, weekEnd) {
-  const options = { month: 'short', day: 'numeric' };
-  const startLabel = weekStart.toLocaleDateString(undefined, options);
-  const endLabel = weekEnd.toLocaleDateString(undefined, options);
-  return `${startLabel} - ${endLabel}`;
-}
-
-function updateCharts() {
-  const lostItemsRef = ref(db, 'lostItemForm');
-  const claimedItemsRef = ref(db, 'claimedItems');
-
-  const lostItemsData = [];
-  const claimedItemsData = [];
-
-  onValue(lostItemsRef, (snapshot) => {
-    snapshot.forEach((childSnapshot) => {
-      const item = childSnapshot.val();
-      const date = new Date(item.foundDate);
-      const [year, week, weekStart, weekEnd] = getWeekDates(date);
-      const weekLabel = formatWeekLabel(weekStart, weekEnd);
-      const weekStartTime = weekStart.getTime();
-
-      if (!lostItemsData[weekStartTime]) {
-        lostItemsData[weekStartTime] = { label: weekLabel, count: 0 };
-      }
-      lostItemsData[weekStartTime].count++;
-    });
-
-    const sortedLostItemsData = Object.keys(lostItemsData).sort((a, b) => a - b).map(key => lostItemsData[key]);
-    const labels = sortedLostItemsData.map(item => item.label);
-    const data = sortedLostItemsData.map(item => item.count);
-
-    new Chart(document.getElementById('lostItemsChart'), {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Lost Items',
-          data: data,
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
+  function updateCharts() {
+    const lostItemsRef = ref(db, 'lostItemForm');
+    const claimedItemsRef = ref(db, 'claimedItems');
+    const lostItemsData = [];
+    const claimedItemsData = [];
+    onValue(lostItemsRef, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const item = childSnapshot.val();
+        const date = new Date(item.foundDate);
+        const [year, week, weekStart, weekEnd] = getWeekDates(date);
+        const weekLabel = formatWeekLabel(weekStart, weekEnd);
+        const weekStartTime = weekStart.getTime();
+        if (!lostItemsData[weekStartTime]) {
+          lostItemsData[weekStartTime] = { label: weekLabel, count: 0 };
+        }
+        lostItemsData[weekStartTime].count++;
+      });
+      const sortedLostItemsData = Object.keys(lostItemsData).sort((a, b) => a - b).map(key => lostItemsData[key]);
+      const labels = sortedLostItemsData.map(item => item.label);
+      const data = sortedLostItemsData.map(item => item.count);
+      new Chart(document.getElementById('lostItemsChart'), {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Lost Items',
+            data: data,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
           }
         }
-      }
-    });
-  });
-
-  onValue(claimedItemsRef, (snapshot) => {
-    snapshot.forEach((childSnapshot) => {
-      const item = childSnapshot.val();
-      const date = new Date(item.claimedDate);
-      const [year, week, weekStart, weekEnd] = getWeekDates(date);
-      const weekLabel = formatWeekLabel(weekStart, weekEnd);
-      const weekStartTime = weekStart.getTime();
-
-      if (!claimedItemsData[weekStartTime]) {
-        claimedItemsData[weekStartTime] = { label: weekLabel, count: 0 };
-      }
-      claimedItemsData[weekStartTime].count++;
+      });
     });
 
-    const sortedClaimedItemsData = Object.keys(claimedItemsData).sort((a, b) => a - b).map(key => claimedItemsData[key]);
-    const labels = sortedClaimedItemsData.map(item => item.label);
-    const data = sortedClaimedItemsData.map(item => item.count);
-
-    new Chart(document.getElementById('claimedItemsChart'), {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Claimed Items',
-          data: data,
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
+    onValue(claimedItemsRef, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const item = childSnapshot.val();
+        const date = new Date(item.claimedDate);
+        const [year, week, weekStart, weekEnd] = getWeekDates(date);
+        const weekLabel = formatWeekLabel(weekStart, weekEnd);
+        const weekStartTime = weekStart.getTime();
+        if (!claimedItemsData[weekStartTime]) {
+          claimedItemsData[weekStartTime] = { label: weekLabel, count: 0 };
+        }
+        claimedItemsData[weekStartTime].count++;
+      });
+      const sortedClaimedItemsData = Object.keys(claimedItemsData).sort((a, b) => a - b).map(key => claimedItemsData[key]);
+      const labels = sortedClaimedItemsData.map(item => item.label);
+      const data = sortedClaimedItemsData.map(item => item.count);
+      new Chart(document.getElementById('claimedItemsChart'), {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Claimed Items',
+            data: data,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
           }
         }
-      }
+      });
     });
+
+    const dailyItemsData = {};
+    onValue(lostItemsRef, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const item = childSnapshot.val();
+        const date = new Date(item.foundDate);
+        const dateString = date.toISOString().split('T')[0];
+        if (!dailyItemsData[dateString]) {
+          dailyItemsData[dateString] = { lost: 0, claimed: 0 };
+        }
+        dailyItemsData[dateString].lost++;
+      });
+
+      onValue(claimedItemsRef, (snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+          const item = childSnapshot.val();
+          const date = new Date(item.claimedDate);
+          const dateString = date.toISOString().split('T')[0];
+          if (!dailyItemsData[dateString]) {
+            dailyItemsData[dateString] = { lost: 0, claimed: 0 };
+          }
+          dailyItemsData[dateString].claimed++;
+        });
+
+        const sortedDailyKeys = Object.keys(dailyItemsData).sort((a, b) => new Date(a) - new Date(b));
+        const labels = sortedDailyKeys;
+        const lostData = sortedDailyKeys.map(key => dailyItemsData[key].lost);
+        const claimedData = sortedDailyKeys.map(key => dailyItemsData[key].claimed);
+
+        new Chart(document.getElementById('dailyItemsChart'), {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Lost Items',
+              data: lostData,
+              borderColor: 'rgba(255, 99, 132, 1)',
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              fill: false
+            },
+            {
+              label: 'Claimed Items',
+              data: claimedData,
+              borderColor: 'rgba(54, 162, 235, 1)',
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              fill: false
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      });
+    });
+  }
+
+  window.addEventListener('load', () => {
+    updateCounts();
+    updateNotifications();
+    updateCharts();
   });
-}
-
-window.addEventListener('load', () => {
-  updateCounts();
-  updateNotifications();
-  updateCharts();
-});
-
-
-
-
- 
 </script>
-
-
-
 </body>
 </html>
