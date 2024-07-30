@@ -35,8 +35,8 @@
       gap: 20px;
     }
     .box {
-      background-color: #1c1c1e;
-      color: white;
+      background-color: #f8f9fa;
+      color: #1c1c1e;
       padding: 20px;
       border-radius: 5px;
       flex: 1 1 calc(50% - 20px);
@@ -53,8 +53,8 @@
       box-sizing: border-box;
     }
     .chart {
-      background-color: #1c1c1e;
-      color: white;
+      background-color: #f8f9fa;
+      color: #1c1c1e;
       padding: 20px;
       border-radius: 5px;
       width: 100%;
@@ -78,7 +78,7 @@
       text-align: center;
     }
     .notification-icon {
-      position: fixed;
+      position: absolute;
       top: 90px;
       right: 30px;
       cursor: pointer;
@@ -86,7 +86,7 @@
       height: 40px;
     }
     .notifications-container {
-      position: fixed;
+      position: absolute;
       top: 120px;
       right: 20px;
       width: 300px;
@@ -102,6 +102,17 @@
     .notification {
       margin-bottom: 10px;
     }
+    .notification-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 5px 10px;
+  font-size: 12px;
+  display: none; /* Hide by default */
+}
     .navbar-brand {
       display: flex;
       align-items: center;
@@ -147,7 +158,7 @@
       margin-right: auto;
     }
     .printable-area {
-      padding: 20px;
+    
       margin: 20px;
     }
     .print-header {
@@ -221,6 +232,7 @@
 <div class="container-fluid container-main">
   <div class="notification-icon" id="notificationIcon">
     <img src="images/notificon.png" alt="Notification Icon" width="40" height="40">
+    <div class="notification-badge" id="notificationBadge">0</div>
   </div>
   <div class="notifications-container" id="notificationsContainer">
     <h2>Contact Us Notifications</h2>
@@ -228,7 +240,10 @@
   </div>
   <div class="content" id="invoice">
     <div class="print-button-container">
-      <button onclick="window.print()" class="btn btn-primary print-button">Print</button>
+      <button onclick="window.print()" class="btn btn-primary print-button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+        <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"/>
+        <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1"/>
+      </svg></button>
     </div>
     <div class="printable-area">
       <div class="print-header">
@@ -304,33 +319,54 @@
     });
   }
 
-  function updateNotifications() {
-    const contactFormRef = ref(db, 'contactForm');
-    const notificationsContainer = document.getElementById('notifications');
-    onValue(contactFormRef, (snapshot) => {
-      notificationsContainer.innerHTML = '';
-      let notifications = [];
-      snapshot.forEach((childSnapshot) => {
-        notifications.push(childSnapshot.val());
-      });
-      notifications.sort((a, b) => b.timestamp - a.timestamp);
-      notifications.forEach((notification) => {
-        const notificationElement = document.createElement('div');
-        notificationElement.className = 'notification';
-        notificationElement.textContent = `Message from ${notification.firstName} ${notification.lastName}: ${notification.helpMsg}`;
-        notificationsContainer.insertBefore(notificationElement, notificationsContainer.firstChild);
-      });
-    });
-  }
+ let lastNotificationCount = 0;
+let newNotificationCount = 0;
 
-  function toggleNotifications() {
-    const notificationsContainer = document.getElementById('notificationsContainer');
-    if (window.getComputedStyle(notificationsContainer).display === 'none') {
-      notificationsContainer.style.display = 'block';
-    } else {
-      notificationsContainer.style.display = 'none';
+function updateNotifications() {
+  const contactFormRef = ref(db, 'contactForm');
+  const notificationsContainer = document.getElementById('notifications');
+  const notificationBadge = document.getElementById('notificationBadge');
+
+  onValue(contactFormRef, (snapshot) => {
+    notificationsContainer.innerHTML = '';
+    let notifications = [];
+    snapshot.forEach((childSnapshot) => {
+      notifications.push(childSnapshot.val());
+    });
+    notifications.sort((a, b) => b.timestamp - a.timestamp);
+    notifications.forEach((notification) => {
+      const notificationElement = document.createElement('div');
+      notificationElement.className = 'notification';
+      notificationElement.textContent = `Message from ${notification.firstName} ${notification.lastName}: ${notification.helpMsg}`;
+      notificationsContainer.insertBefore(notificationElement, notificationsContainer.firstChild);
+    });
+
+    // Detect new messages and update the badge count starting from 1
+    if (notifications.length > lastNotificationCount) {
+      newNotificationCount += notifications.length - lastNotificationCount;
+      notificationBadge.textContent = newNotificationCount;
+      notificationBadge.style.display = 'block';
     }
+    lastNotificationCount = notifications.length;
+  });
+}
+
+function toggleNotifications() {
+  const notificationsContainer = document.getElementById('notificationsContainer');
+  if (window.getComputedStyle(notificationsContainer).display === 'none') {
+    notificationsContainer.style.display = 'block';
+    // Reset the badge count when opened
+    const notificationBadge = document.getElementById('notificationBadge');
+    newNotificationCount = 0;
+    notificationBadge.textContent = newNotificationCount;
+    notificationBadge.style.display = 'none';
+  } else {
+    notificationsContainer.style.display = 'none';
   }
+}
+
+// Call updateNotifications to initially populate notifications and set up the badge
+updateNotifications();
 
   function saveContactInfoToFirebase(fname, lname, email, message) {
     let newContactInfo = push(saveContactInfo);
