@@ -8,10 +8,9 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/lostitemstud123.css">
-
   <style>
     /* Add any additional custom styles here */
     #video, #canvas {
@@ -530,6 +529,12 @@
   </div>
 </div>
 
+<!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<!-- Firebase Database -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<!-- Firebase Storage -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 <!-- Bootstrap JS and dependencies (jQuery and Popper.js) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" async></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js" async></script>
@@ -624,32 +629,15 @@ function showClaimModal(item) {
   claimFormContainer.style.display = "block";
   claimDetails.style.display = "none";
 
+  // Add the item photo URL to a hidden input field in the claim form
+  const claimForm = document.getElementById('claimForm');
+  const itemPhotoInput = document.createElement('input');
+  itemPhotoInput.type = 'hidden';
+  itemPhotoInput.name = 'itemPhoto';
+  itemPhotoInput.value = item.photo;
+  claimForm.appendChild(itemPhotoInput);
 
   claimModal.style.display = "block";
-  
-  const claimForm = document.getElementById("claimForm");
-  claimForm.addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const firstName = document.getElementById("firstName").value;
-    const lastName = document.getElementById("lastName").value;
-    const studentId = document.getElementById("studentId").value;
-
-    // Hide the form and show the confirmation details
-    claimFormContainer.style.display = "none";
-    claimDetails.style.display = "block";
-
-    // Populate the claim details in the modal
-    claimInfo.innerHTML = `
-      <p><strong>Item Name:</strong> ${item.itemName}</p>
-      <p><strong>First Name:</strong> ${firstName}</p>
-      <p><strong>Last Name:</strong> ${lastName}</p>
-      <p><strong>Student ID:</strong> ${studentId}</p>
-      <img src="${item.photo}" alt="Item Photo" class="item-photo" style="max-width: 20%; height: auto;">
-    `;
-
-    console.log(`Claim submitted for item ${item.itemName} by ${firstName} ${lastName}, ID: ${studentId}`);
-  });
 }
 
 // Close claim modal
