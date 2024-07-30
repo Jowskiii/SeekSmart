@@ -157,35 +157,83 @@
     .print-button-container {
       margin-right: auto;
     }
-    .printable-area {
     
-      margin: 20px;
-    }
     .print-header {
       display: none;
     }
-    @media print {
-      .notification-icon,
-      .print-button-container {
-        display: none !important;
-      }
-      .printable-area {
-        border: 2px solid black;
-      }
-      .print-header {
-        display: block;
-        text-align: center;
-        margin-bottom: 20px;
-      }
-      .print-header img {
-        width: 100px;
-        height: auto;
-      }
-      .print-header h1 {
-        margin: 10px 0;
-        font-size: 24px;
-      }
-    }
+    .printable-area {
+  margin: 20px;
+}
+
+@media print {
+  .notification-icon,
+  .print-button-container {
+    display: none !important;
+  }
+
+  .printable-area {
+    border: 1px dashed;
+    padding: 5px;
+    page-break-inside: avoid;
+  }
+
+  .print-header {
+    display: block;
+    text-align: center;
+    margin-bottom: none; /* Increased margin for better spacing */
+  }
+
+  .print-header img {
+    width: 400px; /* Increased size for better visibility */
+    height: auto;
+  }
+
+  .print-header h1 {
+    margin: none; /* Adjusted margin for spacing */
+    font-size: 50px; /* Increased font size for better visibility */
+  }
+
+  .chart {
+    margin-bottom: 40px;
+    page-break-inside: avoid;
+  }
+
+  .chart canvas {
+    max-width: 100%;
+    max-height: 100%; /* Adjusted max height if needed */
+  }
+
+  .wrapper .box p.title {
+    font-size: 25px;
+  }
+
+  h2 {
+    font-size: 14px; /* Reduced font size for other headers */
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Reduce margins and paddings for all elements inside printable area */
+  .printable-area * {
+    margin: 0;
+    padding: 50;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .col-md-6 {
+    flex: 0 0 48%;
+  }
+}
+
+
   </style>
 </head>
 <body>
@@ -248,8 +296,8 @@
     <div class="printable-area">
       <div class="print-header">
         <img src="images/dblogo.png" alt="Logo">
-        <h1>Holy Child Catholic School</h1>
-        <br> Weekly Report </br>
+        <h1>System Report</h1>
+        
       </div>
       <div class="row">
         <div class="col-md-6 col-12">
@@ -272,18 +320,25 @@
               <h2>Weekly Claimed Items</h2>
               <canvas id="claimedItemsChart"></canvas>
             </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="chart">
-                  <h2>Daily Items</h2>
-                  <canvas id="dailyItemsChart"></canvas>
-                </div>
-              </div>
-            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-12">
+          <div class="chart">
+            <h2>Daily Items</h2>
+            <canvas id="dailyItemsChart"></canvas>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <div class="chart">
+            <h2>Frequently Lost and Claimed Items</h2>
+            <canvas id="itemNameChart"></canvas>
           </div>
         </div>
       </div>
     </div>
+    
   </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -478,6 +533,72 @@ updateNotifications();
         }
       });
     });
+    const itemNameData = {};
+onValue(lostItemsRef, (snapshot) => {
+  snapshot.forEach((childSnapshot) => {
+    const item = childSnapshot.val();
+    const itemName = item.itemName.toLowerCase();
+    if (!itemNameData[itemName]) {
+      itemNameData[itemName] = 0;
+    }
+    itemNameData[itemName]++;
+  });
+
+  onValue(claimedItemsRef, (snapshot) => {
+    snapshot.forEach((childSnapshot) => {
+      const item = childSnapshot.val();
+      const itemName = item.itemName.toLowerCase();
+      if (!itemNameData[itemName]) {
+        itemNameData[itemName] = 0;
+      }
+      itemNameData[itemName]++;
+    });
+
+    let itemNameLabels = Object.keys(itemNameData);
+    let itemNameCounts = itemNameLabels.map(key => itemNameData[key]);
+
+    // Sort the labels and counts from highest to lowest
+    const sortedItems = itemNameLabels
+      .map((label, index) => ({ label, count: itemNameCounts[index] }))
+      .sort((a, b) => b.count - a.count);
+
+    itemNameLabels = sortedItems.map(item => item.label);
+    itemNameCounts = sortedItems.map(item => item.count);
+
+    // Function to generate random colors
+    function getRandomColor() {
+      const r = Math.floor(Math.random() * 255);
+      const g = Math.floor(Math.random() * 255);
+      const b = Math.floor(Math.random() * 255);
+      return `rgba(${r}, ${g}, ${b}, 0.2)`;
+    }
+
+    const backgroundColors = itemNameLabels.map(() => getRandomColor());
+    const borderColors = backgroundColors.map(color => color.replace('0.2', '1'));
+
+    new Chart(document.getElementById('itemNameChart'), {
+      type: 'bar',
+      data: {
+        labels: itemNameLabels,
+        datasets: [{
+          label: 'Number of Items',
+          data: itemNameCounts,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  });
+});
+
 
     const dailyItemsData = {};
     onValue(lostItemsRef, (snapshot) => {
