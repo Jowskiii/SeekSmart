@@ -465,15 +465,15 @@
       <form id="claimForm">
         <div class="form-group">
           <label for="firstName">First Name:</label>
-          <input type="text" id="firstName" name="firstName" class="form-control" required>
+          <input type="text" class="form-control" id="claimFirstName" readonly>
         </div>
         <div class="form-group">
           <label for="lastName">Last Name:</label>
-          <input type="text" id="lastName" name="lastName" class="form-control" required>
+          <input type="text" class="form-control" id="claimLastName" readonly>
         </div>
         <div class="form-group">
           <label for="studentId">Student ID:</label>
-          <input type="text" id="studentId" name="studentId" class="form-control" required>
+          <input type="text" class="form-control" id="claimStudentId" readonly>
         </div>
         <button type="submit" class="btn btn-primary">Submit Claim</button>
       </form>
@@ -545,6 +545,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     // Firebase configuration
     const firebaseConfig = {
@@ -560,6 +561,24 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const userRef = ref(db, 'StudentUsers/' + user.uid);
+            get(userRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    userDetails = snapshot.val();
+                } else {
+                    console.error('No user data available');
+                }
+            }).catch((error) => {
+                console.error('Error fetching user data:', error);
+            });
+        } else {
+            console.error('User is not signed in');
+        }
+    });
 
     var itemsContainer = document.getElementById("itemsContainer");
     var items = []; // Array to store retrieved items
@@ -624,6 +643,11 @@ function showClaimModal(item) {
   const claimDetails = document.getElementById("claimDetails");
   const claimInfo = document.getElementById("claimInfo");
 
+        // Populate the claim form with user details
+        document.getElementById("claimFirstName").value = userDetails.firstName || '';
+        document.getElementById("claimLastName").value = userDetails.lastName || '';
+        document.getElementById("claimStudentId").value = userDetails.studentId || '';
+          
     // Show the claim form initially
     claimModal.style.display = "block";
   claimFormContainer.style.display = "block";

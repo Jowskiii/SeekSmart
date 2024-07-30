@@ -9,90 +9,111 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Firebase scripts -->
-  <script type="module">
-    // Import functions 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  
-    // Web app Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
-      authDomain: "seeksmart-database.firebaseapp.com",
-      databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
-      projectId: "seeksmart-database",
-      storageBucket: "seeksmart-database.appspot.com",
-      messagingSenderId: "1066553932800",
-      appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
-    };
-  
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-    const auth = getAuth();
-  
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const loginDate = new Date().toLocaleString();
-  
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          if (user) {
-            const userRef = ref(database, 'StudentUsers/' + user.uid);
-            get(userRef).then((snapshot) => {
-              if (!snapshot.exists()) {
-                // New user, add to database
-                set(userRef, {
-                  email: user.email,
-                  role: "student", // Default role, change as needed
-                  lastLogin: loginDate
-                }).then(() => {
-                  alert('New user added to the database. Login again.');
-                  auth.signOut();
-                }).catch((error) => {
-                  console.error('Error adding new user:', error);
-                });
-              } else {
-                // Existing user, update login date and check role
-                const userData = snapshot.val();
-                update(userRef, { lastLogin: loginDate }).then(() => {
-                  if (userData.role === "student") {
-                    alert('Student logged in!');
-                    window.location.href = "lostitemstud.html";
-                  } else {
-                    alert('Access denied. Students only.');
-                    auth.signOut();
-                  }
-                }).catch((error) => {
-                  console.error('Error updating login date:', error);
-                });
-              }
-            }).catch((error) => {
-              console.error('Error fetching user data:', error);
-            });
-          } else {
-            alert('Authentication failed');
-          }
-        })
-        .catch((error) => {
-          const errorMessage = error.message;
-          alert(errorMessage);
-        });
-    });
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        
+        // Web app Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+            authDomain: "seeksmart-database.firebaseapp.com",
+            databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+            projectId: "seeksmart-database",
+            storageBucket: "seeksmart-database.appspot.com",
+            messagingSenderId: "1066553932800",
+            appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const uid = user.uid;
-        // Perform actions based on user state
-      } else {
-        // User is signed out
-        // Perform actions based on user state
-      }
-    });
-  </script>
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const loginDate = new Date().toLocaleString();
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    const userRef = ref(database, 'StudentUsers/' + user.uid);
+                    get(userRef).then((snapshot) => {
+                        if (!snapshot.exists()) {
+                            set(userRef, {
+                                email: user.email,
+                                role: "student",
+                                lastLogin: loginDate
+                            }).then(() => {
+                                alert('New user added to the database. Login again.');
+                                auth.signOut();
+                            }).catch((error) => {
+                                console.error('Error adding new user:', error);
+                            });
+                        } else {
+                            const userData = snapshot.val();
+                            update(userRef, { lastLogin: loginDate }).then(() => {
+                                if (userData.role === "student") {
+                                    alert('Student logged in!');
+                                    window.location.href = "lostitemstud.html";
+                                } else {
+                                    alert('Access denied. Students only.');
+                                    auth.signOut();
+                                }
+                            }).catch((error) => {
+                                console.error('Error updating login date:', error);
+                            });
+                        }
+                    }).catch((error) => {
+                        console.error('Error fetching user data:', error);
+                    });
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const studentId = document.getElementById('studentId').value;
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    const userRef = ref(database, 'StudentUsers/' + user.uid);
+                    set(userRef, {
+                        email: user.email,
+                        role: "student",
+                        firstName,
+                        lastName,
+                        studentId
+                    }).then(() => {
+                        alert('User registered successfully!');
+                        document.getElementById('registerForm').reset();
+                         $('#RegisterModal').modal('hide');
+                    }).catch((error) => {
+                        console.error('Error adding new user:', error);
+                    });
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+            } else {
+                // User is signed out
+            }
+        });
+    </script>
   
     <!-- Custom CSS -->
     <style>
@@ -166,7 +187,27 @@
         .login-button:hover {
             background-color: rgb(52, 91, 180); /* Ensure hover color matches the normal state */
         }
-        
+
+        .register-button {
+            position: relative;
+            background-color: #020079;
+            border-radius: 5px;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            box-sizing: border-box;
+            width: 154px;
+            margin-top: 3px;
+            height: 49px;
+            color: #edecf3;
+            border: 2px solid #000000;
+            font-size: 20px;
+            transition: all 0.3s ease-in-out;
+            z-index: 1;
+            overflow: hidden;
+        }       
+        .register-button:hover {
+            background-color: rgb(52, 91, 180); /* Ensure hover color matches the normal state */
+        } 
         .modal-dialog {
             position: relative;
             margin: 10% auto; /* Adjust vertical and horizontal margin */
@@ -335,6 +376,7 @@
                 <h2>Welcome, Student!</h2>
                 <p>Please Log-In</p>
                 <button class="btn btn-primary login-button" data-toggle="modal" data-target="#loginModal">Login</button>
+                <button class="btn btn-primary register-button" data-toggle="modal" data-target="#RegisterModal">Register</button>
             </div>
         </div>
     </div>
@@ -345,23 +387,56 @@
                             
                             <img id="loginimage" src="images/loginlogo.png" class="img-fluid">
                             <form id="loginForm">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" autocomplete="off">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">Login</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                              <div class="form-group">
+                                  <label for="loginEmail">Email address</label>
+                                  <input type="email" class="form-control" id="loginEmail" placeholder="Enter email">
+                              </div>
+                              <div class="form-group">
+                                  <label for="loginPassword">Password</label>
+                                  <input type="password" class="form-control" id="loginPassword" placeholder="Password">
+                              </div>
+                              <button type="submit" class="btn btn-primary">Login</button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
         </div>
     </div>
-            
+
+    <div id="RegisterModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <img id="loginimage" src="images/loginlogo.png" class="img-fluid mx-auto d-block" alt="Login Logo">
+            <div class="modal-body">
+              <form id="registerForm">
+                  <div class="form-group">
+                      <label for="registerEmail">Email address</label>
+                      <input type="email" class="form-control" id="registerEmail" placeholder="Enter email" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="registerPassword">Password</label>
+                      <input type="password" class="form-control" id="registerPassword" placeholder="Password" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="firstName">First Name</label>
+                      <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="lastName">Last Name</label>
+                      <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="studentId">Student ID</label>
+                      <input type="text" class="form-control" id="studentId" placeholder="Student ID" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Register</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
