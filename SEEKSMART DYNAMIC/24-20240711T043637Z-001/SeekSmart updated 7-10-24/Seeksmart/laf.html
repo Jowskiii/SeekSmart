@@ -517,30 +517,29 @@
     });
 
     function fetchClaims() {
-      const claimsRef = db.ref('claims');
-      claimsRef.on('value', (snapshot) => {
-        const claims = snapshot.val();
-        const claimNotificationsContent = document.getElementById('claimNotificationsContent');
-        claimNotificationsContent.innerHTML = ''; // Clear previous notifications
-        let claimCount = 0;
-        for (const key in claims) {
-          if (claims.hasOwnProperty(key)) {
-            const claim = claims[key];
-            claimCount++;
-            const claimElement = document.createElement('div');
-            claimElement.innerHTML = `
-              <p><strong>Claimant:</strong> ${claim.firstName} ${claim.lastName}</p>
-              <p><strong>Student ID:</strong> ${claim.studentId}</p>
-              <p><strong>Timestamp:</strong> ${claim.timestamp}</p>
-              <img src="${claim.photo}" alt="Item Photo" width="100">
-              <hr>
-            `;
-            claimNotificationsContent.appendChild(claimElement);
-          }
-        }
-        document.getElementById('claimBadge').innerText = claimCount;
-      });
+  const claimsRef = ref(db, 'claimNotifications');
+  claimsRef.on('value', (snapshot) => {
+    const claims = snapshot.val();
+    const claimNotificationsContent = document.getElementById('claimNotificationsContent');
+    claimNotificationsContent.innerHTML = ''; // Clear previous notifications
+    let claimCount = 0;
+    for (const key in claims) {
+      if (claims.hasOwnProperty(key)) {
+        const claim = claims[key];
+        claimCount++;
+        const claimElement = document.createElement('div');
+        claimElement.innerHTML = `
+          <p><strong>Claimant:</strong> ${claim.firstName} ${claim.lastName}</p>
+          <p><strong>Student ID:</strong> ${claim.studentId}</p>
+          <p><strong>Timestamp:</strong> ${claim.timestamp}</p>
+          <hr>
+        `;
+        claimNotificationsContent.appendChild(claimElement);
+      }
     }
+    document.getElementById('claimBadge').innerText = claimCount;
+  });
+}
 
     document.getElementById('notificationIcon').addEventListener('click', function() {
       document.getElementById('claimNotificationsModal').style.display = 'block';
