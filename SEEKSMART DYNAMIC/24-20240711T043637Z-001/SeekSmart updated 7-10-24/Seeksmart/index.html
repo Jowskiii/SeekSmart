@@ -193,48 +193,60 @@
 <br>
 <br>
   <div class="col-lg-5">
-    <div id="studForm" class="modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                
-                <img id="loginimage" src="images/loginlogo.png" class="img-fluid">
-                <form id="studentForm">
-                  <div class="form-group">
-                      <label for="studEmail">Email address</label>
-                      <input type="email" class="form-control" id="studEmail" placeholder="Enter email">
-                  </div>
-                  <div class="form-group">
-                      <label for="studentPassword">Password</label>
-                      <input type="password" class="form-control" id="studentPassword" placeholder="Password">
-                  </div>
-                  <button type="studubmit" class="btn btn-primary">Login</button>
-                  <button class="btn btn-primary register-button" data-toggle="modal" data-target="#RegisterModal">Register</button>
+    <div id="studForm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="studFormLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-body">
+                  <img id="loginimage" src="images/loginlogo.png" class="img-fluid mx-auto d-block" alt="Login Logo">
+                  <form id="studentForm">
+                      <div class="form-group">
+                          <label for="studEmail">Email address</label>
+                          <input type="email" class="form-control" id="studEmail" placeholder="Enter email">
+                      </div>
+                      <div class="form-group">
+                          <label for="studentPassword">Password</label>
+                          <input type="password" class="form-control" id="studentPassword" placeholder="Password">
+                      </div>
+                      <button type="submit" class="btn btn-primary">Login</button>
+                      <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+   <!-- Register Modal -->
+   <div id="registerModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img id="registerimage" src="images/loginlogo.png" class="img-fluid mx-auto d-block" alt="Register Logo">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerEmail">Email address</label>
+                        <input type="email" class="form-control" id="registerEmail" placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" class="form-control" id="registerPassword" placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentId">Student ID</label>
+                        <input type="text" class="form-control" id="studentId" placeholder="Student ID" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
                 </form>
-             </div>   
-             </div>
-    <form id="registerForm">
-        <div class="form-group">
-            <label for="registerEmail">Email address</label>
-            <input type="email" class="form-control" id="registerEmail" placeholder="Enter email" required>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="registerPassword">Password</label>
-            <input type="password" class="form-control" id="registerPassword" placeholder="Password" required>
-        </div>
-        <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
-        </div>
-        <div class="form-group">
-            <label for="lastName">Last Name</label>
-            <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
-        </div>
-        <div class="form-group">
-            <label for="studentId">Student ID</label>
-            <input type="text" class="form-control" id="studentId" placeholder="Student ID" required>
-        </div>
-        <button type="studubmit" class="btn btn-primary">Register</button>
-    </form>
+    </div>
+</div>
 </div>
                 </div>
             </div>
@@ -250,17 +262,17 @@
     // Import functions 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getDatabase, ref, set, get, child, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     // Web app Firebase config
     const firebaseConfig = {
-        apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
-        authDomain: "seeksmart-database.firebaseapp.com",
-        databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
-        projectId: "seeksmart-database",
-        storageBucket: "seeksmart-database.appspot.com",
-        messagingSenderId: "1066553932800",
-        appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+      apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+      authDomain: "seeksmart-database.firebaseapp.com",
+      databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+      projectId: "seeksmart-database",
+      storageBucket: "seeksmart-database.appspot.com",
+      messagingSenderId: "1066553932800",
+      appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
     };
 
     // Initialize Firebase
@@ -320,7 +332,38 @@
           alert(errorMessage);
         });
     });
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const studentId = document.getElementById('studentId').value;
 
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          const userRef = ref(database, 'StudentUsers/' + user.uid);
+          return set(userRef, {
+            firstName: firstName,
+            lastName: lastName,
+            studentId: studentId,
+            email: user.email,
+            lastLogin: new Date().toLocaleString()
+          });
+        })
+        .then(() => {
+          alert('Registration successful!');
+          $('#registerModal').modal('hide');
+        })
+        .catch((error) => {
+          console.error('Error during registration:', error);
+          alert('Registration failed: ' + error.message);
+        })
+        .finally(() => {
+          document.getElementById('registerForm').reset(); // Reset form after registration attempt
+        });
+    });
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
@@ -330,230 +373,79 @@
         // Perform actions based on user state
       }
     });
-  </script>
 
-<script>
-    // Get the modal
-    var modal = document.getElementById("loginModal");
+    // Student login form submission
+  // Student login form submission
+document.getElementById('studentForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('studEmail').value;
+    const password = document.getElementById('studentPassword').value;
+    const loginDate = new Date().toLocaleString();
 
-    // Get the button that opens the modal
-    var btn = document.querySelector(".login-button");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the button, open the modal 
-    btn.onclick = function() {
-      modal.style.display = "block";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-
-    // Add event listener to hide second logo when email input is clicked
-    document.getElementById("email").addEventListener("focus", function() {
-      document.querySelector(".username-logo").style.display = "none";
-    });
-
-    // Add event listener to show second logo when email input loses focus
-    document.getElementById("email").addEventListener("blur", function() {
-      if (this.value === "") {
-        document.querySelector(".username-logo").style.display = "block";
-      }
-    });
-
-    // Add event listener to hide second logo when password input is clicked
-    document.getElementById("password").addEventListener("focus", function() {
-      document.querySelector(".password-logo").style.display = "none";
-    });
-
-    // Add event listener to show second logo when password input loses focus
-    document.getElementById("password").addEventListener("blur", function() {
-      if (this.value === "") {
-        document.querySelector(".password-logo").style.display = "block";
-      }
-    });
-
-    // Add event listener to the login form for submit event
-    document.querySelector("#loginModal form").addEventListener("submit", function(event) {
-      event.preventDefault(); // Prevent the default form submission
-    });
-
-     document.getElementById('studentForm').addEventListener('studubmit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('studEmail').value;
-            const password = document.getElementById('studentPassword').value;
-            const loginDate = new Date().toLocaleString();
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    const userRef = ref(database, 'StudentUsers/' + user.uid);
-                    get(userRef).then((snapshot) => {
-                        if (!snapshot.exists()) {
-                            set(userRef, {
-                                email: user.email,
-                                role: "student",
-                                lastLogin: loginDate
-                            }).then(() => {
-                                alert('New user added to the database. Login again.');
-                                auth.signOut();
-                            }).catch((error) => {
-                                console.error('Error adding new user:', error);
-                            });
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            const userRef = ref(database, 'StudentUsers/' + user.uid);
+            get(userRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    update(userRef, { lastLogin: loginDate }).then(() => {
+                        if (userData.role === "student") {
+                            alert('Student logged in!');
+                            window.location.href = "lostitemstud.html";
                         } else {
-                            const userData = snapshot.val();
-                            update(userRef, { lastLogin: loginDate }).then(() => {
-                                if (userData.role === "student") {
-                                    alert('Student logged in!');
-                                    window.location.href = "lostitemstud.html";
-                                } else {
-                                    alert('Access denied. Students only.');
-                                    auth.signOut();
-                                }
-                            }).catch((error) => {
-                                console.error('Error updating login date:', error);
-                            });
+                            alert('Access denied. Students only.');
+                            auth.signOut();
                         }
                     }).catch((error) => {
-                        console.error('Error fetching user data:', error);
+                        console.error('Error updating login date:', error);
                     });
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
+                } else {
+                    alert('Student not found. Please register.');
+                    auth.signOut();
+                }
+            }).catch((error) => {
+                console.error('Error fetching user data:', error);
+            });
+        })
+        .catch((error) => {
+            alert(error.message);
         });
+});
 
-        document.getElementById('registerForm').addEventListener('studubmit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const studentId = document.getElementById('studentId').value;
+// Register form submission
+document.getElementById('registerForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const studentId = document.getElementById('studentId').value;
 
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    const userRef = ref(database, 'StudentUsers/' + user.uid);
-                    set(userRef, {
-                        email: user.email,
-                        role: "student",
-                        firstName,
-                        lastName,
-                        studentId
-                    }).then(() => {
-                        alert('User registered successfully!');
-                        document.getElementById('registerForm').reset();
-                         $('#RegisterModal').modal('hide');
-                    }).catch((error) => {
-                        console.error('Error adding new user:', error);
-                    });
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            const userRef = ref(database, 'StudentUsers/' + user.uid);
+            return set(userRef, {
+                email: user.email,
+                role: "student",
+                firstName,
+                lastName,
+                studentId,
+                lastLogin: new Date().toLocaleString()
+            });
+        })
+        .then(() => {
+            alert('Registration successful!');
+            $('#registerModal').modal('hide');
+            document.getElementById('registerForm').reset();
+        })
+        .catch((error) => {
+            console.error('Error during registration:', error);
+            alert('Registration failed: ' + error.message);
         });
+});
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in
-            } else {
-                // User is signed out
-            }
-        });
-
-        //student
-        document.getElementById('studForm').addEventListener('studubmit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('studEmail').value;
-            const password = document.getElementById('studentPassword').value;
-            const loginDate = new Date().toLocaleString();
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    const userRef = ref(database, 'StudentUsers/' + user.uid);
-                    get(userRef).then((snapshot) => {
-                        if (!snapshot.exists()) {
-                            set(userRef, {
-                                email: user.email,
-                                role: "student",
-                                lastLogin: loginDate
-                            }).then(() => {
-                                alert('New user added to the database. Login again.');
-                                auth.signOut();
-                            }).catch((error) => {
-                                console.error('Error adding new user:', error);
-                            });
-                        } else {
-                            const userData = snapshot.val();
-                            update(userRef, { lastLogin: loginDate }).then(() => {
-                                if (userData.role === "student") {
-                                    alert('Student logged in!');
-                                    window.location.href = "lostitemstud.html";
-                                } else {
-                                    alert('Access denied. Students only.');
-                                    auth.signOut();
-                                }
-                            }).catch((error) => {
-                                console.error('Error updating login date:', error);
-                            });
-                        }
-                    }).catch((error) => {
-                        console.error('Error fetching user data:', error);
-                    });
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
-        });
-
-        document.getElementById('registerForm').addEventListener('studubmit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const studentId = document.getElementById('studentId').value;
-
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    const userRef = ref(database, 'StudentUsers/' + user.uid);
-                    set(userRef, {
-                        email: user.email,
-                        role: "student",
-                        firstName,
-                        lastName,
-                        studentId
-                    }).then(() => {
-                        alert('User registered successfully!');
-                        document.getElementById('registerForm').reset();
-                         $('#RegisterModal').modal('hide');
-                    }).catch((error) => {
-                        console.error('Error adding new user:', error);
-                    });
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
-        });
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in
-            } else {
-                // User is signed out
-            }
-        });
   </script>
-
-
-  
 </body>
 </html>

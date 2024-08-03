@@ -417,17 +417,31 @@
     </div>
 
 <!-- Modal for image capture/upload and specific item search -->
-<div id="modalContainer" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <div class="modal-footer"></div>
-
-    <div id="matchingImagesContainer" style="display:none;">
-      <div class="option-buttons">
-        <h2>Upload Image</h2>
-      </div>
-      <div id="upload-container">
-        <input type="file" id="upload-image" accept="image/*">
+    <!-- Modal for image capture/upload and specific item search -->
+    <div id="modalContainer" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-footer"></div>
+        <div id="matchingImagesContainer" style="display:none;">
+          <div class="option-buttons">
+            <h2>Scan Image</h2>
+          </div>
+          <div id="upload-container">
+            <button id="scan-item" class="btn btn-primary">Scan Item</button>
+          </div>
+        </div>
+        <div id="capture-container" style="display:none;">
+          <video id="video" width="100%" height="auto" autoplay playsinline></video>
+          <canvas id="canvas" style="display:none;"></canvas>
+        </div>
+        <img id="loginimage" src="images/loginlogo.png" alt="Login Logo" style="display:none;">
+        <div id="specificItemsContainer" style="display:none;">
+          <h2>Search Specific Items</h2>
+          <form id="specificItemsForm">
+            <input type="text" id="itemDescription" name="itemDescription" placeholder="Input Text" autocomplete="off">
+            <button type="submit">Search</button>
+          </form>
+        </div>
       </div>
     </div>
 
