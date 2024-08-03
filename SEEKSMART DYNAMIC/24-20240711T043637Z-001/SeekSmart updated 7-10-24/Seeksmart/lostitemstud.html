@@ -7,33 +7,33 @@
   
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="edge-impulse-standalone.js"></script>
+  <script src="run-impulse.js"></script>
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/lostitemstud123.css">
   <style>
     /* Add any additional custom styles here */
     #video, #canvas {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-        }
-        #video {
-            position: absolute;
-        }
-        #canvas {
-            position: absolute;
-        }
-        #container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-        }
-        #results {
-            font-family: monospace;
-            white-space: pre;
-            padding-top: 620px; /* Adjust based on the height of the video/canvas */
-        }
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+    }
+    #video {
+      position: absolute;
+    }
+    #canvas {
+      position: absolute;
+    }
+    #container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+    }
+    #results {
+      font-family: monospace;
+      white-space: pre;
+      padding-top: 620px; /* Adjust based on the height of the video/canvas */
+    }
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -42,42 +42,37 @@
       flex-direction: column;
       min-height: 100vh; /* Ensure the content stretches to at least the height of the viewport */
     }
-    .navbar{
+    .navbar {
       background-color: #020079;
       width: 100%;
     }
 
     .navbar-dark .navbar-nav .nav-link {
-    color: #ffffff;
+      color: #ffffff;
     }
     .content {
       flex: 1;
       padding: 20px;
       background: white;
     }
-  
     .content-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
     }
-
     .content-header h1 {
       margin: 0;
       font-size: 24px;
       color: #333;
     }
-
     .content-header .logo {
       width: 80px;
       height: auto;
     }
-
     .search-bar {
       margin-bottom: 20px;
     }
-
     .search-button {
       background-color: #1c1c1e;
       color: white;
@@ -86,16 +81,13 @@
       cursor: pointer;
       margin-right: 10px;
     }
-
     .search-button:hover {
       background-color: #020079;
     }
-
     .items-container {
       display: flex;
       flex-wrap: wrap;
     }
-
     .item-container {
       width: calc(50% - 20px);
       margin: 10px;
@@ -103,24 +95,19 @@
       border: 1px solid #ddd;
       background-color: #f9f9f9;
     }
-
     .item-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
     }
-
-
     .item-header img {
       width: 1.5in;
       height: 1.5in;
     }
-
     .item-footer {
       text-align: right;
     }
-
     .view-btn {
       background-color: #007bff;
       color: white;
@@ -128,12 +115,9 @@
       padding: 8px 16px;
       cursor: pointer;
     }
-
     .view-btn:hover {
       background-color: #0056b3;
     }
-
-    /* Modal styles */
     .modal {
       display: none;
       position: fixed;
@@ -146,47 +130,46 @@
       background-color: rgba(0,0,0,0.4);
     }
     .modal button {
-    position: relative;
-    background-color: #1c1c1e;
-    background-repeat: no-repeat;
-    cursor: pointer;
-    box-sizing: border-box;
-    width: 100%;
-    height: auto;
-    color: #ffffff;
-    border: 2px solid #000000;
-    font-size: 20px;
-    transition: all 0.3s ease-in-out;
-    z-index: 1;
-    overflow: hidden;
-    margin: 0 auto;
-    display: block;
-    margin-bottom: 20px;
+      position: relative;
+      background-color: #1c1c1e;
+      background-repeat: no-repeat;
+      cursor: pointer;
+      box-sizing: border-box;
+      width: 100%;
+      height: auto;
+      color: #ffffff;
+      border: 2px solid #000000;
+      font-size: 20px;
+      transition: all 0.3s ease-in-out;
+      z-index: 1;
+      overflow: hidden;
+      margin: 0 auto;
+      display: block;
+      margin-bottom: 20px;
     }
     .btn-primary:hover {
-    color: #fff;
-    background-color: #020079;
-    border-color: #020079;
+      color: #fff;
+      background-color: #020079;
+      border-color: #020079;
     }
     .modal form input[type="text"], .modal form input[type="password"] {
-    width: 100%;
-    padding: 20px;
-    margin-bottom: 20px;
-    background: none;
-    border-radius: 0;
-    display: flex;
-    box-sizing: border-box;
-    text-align: left;
+      width: 100%;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: none;
+      border-radius: 0;
+      display: flex;
+      box-sizing: border-box;
+      text-align: left;
     }
-
     button, input {
-    overflow: visible;
-    background: #1c1c1e;
-    color: white;
+      overflow: visible;
+      background: #1c1c1e;
+      color: white;
     }
     .h2, h2 {
-    font-size: 2rem;
-    color: #333;
+      font-size: 2rem;
+      color: #333;
     }
     .modal-content {
       background-color: #fefefe;
@@ -197,25 +180,21 @@
       max-width: 600px;
       position: relative;
     }
-
     .close {
       color: #aaa;
       float: right;
       font-size: 28px;
       font-weight: bold;
     }
-
     .close:hover,
     .close:focus {
       color: black;
       text-decoration: none;
       cursor: pointer;
     }
-
     .option-buttons {
       margin-bottom: 20px;
     }
-
     .option-buttons button {
       background-color: #007bff;
       color: white;
@@ -224,35 +203,28 @@
       cursor: pointer;
       margin-right: 10px;
     }
-
     .option-buttons button:hover {
       background-color: #0056b3;
     }
-
     #capture-container,
     #upload-container {
       margin-bottom: 20px;
     }
-
     #capture-container video,
     #loginimage {
       width: 100%;
       height: auto;
     }
-
     #canvas {
       display: none;
     }
-
     #specificItemsContainer h2 {
       margin-top: 0;
       color: #333;
     }
-
     #specificItemsForm {
       margin-bottom: 20px;
     }
-
     #specificItemsForm input[type="text"] {
       width: 100%;
       padding: 10px;
@@ -262,7 +234,6 @@
       box-sizing: border-box;
       color: #000000;
     }
-
     #specificItemsForm button {
       background-color: #007bff;
       color: white;
@@ -270,86 +241,80 @@
       padding: 10px 20px;
       cursor: pointer;
     }
-
     #specificItemsForm button:hover {
       background-color: #0056b3;
     }
-  
     .item-photo {
-    max-width: 2in;
-    height: 2in;
-    border-radius: 0.04in;
+      max-width: 2in;
+      height: 2in;
+      border-radius: 0.04in;
     }
-        #snap {
-    display: block;
-    margin: 0 auto;
-    background-color: #1c1c1e;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-}
-.option-buttons button {
-    background-color: #1c1c1e;
-    color: white;
-    border: #fff;
-    padding: 10px;
-    cursor: pointer;
-    margin-right: 10px;
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-}
-#specificItemsContainer form button {
-    padding: 10px 20px;
-    background-color: #1c1c1e;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-#specificItemsContainer {
-    margin-top: 5px;
-    padding: 5px;
-    border-radius: 5px;
-}
+    #snap {
+      display: block;
+      margin: 0 auto;
+      background-color: #1c1c1e;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .option-buttons button {
+      background-color: #1c1c1e;
+      color: white;
+      border: #fff;
+      padding: 10px;
+      cursor: pointer;
+      margin-right: 10px;
+      display: flex;
+      justify-content: center; 
+      align-items: center; 
+    }
+    #specificItemsContainer form button {
+      padding: 10px 20px;
+      background-color: #1c1c1e;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #specificItemsContainer {
+      margin-top: 5px;
+      padding: 5px;
+      border-radius: 5px;
+    }
     .navbar-brand {
       display: flex;
       align-items: center;
     }
-
     .navbar-brand svg {
       margin-right: 5px; /* Adjust space between icon and text */
       width: 1.25em; /* Adjust width relative to text size */
       height: 1.25em; /* Adjust height relative to text size */
     }
     .nav-link {
-        display: flex;
-        align-items: center;
-      }
+      display: flex;
+      align-items: center;
+    }
     .nav-link svg {
-        margin-right: 5px; /* Adjust space between icon and text */
-        width: 1em; /* Adjust the width to match text size */
-        height: 1em; /* Adjust the height to match text size */
-        vertical-align:-0.125em;
-      }
-
-      #specificItemsContainer form input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
+      margin-right: 5px; /* Adjust space between icon and text */
+      width: 1em; /* Adjust the width to match text size */
+      height: 1em; /* Adjust the height to match text size */
+      vertical-align: -0.125em;
+    }
+    #specificItemsContainer form input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
     @media (max-width: 992px) {
       .navbar-expand-lg .navbar-nav {
         flex-direction: column;
       }
-
       .item-container {
         width: 100%;
       }
-
       .search-button {
         margin-bottom: 10px;
       }
@@ -413,46 +378,43 @@
 
     <div class="items-container" id="itemsContainer"></div>
     
-  <!-- Modal for item details -->
-<div id="itemModal" class="modal">
-  <div class="modal-content">
-      <span class="close">&times;</span>
-      <div id="modalDetails"></div>
-    
-          
+    <!-- Modal for item details -->
+    <div id="itemModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modalDetails"></div>
       </div>
-  </div>
-</div>
+    </div>
 
-<!-- Modal for claim -->
-<div id="claimModal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="claimClose">&times;</span>
-    <div id="claimFormContainer">
-      <h2>Claim Item</h2>
-      <form id="claimForm">
-        <div class="form-group">
-          <label for="firstName">First Name:</label>
-          <input type="text" class="form-control" id="claimFirstName" readonly>
+    <!-- Modal for claim -->
+    <div id="claimModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="claimClose">&times;</span>
+        <div id="claimFormContainer">
+          <h2>Claim Item</h2>
+          <form id="claimForm">
+            <div class="form-group">
+              <label for="firstName">First Name:</label>
+              <input type="text" class="form-control" id="claimFirstName" readonly>
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name:</label>
+              <input type="text" class="form-control" id="claimLastName" readonly>
+            </div>
+            <div class="form-group">
+              <label for="studentId">Student ID:</label>
+              <input type="text" class="form-control" id="claimStudentId" readonly>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Claim</button>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="lastName">Last Name:</label>
-          <input type="text" class="form-control" id="claimLastName" readonly>
+        <div id="claimDetails" style="display:none;">
+          <h2>Claim Confirmation</h2>
+          <div id="claimInfo"></div>
+          <p id="claimMessage">Please visit the admin of lost and found in 2 days to claim the item and provide a screenshot as proof.</p>
         </div>
-        <div class="form-group">
-          <label for="studentId">Student ID:</label>
-          <input type="text" class="form-control" id="claimStudentId" readonly>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit Claim</button>
-      </form>
+      </div>
     </div>
-    <div id="claimDetails" style="display:none;">
-      <h2>Claim Confirmation</h2>
-      <div id="claimInfo"></div>
-      <p id="claimMessage">Please visit the admin of lost and found in 2 days to claim the item and provide a screenshot as proof.</p>
-    </div>
-  </div>
-</div>
 
 <!-- Modal for image capture/upload and specific item search -->
 <div id="modalContainer" class="modal">
@@ -465,7 +427,7 @@
         <h2>Upload Image</h2>
       </div>
       <div id="upload-container">
-        <input type="file" id="upload-image"  accept=".jpeg" accept=".png">
+        <input type="file" id="upload-image" accept="image/*">
       </div>
     </div>
 
@@ -487,223 +449,155 @@
   </div>
 </div>
 
-<div id="myModal" class="modal">
-  <div class="modal-content">
-    <canvas id="modal-canvas"></canvas>
-    <p id="modal-results"></p>
-    <div class="modal-footer">
-      <button id="closeModalButton">Close</button>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <canvas id="modal-canvas"></canvas>
+        <p id="modal-results"></p>
+        <div class="modal-footer">
+          <button id="closeModalButton">Close</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<!-- Firebase Database -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<!-- Firebase Storage -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-<!-- Bootstrap JS and dependencies (jQuery and Popper.js) -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" async></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js" async></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" async></script>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <!-- Firebase Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <!-- Firebase Storage -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <!-- Bootstrap JS and dependencies (jQuery and Popper.js) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js" async></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" async></script>
 
+    <!-- Firebase and application logic -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getDatabase, ref, child, get, set, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-<!-- Firebase and application logic -->
-<script type="module">
-   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, child, get, set, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
+        authDomain: "seeksmart-database.firebaseapp.com",
+        databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
+        projectId: "seeksmart-database",
+        storageBucket: "seeksmart-database.appspot.com",
+        messagingSenderId: "1066553932800",
+        appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
+      };
 
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDqaFeFgdypMXb8IiOGCoroURcPH0aDk8A",
-  authDomain: "seeksmart-database.firebaseapp.com",
-  databaseURL: "https://seeksmart-database-default-rtdb.firebaseio.com",
-  projectId: "seeksmart-database",
-  storageBucket: "seeksmart-database.appspot.com",
-  messagingSenderId: "1066553932800",
-  appId: "1:1066553932800:web:1c0d9604286191bd5f6ce5"
-};
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const auth = getAuth();
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const auth = getAuth();
+      var itemsContainer = document.getElementById("itemsContainer");
+      var items = []; // Array to store retrieved items
 
-let currentUserDetails = null;
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const userRef = ref(db, 'StudentUsers/' + user.uid);
-    get(userRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        currentUserDetails = snapshot.val();
-        setupClaimButtons();
-      } else {
-        console.error('No user data available');
-        alert('No user data available. Please try again.');
-      }
-    }).catch((error) => {
-      console.error('Error fetching user data:', error);
-      alert('Error fetching user data. Please try again.');
-    });
-  } else {
-    console.error('User not authenticated');
-    alert('User not authenticated. Please log in.');
-  }
-});
-
-function setupClaimButtons() {
-  document.querySelectorAll('.claim-btn').forEach(button => {
-    button.addEventListener('click', (event) => {
-      const itemId = event.target.getAttribute('data-item-id');
-      submitClaim(itemId);
-    });
-  });
-}
-
-function submitClaim(itemId) {
-  if (!currentUserDetails || !currentUserDetails.firstName || !currentUserDetails.lastName || !currentUserDetails.studentId) {
-    console.error('User details are not properly loaded.');
-    alert('User details are not properly loaded. Please try again.');
-    return;
-  }
-
-  const claimDetails = {
-    firstName: currentUserDetails.firstName,
-    lastName: currentUserDetails.lastName,
-    studentId: currentUserDetails.studentId,
-    timestamp: new Date().toISOString()
-  };
-
-  const dbRef = ref(db, 'claims/' + itemId);
-  set(dbRef, claimDetails).then(() => {
-    alert('Claim submitted successfully');
-    notifyAdmin(claimDetails);
-  }).catch((error) => {
-    console.error('Error submitting claim:', error);
-    alert('Error submitting claim. Please try again.');
-  });
-}
-
-function notifyAdmin(claimDetails) {
-  const claimNotificationsRef = ref(db, 'claimNotifications/');
-  push(claimNotificationsRef, claimDetails).then(() => {
-    console.log('Admin notified');
-  }).catch((error) => {
-    console.error('Error notifying admin:', error);
-  });
-}
-    var itemsContainer = document.getElementById("itemsContainer");
-    var items = []; // Array to store retrieved items
-
-    function showModal(item) {
+      function showModal(item) {
         const modalDetails = document.getElementById("modalDetails");
         const itemModal = document.getElementById("itemModal");
 
         if (!modalDetails || !itemModal) {
-            console.error("Modal elements not found.");
-            return;
+          console.error("Modal elements not found.");
+          return;
         }
 
         modalDetails.innerHTML = `
-            <h2>${item.itemName}</h2>
-            <img src="${item.photo}" alt="Item Photo" class="item-photo">
-            <p><strong>Description:</strong> ${item.itemDescription}</p>
-            <p><strong>Found Date:</strong> ${item.foundDate}</p>
-            <p><strong>Found Location:</strong> ${item.foundLocation}</p>
-            <p><strong>Founder Name:</strong> ${item.founderName}</p>
-            <p><strong>Keyword:</strong> ${item.keywordDescription}</p>
+          <h2>${item.itemName}</h2>
+          <img src="${item.photo}" alt="Item Photo" class="item-photo">
+          <p><strong>Description:</strong> ${item.itemDescription}</p>
+          <p><strong>Found Date:</strong> ${item.foundDate}</p>
+          <p><strong>Found Location:</strong> ${item.foundLocation}</p>
+          <p><strong>Founder Name:</strong> ${item.founderName}</p>
+          <p><strong>Keyword:</strong> ${item.keywordDescription}</p>
         `;
 
         itemModal.style.display = "block"; // Show the modal
 
         console.log("Modal shown with item:", item);
-    }
+      }
 
-    function createItemContainer(item) {
+      function createItemContainer(item) {
         const container = document.createElement("div");
         container.classList.add("item-container");
         container.innerHTML = `
-            <div class="item-header">
-                <h2>${item.itemName}</h2>
-                <img src="${item.photo}" alt="Item Photo" class="item-photo" loading="lazy">
-            </div>
-            <div class="item-body">
-                <p><strong>Description:</strong> ${item.itemDescription}</p>
-                <p><strong>Found Date:</strong> ${item.foundDate}</p>
-                <p><strong>Found Location:</strong> ${item.foundLocation}</p>
-                <p><strong>Founder Name:</strong> ${item.founderName}</p>
-                <p><strong>Keyword:</strong> ${item.keywordDescription}</p>
-            </div>
-            <div class="item-footer">
-                <button class="view-btn" data-item-id="${item.itemId}">View</button>
-                <button class="claim-btn" data-item-id="${item.itemId}">Claim</button>        
-            </div>
+          <div class="item-header">
+            <h2>${item.itemName}</h2>
+            <img src="${item.photo}" alt="Item Photo" class="item-photo" loading="lazy">
+          </div>
+          <div class="item-body">
+            <p><strong>Description:</strong> ${item.itemDescription}</p>
+            <p><strong>Found Date:</strong> ${item.foundDate}</p>
+            <p><strong>Found Location:</strong> ${item.foundLocation}</p>
+            <p><strong>Founder Name:</strong> ${item.founderName}</p>
+            <p><strong>Keyword:</strong> ${item.keywordDescription}</p>
+          </div>
+          <div class="item-footer">
+            <button class="view-btn" data-item-id="${item.itemId}">View</button>
+              
+          </div>
         `;
         container.querySelector('.view-btn').addEventListener('click', () => {
-            console.log('Button clicked'); 
-            showModal(item);
+          console.log('Button clicked'); 
+          showModal(item);
         });
-        container.querySelector('.claim-btn').addEventListener('click', (event) => {
-            const itemId = event.target.getAttribute('data-item-id');
-            submitClaim(itemId);
-        });
+        
         itemsContainer.appendChild(container);
-    }
+      }
 
-    function AddAllItemsToTable(LostFound) {
+      function AddAllItemsToTable(LostFound) {
         itemsContainer.innerHTML = "";
         LostFound.forEach(element => {
-            items.push(element); // Push each element to the items array
-            createItemContainer(element);
+          items.push(element); // Push each element to the items array
+          createItemContainer(element);
         });
-    }
+      }
 
-    function searchSpecificItems(description) {
+      function searchSpecificItems(description) {
         const dbRef = ref(db);
         get(child(dbRef, "lostItemForm")).then((snapshot) => {
-            let items = [];
-            snapshot.forEach(childSnapshot => {
-                let item = childSnapshot.val();
-                if (
-                    item.itemDescription.toLowerCase().includes(description.toLowerCase()) ||
-                    item.foundDate.toLowerCase().includes(description.toLowerCase()) ||
-                    item.foundLocation.toLowerCase().includes(description.toLowerCase()) ||
-                    item.keywordDescription.toLowerCase().includes(description.toLowerCase())
-                ) {
-                    item.itemId = childSnapshot.key;
-                    items.push(item); // Only push matching items
-                }
-            });
-            AddAllItemsToTable(items);
+          let items = [];
+          snapshot.forEach(childSnapshot => {
+            let item = childSnapshot.val();
+            if (
+              item.itemDescription.toLowerCase().includes(description.toLowerCase()) ||
+              item.foundDate.toLowerCase().includes(description.toLowerCase()) ||
+              item.foundLocation.toLowerCase().includes(description.toLowerCase()) ||
+              item.keywordDescription.toLowerCase().includes(description.toLowerCase())
+            ) {
+              item.itemId = childSnapshot.key;
+              items.push(item); // Only push matching items
+            }
+          });
+          AddAllItemsToTable(items);
         }).catch(error => {
-            console.error(error);
+          console.error(error);
         });
-    }
+      }
 
-    document.getElementById("specificItemsForm").addEventListener("submit", function (event) {
+      document.getElementById("specificItemsForm").addEventListener("submit", function (event) {
         event.preventDefault();
         const description = document.getElementById("itemDescription").value;
         searchSpecificItems(description);
         modal.style.display = "none";
-    });
+      });
 
-    function GetAllDataOnce() {
+      function GetAllDataOnce() {
         const dbRef = ref(db);
         get(child(dbRef, "lostItemForm")).then((snapshot) => {
-            var items = [];
-            snapshot.forEach(childSnapshot => {
-                let item = childSnapshot.val();
-                item.itemId = childSnapshot.key;
-                items.push(item);
-            });
-            AddAllItemsToTable(items);
+          var items = [];
+          snapshot.forEach(childSnapshot => {
+            let item = childSnapshot.val();
+            item.itemId = childSnapshot.key;
+            items.push(item);
+          });
+          AddAllItemsToTable(items);
         });
-    }
+      }
 
-    window.onload = function () {
+      window.onload = function () {
         GetAllDataOnce();
 
         var modal = document.getElementById("modalContainer");
@@ -716,52 +610,52 @@ function notifyAdmin(claimDetails) {
         let stream = null;
 
         matchingImagesButton.onclick = function () {
-            modal.style.display = "block";
-            matchingImagesContainer.style.display = "block";
-            specificItemsContainer.style.display = "none";
+          modal.style.display = "block";
+          matchingImagesContainer.style.display = "block";
+          specificItemsContainer.style.display = "none";
         }
 
         searchSpecificItemsButton.onclick = function () {
-            modal.style.display = "block";
-            matchingImagesContainer.style.display = "none";
-            specificItemsContainer.style.display = "block";
+          modal.style.display = "block";
+          matchingImagesContainer.style.display = "none";
+          specificItemsContainer.style.display = "block";
         }
 
         // Close modals
         for (var i = 0; i < span.length; i++) {
-            span[i].onclick = function (event) {
-                event.stopPropagation(); // Prevent event from bubbling up
-                modal.style.display = "none";
-                itemModal.style.display = "none";
-                stopCamera();
-            }
+          span[i].onclick = function (event) {
+            event.stopPropagation(); // Prevent event from bubbling up
+            modal.style.display = "none";
+            itemModal.style.display = "none";
+            stopCamera();
+          }
         }
 
         // Close modal when clicking outside of modal content
         window.onclick = function (event) {
-            if (event.target === modal || event.target === itemModal) {
-                modal.style.display = "none";
-                itemModal.style.display = "none";
-                stopCamera();
-            }
+          if (event.target === modal || event.target === itemModal) {
+            modal.style.display = "none";
+            itemModal.style.display = "none";
+            stopCamera();
+          }
         }
 
         var captureImageOption = document.getElementById("captureImageOption");
         if (captureImageOption) {
-            captureImageOption.onclick = function () {
-                console.log("Capture Image button clicked");
-                var captureContainer = document.getElementById("capture-container");
-                var uploadContainer = document.getElementById("upload-container");
-                if (captureContainer && uploadContainer) {
-                    captureContainer.style.display = "block";
-                    uploadContainer.style.display = "none";
-                    startCamera();
-                } else {
-                    console.error("Capture or upload container not found");
-                }
+          captureImageOption.onclick = function () {
+            console.log("Capture Image button clicked");
+            var captureContainer = document.getElementById("capture-container");
+            var uploadContainer = document.getElementById("upload-container");
+            if (captureContainer && uploadContainer) {
+              captureContainer.style.display = "block";
+              uploadContainer.style.display = "none";
+              startCamera();
+            } else {
+              console.error("Capture or upload container not found");
             }
+          }
         } else {
-            console.error("Capture Image button not found");
+          console.error("Capture Image button not found");
         }
 
         var uploadImageOption = document.getElementById("uploadImageOption");
@@ -769,15 +663,15 @@ function notifyAdmin(claimDetails) {
         var uploadContainer = document.getElementById("upload-container");
 
         captureImageOption.onclick = function () {
-            captureContainer.style.display = "block";
-            uploadContainer.style.display = "none";
-            startCamera();
+          captureContainer.style.display = "block";
+          uploadContainer.style.display = "none";
+          startCamera();
         }
 
         uploadImageOption.onclick = function () {
-            uploadContainer.style.display = "block";
-            captureContainer.style.display = "none";
-            stopCamera();
+          uploadContainer.style.display = "block";
+          captureContainer.style.display = "none";
+          stopCamera();
         }
 
         var video = document.getElementById('video');
@@ -786,59 +680,59 @@ function notifyAdmin(claimDetails) {
         var snapButton = document.getElementById('snap');
 
         function startCamera() {
-            console.log("Attempting to start camera...");
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                .then(function (s) {
-                    stream = s;
-                    video.srcObject = stream;
-                    video.play(); // Add this line to ensure the video starts playing
-                    console.log("Camera started successfully");
-                })
-                .catch(function (err) {
-                    console.error("Camera access error: " + err);
-                    alert("Unable to access camera. Please check your permissions and ensure your device has a camera.");
-                });
+          console.log("Attempting to start camera...");
+          navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+            .then(function (s) {
+              stream = s;
+              video.srcObject = stream;
+              video.play(); // Add this line to ensure the video starts playing
+              console.log("Camera started successfully");
+            })
+            .catch(function (err) {
+              console.error("Camera access error: " + err);
+              alert("Unable to access camera. Please check your permissions and ensure your device has a camera.");
+            });
         }
 
         function stopCamera() {
-            if (stream) {
-                stream.getTracks().forEach(function (track) {
-                    track.stop();
-                });
-                stream = null;
-            }
+          if (stream) {
+            stream.getTracks().forEach(function (track) {
+              track.stop();
+            });
+            stream = null;
+          }
         }
 
         snapButton.addEventListener('click', function () {
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            var data = canvas.toDataURL('image/png');
-            console.log(data);
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          var data = canvas.toDataURL('image/png');
+          console.log(data);
         });
 
         // Function to handle form submission for specific item search
         function handleSpecificItemSearch(event) {
-            event.preventDefault(); // Prevent form submission
+          event.preventDefault(); // Prevent form submission
 
-            // Get input value
-            const itemDescription = document.getElementById("itemDescription").value.trim().toLowerCase();
+          // Get input value
+          const itemDescription = document.getElementById("itemDescription").value.trim().toLowerCase();
 
-            // Filter items based on description, found date, found location, and keyword
-            const filteredItems = items.filter(item =>
-                item.itemDescription.toLowerCase().includes(itemDescription) ||
-                item.foundDate.toLowerCase().includes(itemDescription) ||
-                item.foundLocation.toLowerCase().includes(itemDescription) ||
-                item.keywordDescription.toLowerCase().includes(itemDescription)
-            );
+          // Filter items based on description, found date, found location, and keyword
+          const filteredItems = items.filter(item =>
+            item.itemDescription.toLowerCase().includes(itemDescription) ||
+            item.foundDate.toLowerCase().includes(itemDescription) ||
+            item.foundLocation.toLowerCase().includes(itemDescription) ||
+            item.keywordDescription.toLowerCase().includes(itemDescription)
+          );
 
-            // Clear previous items and display filtered items
-            itemsContainer.innerHTML = "";
-            filteredItems.forEach(item => {
-                createItemContainer(item);
-            });
+          // Clear previous items and display filtered items
+          itemsContainer.innerHTML = "";
+          filteredItems.forEach(item => {
+            createItemContainer(item);
+          });
 
-            // Close the modal
-            const modal = document.getElementById("modalContainer");
-            modal.style.display = "none";
+          // Close the modal
+          const modal = document.getElementById("modalContainer");
+          modal.style.display = "none";
         }
 
         // Add event listener to the specific items search form
@@ -846,106 +740,128 @@ function notifyAdmin(claimDetails) {
         specificItemsForm.addEventListener("submit", handleSpecificItemSearch);
 
         // Function to show modal with item details
-    }
+      }
 
-    var modal = document.getElementById("myModal");
+      var modal = document.getElementById("myModal");
 
-    // Get the button that closes the modal
-    var closeModalButton = document.getElementById("closeModalButton");
+      // Get the button that closes the modal
+      var closeModalButton = document.getElementById("closeModalButton");
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
 
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
         modal.style.display = "none";
-    }
+      }
 
-    // When the user clicks on the button, close the modal
-    closeModalButton.onclick = function () {
+      // When the user clicks on the button, close the modal
+      closeModalButton.onclick = function () {
         modal.style.display = "none";
-    }
+      }
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
         if (event.target == modal) {
-            modal.style.display = "none";
+          modal.style.display = "none";
         }
-    }
+      }
 
-    let model;
+      (async () => {
+        // Initialize the classifier
+        var classifier = new EdgeImpulseClassifier();
+        await classifier.init();
 
-    async function runObjectDetection() {
-        model = await cocoSsd.load();
-        console.log("Object detection model loaded");
+        let project = classifier.getProjectInfo();
+        document.querySelector('h1').textContent = project.owner + ' / ' + project.name + ' (version ' + project.deploy_version + ')';
 
-        const matchingImagesButton = document.getElementById('matchingImagesButton');
-        matchingImagesButton.addEventListener('click', handleMatchingImagesButtonClick);
+        // Get video element and canvas
+        const videoElement = document.getElementById('video');
+        const canvasElement = document.getElementById('canvas');
+        const canvasContext = canvasElement.getContext('2d', { willReadFrequently: true });
 
-        const fileInput = document.getElementById('upload-image');
-        fileInput.addEventListener('change', handleFileUpload);
-    }
-
-    function handleMatchingImagesButtonClick() {
-        const modal = document.getElementById("modalContainer");
-        const matchingImagesContainer = document.getElementById("matchingImagesContainer");
-        const specificItemsContainer = document.getElementById("specificItemsContainer");
-
-        modal.style.display = "block";
-        matchingImagesContainer.style.display = "block";
-        specificItemsContainer.style.display = "none";
-    }
-
-    async function handleFileUpload(event) {
-        const file = event.target.files[0];
-        if (file) {
-            await detectObjectsInImage(file);
+        // Initialize camera
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          videoElement.srcObject = stream;
+        } catch (err) {
+          console.error('Error accessing the camera:', err);
+          return;
         }
-    }
 
-    async function detectObjectsInImage(file) {
-        const img = new Image();
-        img.onload = async () => {
-            const modalCanvas = document.getElementById('modal-canvas');
-            const modalContext = modalCanvas.getContext('2d');
-            modalCanvas.width = img.width;
-            modalCanvas.height = img.height;
-            modalContext.drawImage(img, 0, 0);
+        // Run inference on button click
+        document.getElementById('run-inference').onclick = async () => {
+          try {
+            // Ensure video is playing and capturing current frame
+            canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
 
-            const predictions = await model.detect(modalCanvas);
+            // Get image data from canvas
+            const imageData = canvasContext.getImageData(0, 0, canvasElement.width, canvasElement.height);
 
-            modalContext.clearRect(0, 0, modalCanvas.width, modalCanvas.height);
-            modalContext.drawImage(img, 0, 0, modalCanvas.width, modalCanvas.height);
+            // Convert image data to input features (assuming grayscale image for simplicity)
+            let features = [];
+            for (let i = 0; i < imageData.data.length; i += 4) {
+              // Assuming grayscale, take only one channel (red)
+              features.push(imageData.data[i] / 255); // Normalize to [0, 1]
+            }
 
-            const modalResultsElement = document.getElementById('modal-results');
-            modalResultsElement.innerHTML = '';
-            predictions.forEach(prediction => {
-                const [x, y, width, height] = prediction.bbox;
-                const text = `${prediction.class}: ${Math.round(prediction.score * 100)}%`;
+            // Classify using Edge Impulse classifier
+            let res = await classifier.classify(features);
 
-                modalContext.strokeStyle = 'red';
-                modalContext.lineWidth = 2;
-                modalContext.strokeRect(x, y, width, height);
+            console.log('Inference result:', res);
 
-                modalContext.fillStyle = 'red';
-                const textWidth = modalContext.measureText(text).width;
-                const textHeight = parseInt(modalContext.font, 10);
-                modalContext.fillRect(x, y - textHeight, textWidth, textHeight);
-
-                modalContext.fillStyle = 'white';
-                modalContext.fillText(text, x, y);
-
-                modalResultsElement.innerHTML += `${text}<br>`;
-            });
-
-            document.getElementById('myModal').style.display = "block";
+            // Display results
+            document.querySelector('#results').textContent = JSON.stringify(res, null, 4);
+          } catch (ex) {
+            alert('Failed to classify: ' + (ex.message || ex.toString()));
+            console.error(ex);
+          }
         };
-        img.src = URL.createObjectURL(file);
-    }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        runObjectDetection();
-    });
-</script>
+        // Handle file upload for image classification
+        document.getElementById('upload-image').onchange = async (event) => {
+          try {
+            const file = event.target.files[0];
+            if (file) {
+              const img = new Image();
+              img.onload = async () => {
+                canvasElement.width = img.width;
+                canvasElement.height = img.height;
+                canvasContext.drawImage(img, 0, 0, canvasElement.width, canvasElement.height);
+
+                const imageData = canvasContext.getImageData(0, 0, canvasElement.width, canvasElement.height);
+
+                // Convert image data to input features (assuming grayscale image for simplicity)
+                let features = [];
+                for (let i = 0; i < imageData.data.length; i += 4) {
+                  features.push(imageData.data[i] / 255); // Normalize to [0, 1]
+                }
+
+                console.log('Features length:', features.length);
+                console.log('First few features:', features.slice(0, 10));
+
+                // Classify using Edge Impulse classifier
+                let res = await classifier.classify(features);
+
+                console.log('Classification result:', res);
+
+                // Display results
+                document.querySelector('#results').textContent = JSON.stringify(res, null, 4);
+              };
+              img.src = URL.createObjectURL(file);
+            }
+          } catch (ex) {
+            alert('Failed to classify: ' + (ex.message || ex.toString()));
+            console.error(ex);
+          }
+        };
+        
+      })();
+    </script>
+    <script>
+      document.getElementById('scan-item').onclick = function() {
+        window.open('https://smartphone.edgeimpulse.com/classifier.html?apiKey=ei_31ec11cdac3a1e7416072984b425716d780efd3eb9478b7b5b6a82f9f7a1a239', '_blank');
+      };
+    </script>
 </body>
 </html>
