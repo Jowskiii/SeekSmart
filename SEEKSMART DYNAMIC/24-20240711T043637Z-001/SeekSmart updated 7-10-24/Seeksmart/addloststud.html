@@ -17,7 +17,7 @@
             align-items: center;
         }
         body {
-             background-color: whitesmoke;
+            background-color: whitesmoke;
         }
         .navbar {
             background-color: #020079;
@@ -34,48 +34,50 @@
             display: none;
         }
         .btn-primary {
-    color: #fff;
-    background-color: #1c1c1e;
-    border-color: #000000;
-}
-        .navbar-dark .navbar-nav .nav-link {
-        color: #ffffff;
+            color: #fff;
+            background-color: #1c1c1e;
+            border-color: #000000;
         }
-        
+        .navbar-dark .navbar-nav .nav-link {
+            color: #ffffff;
+        }
         .bg-light {
             background-color: #e9ecef !important;
         }
         .navbar-brand {
-      display: flex;
-      align-items: center;
-    }
-
-    .navbar-brand svg {
-      margin-right: 5px; /* Adjust space between icon and text */
-      width: 1.25em; /* Adjust width relative to text size */
-      height: 1.25em; /* Adjust height relative to text size */
-    }
-    .nav-link {
-        display: flex;
-        align-items: center;
-      }
-    .nav-link svg {
-        margin-right: 5px; /* Adjust space between icon and text */
-        width: 1em; /* Adjust the width to match text size */
-        height: 1em; /* Adjust the height to match text size */
-        vertical-align:-0.125em;
-      }
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand svg {
+            margin-right: 5px; /* Adjust space between icon and text */
+            width: 1.25em; /* Adjust width relative to text size */
+            height: 1.25em; /* Adjust height relative to text size */
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+        }
+        .nav-link svg {
+            margin-right: 5px; /* Adjust space between icon and text */
+            width: 1em; /* Adjust the width to match text size */
+            height: 1em; /* Adjust the height to match text size */
+            vertical-align: -0.125em;
+        }
         @media (max-width: 768px) {
             .content {
                 padding: 10px;
             }
+        }
+        .required::after {
+            content: ' *';
+            color: red;
         }
     </style>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-subtle fixed-top">
-    <a class="navbar-brand" >
+    <a class="navbar-brand">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
             <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
           </svg>
@@ -129,30 +131,30 @@
                     <form id="lostItemForm">
                         <div class="form-group">
                             <label for="image">Add Image:</label>
-                            <input type="file" class="form-control-file" id="image" name="image" autocomplete="off" accept="image/*">
+                            <input type="file" class="form-control-file" id="image" name="image" autocomplete="off" accept=".jpg, .jpeg, .png">
                         </div>
                         <div class="form-group">
-                            <label for="founderName">Founder Name:</label>
+                            <label for="founderName" class="required">Founder Name:</label>
                             <input type="text" class="form-control" id="founderName" name="founderName" autocomplete="off" required>
                         </div>
                         <div class="form-group">
-                            <label for="itemName">Item Name:</label>
+                            <label for="itemName" class="required">Item Name:</label>
                             <input type="text" class="form-control" id="itemName" name="itemName" autocomplete="off" required>
                         </div>
                         <div class="form-group">
-                            <label for="itemDescription">Item Description:</label>
+                            <label for="itemDescription" class="required">Item Description:</label>
                             <textarea class="form-control" id="itemDescription" name="itemDescription" autocomplete="off" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="foundDate">Found Date:</label>
-                            <input type="date" class="form-control" id="foundDate" name="foundDate" autocomplete="off" required>
+                            <label for="foundDate" class="required">Found Date:</label>
+                            <input type="text" class="form-control" id="foundDate" name="foundDate" autocomplete="off" placeholder="YYYY-MM-DD HH:MM" required>
                         </div>
                         <div class="form-group">
-                            <label for="foundLocation">Found Location:</label>
+                            <label for="foundLocation" class="required">Found Location:</label>
                             <input type="text" class="form-control" id="foundLocation" name="foundLocation" autocomplete="off" required>
                         </div>
                         <div class="form-group">
-                            <label for="keywordDescription">Keyword Description:</label>
+                            <label for="keywordDescription" class="required">Keyword Description:</label>
                             <input type="text" class="form-control" id="keywordDescription" name="keywordDescription" autocomplete="off" required>
                         </div>
                         <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
@@ -186,6 +188,51 @@
               const storage = getStorage(app);
             
               let isSubmitting = false;
+
+              // File type validation function
+              document.getElementById('image').addEventListener('change', function(e) {
+                const imageFile = e.target.files[0];
+                const validExtensions = ['image/jpeg', 'image/png'];
+                if (imageFile && !validExtensions.includes(imageFile.type)) {
+                    alert("You can only upload jpeg, jpg or png files.");
+                    e.target.value = ''; // Clear the file input
+                }
+              });
+
+              // Founder Name validation function
+              document.getElementById('founderName').addEventListener('input', function(e) {
+                const founderName = e.target.value;
+                const validName = /^[a-zA-Z\s]*$/;
+                if (!validName.test(founderName)) {
+                    alert("Founder Name can only contain letters.");
+                    e.target.value = founderName.replace(/[^a-zA-Z\s]/g, ''); // Remove invalid characters
+                }
+              });
+
+              // Automatically set today's date and time for Found Date
+              document.addEventListener('DOMContentLoaded', function() {
+                const foundDateInput = document.getElementById('foundDate');
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`; // Format as 'YYYY-MM-DD HH:MM'
+                foundDateInput.value = formattedDate;
+              });
+
+              // Remove asterisk when typing in required fields
+              document.querySelectorAll('input, textarea').forEach((element) => {
+                element.addEventListener('input', function(e) {
+                  const label = document.querySelector(`label[for=${e.target.id}]`);
+                  if (e.target.value) {
+                    label.classList.remove('required');
+                  } else {
+                    label.classList.add('required');
+                  }
+                });
+              });
             
               // Form submission handler
               document.getElementById('lostItemForm').addEventListener('submit', async (e) => {
@@ -209,6 +256,16 @@
             
                 try {
                   if (imageFile) {
+                    const validExtensions = ['image/jpeg', 'image/png'];
+                    if (!validExtensions.includes(imageFile.type)) {
+                      notification.textContent = 'Invalid file type. Please upload a JPG or PNG image.';
+                      notification.classList.replace('alert-success', 'alert-danger');
+                      notification.style.display = 'block';
+                      submitButton.disabled = false;
+                      isSubmitting = false;
+                      return;
+                    }
+            
                     const storageReference = storageRef(storage, `images/${imageFile.name}`);
                     await uploadBytes(storageReference, imageFile);
                     const photoURL = await getDownloadURL(storageReference);
