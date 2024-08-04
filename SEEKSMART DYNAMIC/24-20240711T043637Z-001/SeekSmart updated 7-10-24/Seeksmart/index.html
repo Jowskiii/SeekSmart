@@ -159,7 +159,6 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    
                     <li class="nav-item">
                         <button class="btn btn-primary btn-nav login-button" data-toggle="modal" data-target="#adminLogin">
                             <i class="fas fa-user-shield"></i> Admin Login
@@ -171,13 +170,13 @@
                         </button>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="studentcontact.html">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
-                              <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-                          </svg>
-                          Contact Us
-                      </a>
-                  </li>
+                        <a class="nav-link" href="studentcontact.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
+                                <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                            </svg>
+                            Contact Us
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -215,6 +214,9 @@
                             <input type="password" class="form-control" id="password" name="password" placeholder="Password" autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        <div class="text-center mt-3">
+                            <a href="#" class="text-primary" data-toggle="modal" data-target="#forgotPasswordModal" data-dismiss="modal">Forgot Password?</a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -238,6 +240,26 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Login</button>
                         <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button>
+                        <div class="text-center mt-3">
+                            <a href="#" class="text-primary" data-toggle="modal" data-target="#forgotPasswordModal" data-dismiss="modal">Forgot Password?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5 class="modal-title text-center">Reset Password</h5>
+                    <form id="forgotPasswordForm">
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="forgotEmail" placeholder="Enter your email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Send Reset Email</button>
                     </form>
                 </div>
             </div>
@@ -283,7 +305,7 @@
         // Import functions 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getDatabase, ref, set, get, child, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         // Web app Firebase config
         const firebaseConfig = {
@@ -433,6 +455,30 @@
                 })
                 .catch((error) => {
                     alert(error.message);
+                });
+        });
+
+        // Password reset form submission
+        document.getElementById('forgotPasswordForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmail').value;
+            const actionCodeSettings = {
+                url: 'https://seeksmart-database.firebaseapp.com/__/auth/action?mode=action&oobCode=code',
+                handleCodeInApp: true
+            };
+
+            console.log("Sending password reset email to:", email);
+            
+            sendPasswordResetEmail(auth, email, actionCodeSettings)
+                .then(() => {
+                    console.log('Password reset email sent successfully');
+                    alert('Password reset email sent! Check your inbox.');
+                    $('#forgotPasswordModal').modal('hide');
+                    document.getElementById('forgotPasswordForm').reset();
+                })
+                .catch((error) => {
+                    console.error('Error sending password reset email:', error);
+                    alert('Error: ' + error.message);
                 });
         });
 
